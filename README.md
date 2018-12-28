@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/Toms42/Monarch-Connect.svg?branch=master)](https://travis-ci.com/Toms42/Monarch-Connect)
+
 # Monarch-Connect
 A generic client for managing control and telemetry streams for embedded devices, such as mobile robots or IOT devices.
 
