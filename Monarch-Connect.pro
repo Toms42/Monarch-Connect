@@ -51,7 +51,17 @@ SOURCES += \
     Nodeeditor/src/NodeStyle.cpp \
     Nodeeditor/src/Properties.cpp \
     Nodeeditor/src/StyleCollection.cpp \
-    Models/models.cpp
+    Models/models.cpp \
+    Connections/event.cpp \
+    Connections/payload.cpp \
+    Connections/connectionstats.cpp \
+    Connections/streamreceiver.cpp \
+    Connections/streamsender.cpp \
+    Common/project.cpp \
+    Common/taglist.cpp \
+    Common/tunnellist.cpp \
+    Common/flowlist.cpp \
+    Common/tagtype.cpp
 
 HEADERS += \
     Nodeeditor/src/ConnectionBlurEffect.hpp \
@@ -103,7 +113,17 @@ HEADERS += \
     Nodeeditor/include/nodes/NodeState \
     Nodeeditor/include/nodes/NodeStyle \
     Nodeeditor/include/nodes/TypeConverter \
-    Models/models.hpp
+    Models/models.hpp \
+    Connections/event.h \
+    Connections/payload.h \
+    Connections/connectionstats.h \
+    Connections/streamreceiver.h \
+    Connections/streamsender.h \
+    Common/project.h \
+    Common/taglist.h \
+    Common/tunnellist.h \
+    Common/flowlist.h \
+    Common/tagtype.h
 
 FORMS += \
         mainwindow.ui

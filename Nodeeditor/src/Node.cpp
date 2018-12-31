@@ -36,6 +36,12 @@ Node(std::unique_ptr<NodeDataModel> && dataModel)
   // propagate data: model => node
   connect(_nodeDataModel.get(), &NodeDataModel::dataUpdated,
           this, &Node::onDataUpdated);
+  /*
+  connect(_nodeDataModel.get(), &NodeDataModel::portAdded,
+          this, &Node::onPortAdded);
+  connect(_nodeDataModel.get(), &NodeDataModel::portRemoved,
+          this, &Node::onPortRemoved);
+  */
 }
 
 
@@ -206,3 +212,39 @@ onDataUpdated(PortIndex index)
   for (auto const & c : connections)
     c.second->propagateData(nodeData);
 }
+
+/*
+void
+Node::
+onPortAdded(PortType type, PortIndex index)
+{
+    //add port to state:
+    auto & connections = _nodeState.getEntries(type);
+    auto emptyport = NodeState::ConnectionPtrSet();
+    connections.insert(connections.begin()+index, emptyport);
+
+    //update graphics:
+    _nodeGeometry.updatePorts(_nodeDataModel);
+    _nodeGraphicsObject->setGeometryChanged();
+    _nodeGeometry.recalculateSize();
+    _nodeGraphicsObject->update();
+    _nodeGraphicsObject->moveConnections();
+}
+
+void
+Node::
+onPortRemoved(PortType type, PortIndex index)
+{
+
+    //add port to state:
+    auto & connections = _nodeState.getEntries(type);
+    connections.erase(connections.begin()+index);
+
+    //update graphics:
+    _nodeGeometry.updatePorts(_nodeDataModel);
+    _nodeGraphicsObject->setGeometryChanged();
+    _nodeGeometry.recalculateSize();
+    _nodeGraphicsObject->update();
+    _nodeGraphicsObject->moveConnections();
+}
+*/

@@ -117,6 +117,10 @@ public:
   calculateNodePositionBetweenNodePorts(PortIndex targetPortIndex, PortType targetPort, Node* targetNode,
                                         PortIndex sourcePortIndex, PortType sourcePort, Node* sourceNode,
                                         Node& newNode);
+public:
+  void
+  updatePorts(std::unique_ptr<NodeDataModel> const &dataModel);
+
 private:
 
   unsigned int

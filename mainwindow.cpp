@@ -8,7 +8,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 }
 
+
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::setScene(FlowScene *scene)
+{
+    ui->graphicsView->setScene(scene);
 }

@@ -38,6 +38,14 @@ NodeGeometry(std::unique_ptr<NodeDataModel> const &dataModel)
   _boldFontMetrics = QFontMetrics(f);
 }
 
+void
+NodeGeometry::
+updatePorts(std::unique_ptr<NodeDataModel> const &dataModel)
+{
+    _nSources = dataModel->nPorts(PortType::Out);
+    _nSinks = dataModel->nPorts(PortType::In);
+}
+
 
 QRectF
 NodeGeometry::

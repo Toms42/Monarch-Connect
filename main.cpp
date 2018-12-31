@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "ui_mainwindow.h"
 #include <QApplication>
 
 #include <nodes/NodeData>
@@ -36,13 +37,10 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    w.show();
 
     FlowScene scene(registerDataModels());
-    FlowView view(&scene);
-    view.setWindowTitle("Node-based flow editor");
-    view.resize(800, 600);
-    view.show();
+    w.setScene(&scene);
+    w.show();
 
     return a.exec();
 }

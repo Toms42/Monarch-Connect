@@ -4,6 +4,10 @@
 
 #include <nodes/NodeData>
 #include <nodes/NodeDataModel>
+#include <QPushButton>
+#include <QDebug>
+#include "Connections/streamsender.h"
+#include "Connections/streamreceiver.h"
 
 #include <memory>
 
@@ -20,9 +24,9 @@ class MyNodeData : public NodeData
 {
 public:
 
-  NodeDataType
-  type() const override
-  { return NodeDataType {"MyNodeData", "My Node Data"}; }
+    NodeDataType
+    type() const override
+    { return NodeDataType {"MyNodeData", "My Node Data"}; }
 };
 
 //------------------------------------------------------------------------------
@@ -31,65 +35,121 @@ public:
 /// In this example it has no logic.
 class MyDataModel : public NodeDataModel
 {
-  Q_OBJECT
+    Q_OBJECT
+
+public:
+    MyDataModel() : _button(new QPushButton),
+                    _stream(new StreamSender),
+                    _data(new MyNodeData),
+                    _listener(new StreamReceiver)
+    {
+        _button->setText("press");
+        connect(_button, SIGNAL(pressed()),
+                this, SLOT(button_pressed()));
+    }
+    virtual
+    ~MyDataModel() {}
 
 public:
 
-  virtual
-  ~MyDataModel() {}
+    QString
+    caption() const override
+    {
+        return QString("My Data Model");
+    }
+
+    QString
+    name() const override
+    {
+        return QString("MyDataModel");
+    }
 
 public:
 
-  QString
-  caption() const override
-  {
-    return QString("My Data Model");
-  }
+    QJsonObject
+    save() const override
+    {
+        QJsonObject modelJson;
 
-  QString
-  name() const override
-  {
-    return QString("MyDataModel");
-  }
+        modelJson["name"] = name();
+
+        return modelJson;
+    }
 
 public:
 
-  QJsonObject
-  save() const override
-  {
-    QJsonObject modelJson;
+    unsigned int
+    nPorts(PortType) const override
+    {
+        return 2;
+    }
 
-    modelJson["name"] = name();
+    NodeDataType
+    dataType(PortType type, PortIndex index) const override
+    {
+        if(type == PortType::In)
+        {
+            switch(index)
+            {
+            case 0:
+                return StreamSender().type();
+            case 1:
+                return MyNodeData().type();
+            }
+        }
+        else if(type == PortType::Out)
+        {
+            switch(index)
+            {
+            case 1:
+                return StreamSender().type();
+            case 0:
+                return MyNodeData().type();
+            }
+        }
+        return NodeDataType{"error", "error"};
+    }
 
-    return modelJson;
-  }
+    std::shared_ptr<NodeData>
+    outData(PortIndex index) override
+    {
+        switch(index)
+        {
+        case 1:
+            return std::static_pointer_cast<NodeData>(_stream);
+        case 0:
+            return std::static_pointer_cast<NodeData>(_data);
+        }
+        return nullptr;
+    }
 
-public:
+    void
+    setInData(std::shared_ptr<NodeData> data, PortIndex index) override
+    {
+        switch(index)
+        {
+        case 0:
+            _listener->setSender(std::static_pointer_cast<StreamSender>(data));
+            break;
+        case 1:
+            _data = std::static_pointer_cast<MyNodeData>(data);
+            emit(dataUpdated(1));
+            return ;
+        }
+    }
 
-  unsigned int
-  nPorts(PortType) const override
-  {
-    return 3;
-  }
-
-  NodeDataType
-  dataType(PortType, PortIndex) const override
-  {
-    return MyNodeData().type();
-  }
-
-  std::shared_ptr<NodeData>
-  outData(PortIndex) override
-  {
-    return std::make_shared<MyNodeData>();
-  }
-
-  void
-  setInData(std::shared_ptr<NodeData>, int) override
-  {
-    //
-  }
-
-  QWidget *
-  embeddedWidget() override { return nullptr; }
+    QWidget *
+    embeddedWidget() override { return _button; }
+public slots:
+    void button_pressed()
+    {
+        //_ports--;
+        //qDebug() << "pressed: " << _ports << "\n";
+        //emit(portRemoved(PortType::Out, _ports - 1));
+    }
+protected:
+    QPushButton *_button;
+    std::shared_ptr<StreamSender> _stream;
+    std::shared_ptr<MyNodeData> _data;
+    StreamReceiver *_listener;
 };
