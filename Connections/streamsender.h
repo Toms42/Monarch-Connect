@@ -13,10 +13,13 @@ class StreamSender : public QObject, public NodeData
 {
     Q_OBJECT
 public:
-    explicit StreamSender(QObject *parent = nullptr);
     NodeDataType
     type() const override
     { return NodeDataType {"Stream", "Stream"}; }
+
+public:
+    explicit StreamSender(QObject *parent = nullptr);
+
     void send(Payload payload);
 
 signals:

@@ -10,22 +10,32 @@ TagList::TagList(QObject *parent)
 
 TagType &TagList::getTagType(QString tag)
 {
-
+    return _tagTypes[this->getTagID(tag)];
 }
+
 TagType &TagList::getTagType(QUuid tagID)
 {
-
+    return _tagTypes[tagID];
 }
+
 QUuid TagList::getTagID(QString tag)
 {
-
+    return _tags[tag];
 }
 
-QUuid TagList::insert(TagType &type)
+QString TagList::getTag(QUuid tagID)
 {
-
+    return _tagTypes[tagID].getTag();
 }
-bool TagList::remove(QUuid tagID)
-{
 
+void TagList::insert(TagType &type)
+{
+    _tags.insert(type.getTag(), type.getTagID());
+    _tagTypes.insert(type.getTagID(), type);
+}
+
+void TagList::remove(QUuid tagID)
+{
+    _tags.remove(this->getTag(tagID));
+    _tagTypes.remove(tagID);
 }

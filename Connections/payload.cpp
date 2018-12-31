@@ -1,5 +1,5 @@
 #include "payload.h"
-
+#include "Common/project.h"
 
 Payload::Payload(QUuid tagID, int nFields, QVector<long> vals, QObject *parent)
     : QObject (parent)
@@ -36,23 +36,25 @@ int Payload::nFields()
 
 QString Payload::getFieldName(int field)
 {
-
+    return Project::getInstance().getTagList().getTagType(_tagID).getFieldName(field);
 }
 QString Payload::getFieldUnit(int field)
 {
-
+    return Project::getInstance().getTagList().getTagType(_tagID).getFieldUnit(field);
 }
 double Payload::getFieldScalar(int field)
 {
-
+    return Project::getInstance().getTagList().getTagType(_tagID).getFieldScalar(field);
 }
 
 long Payload::getValDirect(int field)
 {
-
+    if(field < 0 || field >= _nFields) return 0;
+    return _vals[field];
 }
 
 double Payload::getVal(int field)
 {
-
+    if(field < 0 || field >= _nFields) return 0;
+    return static_cast<double>(_vals[field])*getFieldScalar(field);
 }

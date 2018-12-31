@@ -18,8 +18,8 @@ public:
     }
 
     void save();
-    void save(QFileInfo _path);
-    void load();
+    void save(QFileInfo path);
+    void load(QFileInfo path);
 
     TagList &getTagList();
     TunnelList &getTunnelList();

@@ -13,21 +13,17 @@ class StreamReceiver : public QObject
 public:
     explicit StreamReceiver(QObject *parent = nullptr);
     void setSender(std::shared_ptr<StreamSender> sender);
-    void clearFifo(void);
     void clearStats(void);
 
 signals:
     void dataReady(Payload payload);
-    void fifoOverflow(void);
-    void fifoCount(size_t size);
     void statsUpdated(ConnectionStats &stats);
 
 public slots:
-    void place(Payload);
+    void place(Payload payload);
 
 private:
-    QQueue<Payload> _fifo;
-    ConnectionStats _stats;
+    ConnectionStats *_stats;
     StreamSender *_sender;
 
 };

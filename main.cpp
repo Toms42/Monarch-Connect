@@ -39,7 +39,6 @@ int main(int argc, char *argv[])
     MainWindow w;
 
     FlowScene scene(registerDataModels());
-    w.setScene(&scene);
     w.show();
 
     return a.exec();

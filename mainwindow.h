@@ -17,8 +17,6 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void
-    setScene(FlowScene *scene);
 
 private:
     Ui::MainWindow *ui;
