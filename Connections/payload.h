@@ -4,8 +4,12 @@
 #include <QObject>
 #include <QUuid>
 #include <QVector>
+#include <nodes/NodeData>
 
-class Payload : public QObject
+using QtNodes::NodeData;
+using QtNodes::NodeDataType;
+
+class Payload : public QObject, public NodeData
 {
     Q_OBJECT
 public:
@@ -13,6 +17,12 @@ public:
     Payload(QUuid tagID, long val, QObject *parent = nullptr);
     Payload(Payload &payload);
 
+public:
+    NodeDataType
+    type() const override
+    { return NodeDataType {"Payload", "Payload"}; }
+
+public:
     QUuid getTagID();
     int nFields();
 

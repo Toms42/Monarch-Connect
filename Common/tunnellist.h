@@ -8,7 +8,6 @@ class TunnelList : public QObject
     Q_OBJECT
 public:
     explicit TunnelList(QObject *parent = nullptr);
-    ~TunnelList();
 
 signals:
 

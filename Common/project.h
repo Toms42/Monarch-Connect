@@ -21,9 +21,9 @@ public:
     void save(QFileInfo path);
     void load(QFileInfo path);
 
-    TagList &getTagList();
-    TunnelList &getTunnelList();
-    FlowList &getFlowList();
+    const TagList &getTagList();
+    const TunnelList &getTunnelList();
+    const FlowList &getFlowList();
 
 signals:
 
@@ -31,7 +31,6 @@ public slots:
 
 private:
     explicit Project(QObject *parent = nullptr);
-    ~Project();
     Project(const Project&) = delete;
     Project &operator=(const Project&) = delete;
 

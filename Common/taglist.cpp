@@ -2,36 +2,38 @@
 
 TagList::TagList(QObject *parent)
     : QObject(parent),
-      _tags(QHash<QString, QUuid>()),
-      _tagTypes(QHash<QUuid, TagType>())
+      _tags(),
+      _tagTypes()
 {
 }
 
 
-TagType &TagList::getTagType(QString tag)
+std::shared_ptr<TagType> TagList::getTagType(QString tag) const
 {
-    return _tagTypes[this->getTagID(tag)];
+    auto tagID = getTagID(tag);
+    return _tagTypes.value(tagID);
 }
 
-TagType &TagList::getTagType(QUuid tagID)
+std::shared_ptr<TagType> TagList::getTagType(QUuid tagID) const
 {
-    return _tagTypes[tagID];
+    return _tagTypes.value(tagID);
 }
 
-QUuid TagList::getTagID(QString tag)
+QUuid TagList::getTagID(QString tag) const
 {
-    return _tags[tag];
+    return _tags.value(tag);
 }
 
-QString TagList::getTag(QUuid tagID)
+QString TagList::getTag(QUuid tagID) const
 {
-    return _tagTypes[tagID].getTag();
+    return _tagTypes.value(tagID)->getTag();
 }
 
-void TagList::insert(TagType &type)
+void TagList::insert(std::unique_ptr<TagType> type)
 {
-    _tags.insert(type.getTag(), type.getTagID());
-    _tagTypes.insert(type.getTagID(), type);
+    type->setParent(this);
+    _tags.insert(type->getTag(), type->getTagID());
+    _tagTypes.insert(type->getTagID(), std::move(type));
 }
 
 void TagList::remove(QUuid tagID)

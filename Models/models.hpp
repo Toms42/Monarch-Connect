@@ -38,10 +38,10 @@ class MyDataModel : public NodeDataModel
     Q_OBJECT
 
 public:
-    MyDataModel() : _button(new QPushButton),
-                    _stream(new StreamSender),
-                    _data(new MyNodeData),
-                    _listener(new StreamReceiver)
+    MyDataModel() : _button(),
+                    _stream(),
+                    _data(),
+                    _listener()
     {
         _button->setText("press");
         connect(_button, SIGNAL(pressed()),

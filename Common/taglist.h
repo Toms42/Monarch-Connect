@@ -3,26 +3,27 @@
 
 #include <QObject>
 #include <QHash>
+#include <QUuid>
 #include "Common/tagtype.h"
+#include <memory>
 
 class TagList : public QObject
 {
     Q_OBJECT
 public:
     explicit TagList(QObject *parent = nullptr);
-    ~TagList();
-    TagType &getTagType(QString tag);
-    TagType &getTagType(QUuid tagID);
+    std::shared_ptr<TagType> getTagType(QString tag) const;
+    std::shared_ptr<TagType> getTagType(QUuid tagID) const;
 
-    QUuid getTagID(QString tag);
-    QString getTag(QUuid tagID);
+    QUuid getTagID(QString tag) const;
+    QString getTag(QUuid tagID) const;
 
-    void insert(TagType &type);
+    void insert(std::unique_ptr<TagType> type);
     void remove(QUuid tagID);
 
 private:
     QHash<QString, QUuid> _tags;
-    QHash<QUuid, TagType> _tagTypes;
+    QHash<QUuid, std::shared_ptr<TagType>> _tagTypes;
 
 signals:
 

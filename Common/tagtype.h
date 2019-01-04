@@ -21,8 +21,10 @@ public:
                      double fieldScalar,
                      QString fieldUnit,
                      QObject *parent = nullptr);
-    ~TagType();
+    explicit TagType(QObject *parent = nullptr);
+    bool operator==(const TagType & other) const;
     QString getTag();
+    QString getTag() const;
     QUuid getTagID();
     QString getFieldName(int field);
     QString getFieldUnit(int field);

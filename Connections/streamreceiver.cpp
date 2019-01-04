@@ -3,7 +3,7 @@
 
 StreamReceiver::StreamReceiver(QObject *parent)
     : QObject(parent),
-      _stats(new ConnectionStats)
+      _stats()
 {
 
 }

@@ -8,7 +8,6 @@ class FlowList : public QObject
     Q_OBJECT
 public:
     explicit FlowList(QObject *parent = nullptr);
-    ~FlowList();
 
 signals:
 

@@ -2,15 +2,10 @@
 
 Project::Project(QObject *parent)
     : QObject(parent),
-      _tags(new TagList(this)),
-      _tunnels(new TunnelList(this)),
-      _flows(new FlowList(this)),
-      _path(QFileInfo())
-{
-
-}
-
-Project::~Project()
+      _tags(this),
+      _tunnels(this),
+      _flows(this),
+      _path()
 {
 
 }
@@ -46,17 +41,17 @@ void Project::load(QFileInfo path)
     }
 }
 
-TagList &Project::getTagList()
+const TagList &Project::getTagList()
 {
     return _tags;
 }
 
-TunnelList &Project::getTunnelList()
+const TunnelList &Project::getTunnelList()
 {
     return _tunnels;
 }
 
-FlowList &Project::getFlowList()
+const FlowList &Project::getFlowList()
 {
     return _flows;
 }
