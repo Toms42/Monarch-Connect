@@ -6,8 +6,11 @@
 
 QT       += core gui opengl
 
+# Compile with c++11 standard:
 CONFIG += c++11
+QMAKE_CXXFLAGS += -std=c++11
 
+# let nodeeditor know it's being statically linked
 DEFINES += NODE_EDITOR_STATIC
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
