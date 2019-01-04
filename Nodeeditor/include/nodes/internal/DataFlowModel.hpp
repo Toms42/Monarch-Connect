@@ -5,6 +5,7 @@
 #include "Export.hpp"
 #include "FlowSceneModel.hpp"
 #include "QUuidStdHash.hpp"
+#include "Node.hpp"
 
 namespace QtNodes {
 

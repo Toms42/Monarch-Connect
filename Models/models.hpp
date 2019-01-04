@@ -38,13 +38,14 @@ class MyDataModel : public NodeDataModel
     Q_OBJECT
 
 public:
-    MyDataModel() : _button(),
-                    _stream(),
-                    _data(),
-                    _listener()
+    MyDataModel()
+        : _button(),
+        _stream(),
+        _data(),
+        _listener()
     {
-        _button->setText("press");
-        connect(_button, SIGNAL(pressed()),
+        _button.setText("press");
+        connect(&_button, SIGNAL(pressed()),
                 this, SLOT(button_pressed()));
     }
     virtual
@@ -129,7 +130,7 @@ public:
         switch(index)
         {
         case 0:
-            _listener->setSender(std::static_pointer_cast<StreamSender>(data));
+            _listener.setSender(std::static_pointer_cast<StreamSender>(data));
             break;
         case 1:
             _data = std::static_pointer_cast<MyNodeData>(data);
@@ -139,7 +140,7 @@ public:
     }
 
     QWidget *
-    embeddedWidget() override { return _button; }
+    embeddedWidget() override { return &_button; }
 public slots:
     void button_pressed()
     {
@@ -148,8 +149,8 @@ public slots:
         //emit(portRemoved(PortType::Out, _ports - 1));
     }
 protected:
-    QPushButton *_button;
+    QPushButton _button;
     std::shared_ptr<StreamSender> _stream;
     std::shared_ptr<MyNodeData> _data;
-    StreamReceiver *_listener;
+    StreamReceiver _listener;
 };
