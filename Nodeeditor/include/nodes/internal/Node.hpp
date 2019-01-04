@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <QtCore/QObject>
 #include <QtCore/QUuid>
 
@@ -8,17 +7,16 @@
 
 #include "PortType.hpp"
 
-#include "Export.hpp"
-#include "NodeState.hpp"
-#include "NodeGeometry.hpp"
-#include "NodeData.hpp"
-#include "NodeGraphicsObject.hpp"
 #include "ConnectionGraphicsObject.hpp"
+#include "Export.hpp"
+#include "NodeData.hpp"
+#include "NodeGeometry.hpp"
+#include "NodeGraphicsObject.hpp"
+#include "NodeState.hpp"
 #include "Serializable.hpp"
 #include "memory.hpp"
 
-namespace QtNodes
-{
+namespace QtNodes {
 
 class Connection;
 class ConnectionState;
@@ -32,95 +30,53 @@ class NODE_EDITOR_PUBLIC Node
   Q_OBJECT
 
 public:
-
   /// NodeDataModel should be an rvalue and is moved into the Node
-  Node(std::unique_ptr<NodeDataModel> && dataModel);
+  Node(std::unique_ptr<NodeDataModel>&& dataModel, QUuid const& id);
 
-  virtual
-  ~Node();
-
-public:
-
-  QJsonObject
-  save() const override;
-
-  void
-  restore(QJsonObject const &json) override;
+  virtual ~Node();
 
 public:
+  QJsonObject save() const override;
 
-  QUuid
-  id() const;
-
-  void reactToPossibleConnection(PortType,
-                                 NodeDataType const &,
-                                 QPointF const & scenePoint);
-
-  void
-  resetReactionToConnection();
+  void restore(QJsonObject const& json) override;
 
 public:
+  QUuid id() const;
 
-  NodeGraphicsObject const &
-  nodeGraphicsObject() const;
+  QPointF position() const;
 
-  NodeGraphicsObject &
-  nodeGraphicsObject();
+  void setPosition(QPointF const& newPos);
 
-  void
-  setGraphicsObject(std::unique_ptr<NodeGraphicsObject>&& graphics);
+public:
+  NodeDataModel* nodeDataModel() const;
 
-  NodeGeometry&
-  nodeGeometry();
+  std::vector<Connection*> const& connections(PortType pType,
+                                              PortIndex pIdx) const;
 
-  NodeGeometry const&
-  nodeGeometry() const;
-
-  NodeState const &
-  nodeState() const;
-
-  NodeState &
-  nodeState();
-
-  NodeDataModel*
-  nodeDataModel() const;
+  std::vector<Connection*>& connections(PortType pType, PortIndex pIdx);
 
 public slots: // data propagation
 
   /// Propagates incoming data to the underlying model.
-  void
-  propagateData(std::shared_ptr<NodeData> nodeData,
-                PortIndex inPortIndex) const;
+  void propagateData(std::shared_ptr<NodeData> nodeData,
+                     PortIndex inPortIndex) const;
 
   /// Fetches data from model's OUT #index port
   /// and propagates it to the connection
-  void
-  onDataUpdated(PortIndex index);
+  void onDataUpdated(PortIndex index);
 
-  /*
-  void
-  onPortAdded(PortType type, PortIndex index);
+signals:
 
-  void
-  onPortRemoved(PortType type, PortIndex index);
-  */
+  void positionChanged(QPointF const& newPos);
 
 private:
-
   // addressing
 
   QUuid _uid;
 
   // data
-
   std::unique_ptr<NodeDataModel> _nodeDataModel;
-
-  NodeState _nodeState;
-
-  // painting
-
-  NodeGeometry _nodeGeometry;
-
-  std::unique_ptr<NodeGraphicsObject> _nodeGraphicsObject;
+  std::vector<std::vector<Connection*>> _inConnections, _outConnections;
+  QPointF _pos;
 };
 }

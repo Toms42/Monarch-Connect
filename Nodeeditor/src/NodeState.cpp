@@ -1,29 +1,31 @@
 #include "NodeState.hpp"
 
+#include "FlowSceneModel.hpp"
 #include "NodeDataModel.hpp"
+#include "NodeIndex.hpp"
+#include "QUuidStdHash.hpp"
 
 #include "Connection.hpp"
 
-using QtNodes::NodeState;
-using QtNodes::NodeDataType;
-using QtNodes::NodeDataModel;
-using QtNodes::PortType;
-using QtNodes::PortIndex;
 using QtNodes::Connection;
+using QtNodes::ConnectionGraphicsObject;
+using QtNodes::NodeDataModel;
+using QtNodes::NodeDataType;
+using QtNodes::NodeIndex;
+using QtNodes::NodeState;
+using QtNodes::PortIndex;
+using QtNodes::PortType;
 
-NodeState::
-NodeState(std::unique_ptr<NodeDataModel> const &model)
-  : _inConnections(model->nPorts(PortType::In))
-  , _outConnections(model->nPorts(PortType::Out))
+NodeState::NodeState(NodeIndex const& index)
+  : _inConnections(index.model()->nodePortCount(index, PortType::In))
+  , _outConnections(index.model()->nodePortCount(index, PortType::Out))
   , _reaction(NOT_REACTING)
   , _reactingPortType(PortType::None)
   , _resizing(false)
 {}
 
-
-std::vector<NodeState::ConnectionPtrSet> const &
-NodeState::
-getEntries(PortType portType) const
+std::vector<NodeState::ConnectionPtrVec> const&
+NodeState::getEntries(PortType portType) const
 {
   if (portType == PortType::In)
     return _inConnections;
@@ -31,10 +33,8 @@ getEntries(PortType portType) const
     return _outConnections;
 }
 
-
-std::vector<NodeState::ConnectionPtrSet> &
-NodeState::
-getEntries(PortType portType)
+std::vector<NodeState::ConnectionPtrVec>&
+NodeState::getEntries(PortType portType)
 {
   if (portType == PortType::In)
     return _inConnections;
@@ -42,69 +42,58 @@ getEntries(PortType portType)
     return _outConnections;
 }
 
-
-NodeState::ConnectionPtrSet
-NodeState::
-connections(PortType portType, PortIndex portIndex) const
+NodeState::ConnectionPtrVec
+NodeState::connections(PortType portType, PortIndex portIndex) const
 {
-  auto const &connections = getEntries(portType);
+  auto const& connections = getEntries(portType);
 
   return connections[portIndex];
 }
 
-
 void
-NodeState::
-setConnection(PortType portType,
-              PortIndex portIndex,
-              Connection& connection)
+NodeState::setConnection(PortType portType,
+                         PortIndex portIndex,
+                         ConnectionGraphicsObject& connection)
 {
-  auto &connections = getEntries(portType);
+  auto& connections = getEntries(portType);
 
-  connections[portIndex].insert(std::make_pair(connection.id(),
-                                               &connection));
+  connections[portIndex].push_back(&connection);
 }
 
-
 void
-NodeState::
-eraseConnection(PortType portType,
-                PortIndex portIndex,
-                QUuid id)
+NodeState::eraseConnection(PortType portType,
+                           PortIndex portIndex,
+                           ConnectionGraphicsObject& conn)
 {
-  getEntries(portType)[portIndex].erase(id);
+  auto& ptrSet = getEntries(portType)[portIndex];
+  auto iter = std::find(ptrSet.begin(), ptrSet.end(), &conn);
+  if (iter != ptrSet.end()) {
+    ptrSet.erase(iter);
+  }
 }
-
 
 NodeState::ReactToConnectionState
-NodeState::
-reaction() const
+NodeState::reaction() const
 {
   return _reaction;
 }
 
-
 PortType
-NodeState::
-reactingPortType() const
+NodeState::reactingPortType() const
 {
   return _reactingPortType;
 }
 
-
 NodeDataType
-NodeState::
-reactingDataType() const
+NodeState::reactingDataType() const
 {
   return _reactingDataType;
 }
 
-
 void
-NodeState::
-setReaction(ReactToConnectionState reaction,
-            PortType reactingPortType,
-            NodeDataType reactingDataType)
+NodeState::setReaction(ReactToConnectionState reaction,
+                       PortType reactingPortType,
+                       NodeDataType reactingDataType)
 {
   _reaction = reaction;
 
@@ -113,26 +102,20 @@ setReaction(ReactToConnectionState reaction,
   _reactingDataType = std::move(reactingDataType);
 }
 
-
 bool
-NodeState::
-isReacting() const
+NodeState::isReacting() const
 {
   return _reaction == REACTING;
 }
 
-
 void
-NodeState::
-setResizing(bool resizing)
+NodeState::setResizing(bool resizing)
 {
   _resizing = resizing;
 }
 
-
 bool
-NodeState::
-resizing() const
+NodeState::resizing() const
 {
   return _resizing;
 }

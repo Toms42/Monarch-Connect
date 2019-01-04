@@ -5,44 +5,34 @@
 #include <QtCore/QPointF>
 
 #include "FlowScene.hpp"
-#include "Node.hpp"
+#include "NodeGraphicsObject.hpp"
 
 using QtNodes::ConnectionState;
-using QtNodes::Node;
+using QtNodes::NodeGraphicsObject;
 
-ConnectionState::
-~ConnectionState()
+ConnectionState::~ConnectionState()
 {
   resetLastHoveredNode();
 }
 
-
 void
-ConnectionState::
-interactWithNode(Node* node)
+ConnectionState::interactWithNode(NodeGraphicsObject* node)
 {
-  if (node)
-  {
+  if (node) {
     _lastHoveredNode = node;
-  }
-  else
-  {
+  } else {
     resetLastHoveredNode();
   }
 }
 
-
 void
-ConnectionState::
-setLastHoveredNode(Node* node)
+ConnectionState::setLastHoveredNode(NodeGraphicsObject* node)
 {
   _lastHoveredNode = node;
 }
 
-
 void
-ConnectionState::
-resetLastHoveredNode()
+ConnectionState::resetLastHoveredNode()
 {
   if (_lastHoveredNode)
     _lastHoveredNode->resetReactionToConnection();

@@ -6,17 +6,15 @@
 
 class QPointF;
 
-namespace QtNodes
-{
+namespace QtNodes {
 
-class Node;
+class NodeGraphicsObject;
 
 /// Stores currently draggind end.
 /// Remembers last hovered Node.
 class ConnectionState
 {
 public:
-
   ConnectionState(PortType port = PortType::None)
     : _requiredPort(port)
   {}
@@ -27,35 +25,26 @@ public:
   ~ConnectionState();
 
 public:
+  void setRequiredPort(PortType end) { _requiredPort = end; }
 
-  void setRequiredPort(PortType end)
-  { _requiredPort = end; }
+  PortType requiredPort() const { return _requiredPort; }
 
-  PortType requiredPort() const
-  { return _requiredPort; }
+  bool requiresPort() const { return _requiredPort != PortType::None; }
 
-  bool requiresPort() const
-  { return _requiredPort != PortType::None; }
-
-  void setNoRequiredPort()
-  { _requiredPort = PortType::None; }
+  void setNoRequiredPort() { _requiredPort = PortType::None; }
 
 public:
+  void interactWithNode(NodeGraphicsObject* node);
 
-  void interactWithNode(Node* node);
+  void setLastHoveredNode(NodeGraphicsObject* node);
 
-  void setLastHoveredNode(Node* node);
-
-  Node*
-  lastHoveredNode() const
-  { return _lastHoveredNode; }
+  NodeGraphicsObject* lastHoveredNode() const { return _lastHoveredNode; }
 
   void resetLastHoveredNode();
 
 private:
-
   PortType _requiredPort;
 
-  Node* _lastHoveredNode{nullptr};
+  NodeGraphicsObject* _lastHoveredNode{ nullptr };
 };
 }
