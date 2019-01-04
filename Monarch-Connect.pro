@@ -7,7 +7,7 @@
 QT       += core gui opengl
 
 # Compile with c++11 standard:
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++14
 
 # let nodeeditor know it's being statically linked
 DEFINES += NODE_EDITOR_STATIC
