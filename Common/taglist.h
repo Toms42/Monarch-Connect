@@ -12,8 +12,8 @@ class TagList : public QObject
     Q_OBJECT
 public:
     explicit TagList(QObject *parent = nullptr);
-    std::shared_ptr<TagType> getTagType(QString tag) const;
-    std::shared_ptr<TagType> getTagType(QUuid tagID) const;
+    std::shared_ptr<const TagType> getTagType(QString tag) const;
+    std::shared_ptr<const TagType> getTagType(QUuid tagID) const;
 
     QUuid getTagID(QString tag) const;
     QString getTag(QUuid tagID) const;

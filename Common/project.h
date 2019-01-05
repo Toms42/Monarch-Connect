@@ -21,9 +21,9 @@ public:
     void save(QFileInfo path);
     void load(QFileInfo path);
 
-    const TagList &getTagList();
-    const TunnelList &getTunnelList();
-    const FlowList &getFlowList();
+    TagList &getTagList();
+    TunnelList &getTunnelList();
+    FlowList &getFlowList();
 
 signals:
 

@@ -23,8 +23,8 @@ public slots:
     void place(Payload payload);
 
 private:
-    ConnectionStats *_stats;
-    StreamSender *_sender;
+    ConnectionStats _stats;
+    std::shared_ptr<StreamSender> _sender;
 
 };
 

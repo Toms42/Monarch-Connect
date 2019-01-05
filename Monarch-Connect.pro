@@ -6,7 +6,7 @@
 
 QT       += core gui opengl
 
-# Compile with c++14 standard:
+# Compile with c++11 standard:
 CONFIG += c++14
 
 # let nodeeditor know it's being statically linked

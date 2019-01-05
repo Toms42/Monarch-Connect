@@ -41,17 +41,17 @@ void Project::load(QFileInfo path)
     }
 }
 
-const TagList &Project::getTagList()
+TagList &Project::getTagList()
 {
     return _tags;
 }
 
-const TunnelList &Project::getTunnelList()
+TunnelList &Project::getTunnelList()
 {
     return _tunnels;
 }
 
-const FlowList &Project::getFlowList()
+FlowList &Project::getFlowList()
 {
     return _flows;
 }

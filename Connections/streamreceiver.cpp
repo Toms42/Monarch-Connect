@@ -1,5 +1,6 @@
 #include "streamreceiver.h"
 #include "Connections/streamsender.h"
+#include <QDebug>
 
 StreamReceiver::StreamReceiver(QObject *parent)
     : QObject(parent),
@@ -9,7 +10,9 @@ StreamReceiver::StreamReceiver(QObject *parent)
 }
 void StreamReceiver::setSender(std::shared_ptr<StreamSender> sender)
 {
-    connect(sender.get(), &StreamSender::sent, this, &StreamReceiver::place);
+    qDebug() << "connected: " << sender.get();
+    _sender = sender;
+    connect(_sender.get(), &StreamSender::sent, this, &StreamReceiver::place);
 }
 void StreamReceiver::clearStats(void)
 {
@@ -18,5 +21,6 @@ void StreamReceiver::clearStats(void)
 
 void StreamReceiver::place(Payload payload)
 {
+    qDebug() << "receiving";
     emit(dataReady(payload));
 }

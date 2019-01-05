@@ -23,12 +23,11 @@ public:
                      QObject *parent = nullptr);
     explicit TagType(QObject *parent = nullptr);
     bool operator==(const TagType & other) const;
-    QString getTag();
     QString getTag() const;
-    QUuid getTagID();
-    QString getFieldName(int field);
-    QString getFieldUnit(int field);
-    double getFieldScalar(int field);
+    QUuid getTagID() const;
+    QString getFieldName(int field) const;
+    QString getFieldUnit(int field) const;
+    double getFieldScalar(int field) const;
 
 
 signals:

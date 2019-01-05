@@ -8,6 +8,8 @@
 #include <QDebug>
 #include "Connections/streamsender.h"
 #include "Connections/streamreceiver.h"
+#include "Common/project.h"
+#include "Connections/payload.h"
 
 #include <memory>
 
@@ -40,13 +42,17 @@ class MyDataModel : public NodeDataModel
 public:
     MyDataModel()
         : _button(),
-        _stream(),
+        _stream(new StreamSender()),
         _data(),
         _listener()
     {
+        auto &t = Project::getInstance().getTagList();
+        t.insert(std::make_unique<TagType>(new TagType("test", "foo", 10, "bar")));
         _button.setText("press");
         connect(&_button, SIGNAL(pressed()),
                 this, SLOT(button_pressed()));
+        connect(&_listener, &StreamReceiver::dataReady,
+                this, &MyDataModel::streamIn);
     }
     virtual
     ~MyDataModel() {}
@@ -144,9 +150,21 @@ public:
 public slots:
     void button_pressed()
     {
+        auto &t = Project::getInstance().getTagList();
+        QUuid id = t.getTagID("test");
+        Payload p(id, 100);
+        _stream->send(p);
         //_ports--;
         //qDebug() << "pressed: " << _ports << "\n";
         //emit(portRemoved(PortType::Out, _ports - 1));
+    }
+    void streamIn(Payload payload)
+    {
+        qDebug() << "got: ";
+        qDebug() << payload.getFieldName(1)
+                 << ": "
+                 << payload.getVal(1)
+                 << payload.getFieldUnit(1);
     }
 protected:
     QPushButton _button;

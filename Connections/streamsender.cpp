@@ -1,6 +1,7 @@
 #include "streamsender.h"
 #include <nodes/NodeData>
 #include <nodes/NodeDataModel>
+#include <QDebug>
 
 using QtNodes::PortType;
 using QtNodes::PortIndex;
@@ -15,7 +16,8 @@ StreamSender::StreamSender(QObject *parent) : QObject(parent)
 
 void StreamSender::send(Payload payload)
 {
-    emit(StreamSender::sent(payload));
+    qDebug() << "sending";
+    emit(sent(payload));
 }
 
 

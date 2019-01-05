@@ -49,6 +49,10 @@ int main(int argc, char *argv[])
     w.show();
 
     DataFlowModel model(registerDataModels());
+    FlowScene scene(&model);
+    FlowView view(&scene);
+    view.resize(600,400);
+    view.show();
 
     return a.exec();
 }

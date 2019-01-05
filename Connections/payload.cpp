@@ -42,19 +42,19 @@ int Payload::nFields()
 QString Payload::getFieldName(int field)
 {
     const TagList& taglist = Project::getInstance().getTagList();
-    std::shared_ptr<TagType> tagtype = taglist.getTagType(_tagID);
+    std::shared_ptr<const TagType> tagtype = taglist.getTagType(_tagID);
     return tagtype->getFieldName(field);
 }
 QString Payload::getFieldUnit(int field)
 {
     const TagList& taglist = Project::getInstance().getTagList();
-    std::shared_ptr<TagType> tagtype = taglist.getTagType(_tagID);
+    std::shared_ptr<const TagType> tagtype = taglist.getTagType(_tagID);
     return tagtype->getFieldUnit(field);
 }
 double Payload::getFieldScalar(int field)
 {
     const TagList& taglist = Project::getInstance().getTagList();
-    std::shared_ptr<TagType> tagtype = taglist.getTagType(_tagID);
+    std::shared_ptr<const TagType> tagtype = taglist.getTagType(_tagID);
     return tagtype->getFieldScalar(field);
 }
 

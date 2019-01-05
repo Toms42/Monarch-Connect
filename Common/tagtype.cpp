@@ -45,52 +45,30 @@ TagType::TagType(QString tag,
     _fieldUnits[0] = fieldUnit;
 
 }
-/*
-TagType::TagType(const TagType &tag)
-{
-    _tagID = tag._tagID;
-    _tag = tag._tag;
-    _nFields = tag._nFields;
-    _fieldNames = tag._fieldNames;
-    _fieldScalars = tag._fieldScalars;
-    _fieldUnits = tag._fieldUnits;
-}
-*/
 bool TagType::operator==(const TagType &other) const
 {
     return _tagID == other._tagID;
 }
-/*
-TagType &TagType::operator=(const TagType & t)
-{
-}
 
-TagType::~TagType()
-{
-}*/
-QString TagType::getTag()
-{
-    return _tag;
-}
 QString TagType::getTag() const
 {
     return _tag;
 }
-QUuid TagType::getTagID()
+QUuid TagType::getTagID() const
 {
     return _tagID;
 }
-QString TagType::getFieldName(int field)
+QString TagType::getFieldName(int field) const
 {
     if(field >= _nFields || field < 0) return "Invalid Field";
     return _fieldNames[field];
 }
-QString TagType::getFieldUnit(int field)
+QString TagType::getFieldUnit(int field) const
 {
     if(field >= _nFields || field < 0) return "Invalid Field";
     return _fieldUnits[field];
 }
-double TagType::getFieldScalar(int field)
+double TagType::getFieldScalar(int field) const
 {
     if(field >= _nFields || field < 0) return 1;
     return _fieldScalars[field];
