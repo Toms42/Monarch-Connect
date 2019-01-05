@@ -1,3 +1,38 @@
+language: none
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      compiler: clang
+      env: CXX=clang++-3.8 CC=clang-3.8
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.8
+          packages:
+            - clang-3.8
+              # VERY IMPORTANT TO INSTALL g++-5! clang doesn't come with a standard library, so
+              # we need to install g++-5 for a C++14 standard library.
+            - g++-5
+
+    - os: linux
+      dist: trusty
+      compiler: gcc
+      env: CXX=g++-5 CC=gcc-5 QT=5
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+
+    - os: osx
+      osx_image: xcode8.3
+      compiler: clang
+      env: CMAKE_PREFIX_PATH=/usr/local/Cellar/qt/5.11.2:$CMAKE_PREFIX_PATH
+
 install:
  - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
  - sudo apt-get update -qq
