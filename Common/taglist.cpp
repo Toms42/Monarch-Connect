@@ -35,7 +35,8 @@ void TagList::insert(std::unique_ptr<TagType> type)
     qDebug() << "inserting";
     type->setParent(this);
     _tags.insert(type->getTag(), type->getTagID());
-    _tagTypes.insert(type->getTagID(), std::move(type));
+    auto tagID = type->getTagID();
+    _tagTypes.insert(tagID, std::move(type));
     qDebug() << "inserted";
 }
 

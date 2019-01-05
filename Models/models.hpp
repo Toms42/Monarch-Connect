@@ -47,7 +47,8 @@ public:
         _listener()
     {
         auto &t = Project::getInstance().getTagList();
-        t.insert(std::make_unique<TagType>(new TagType("test", "foo", 10, "bar")));
+        auto type = std::make_unique<TagType>("test", "foo", 10, "bar");
+        t.insert(std::move(type));
         _button.setText("press");
         connect(&_button, SIGNAL(pressed()),
                 this, SLOT(button_pressed()));
