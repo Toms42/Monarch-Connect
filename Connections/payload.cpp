@@ -3,8 +3,9 @@
 #include "Common/tagtype.h"
 #include "Common/project.h"
 #include <memory>
+#include <math.h>
 
-Payload::Payload(QUuid tagID, int nFields, QVector<long> vals, QObject *parent)
+Payload::Payload(QUuid tagID, int nFields, QVector<double> vals, QObject *parent)
     : QObject (parent),
       _vals(nFields)
 {
@@ -13,7 +14,7 @@ Payload::Payload(QUuid tagID, int nFields, QVector<long> vals, QObject *parent)
     _vals = vals;
 }
 
-Payload::Payload(QUuid tagID, long val, QObject *parent)
+Payload::Payload(QUuid tagID, double val, QObject *parent)
     :QObject (parent),
       _vals(1)
 {
@@ -61,11 +62,11 @@ double Payload::getFieldScalar(int field)
 long Payload::getValDirect(int field)
 {
     if(field < 0 || field >= _nFields) return 0;
-    return _vals[field];
+    return static_cast<long>(round(_vals[field] * getFieldScalar(field)));
 }
 
 double Payload::getVal(int field)
 {
     if(field < 0 || field >= _nFields) return 0;
-    return static_cast<double>(_vals[field])*getFieldScalar(field);
+    return static_cast<double>(_vals[field]);
 }

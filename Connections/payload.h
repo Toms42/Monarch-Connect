@@ -13,8 +13,8 @@ class Payload : public QObject, public NodeData
 {
     Q_OBJECT
 public:
-    Payload(QUuid tagID, int nFields, QVector<long> vals, QObject *parent = nullptr);
-    Payload(QUuid tagID, long val, QObject *parent = nullptr);
+    Payload(QUuid tagID, int nFields, QVector<double> vals, QObject *parent = nullptr);
+    Payload(QUuid tagID, double val, QObject *parent = nullptr);
     Payload(Payload &payload);
 
 public:
@@ -37,7 +37,7 @@ public:
 private:
     QUuid _tagID;
     int _nFields;
-    QVector<long> _vals;
+    QVector<double> _vals;
 };
 
 #endif // PAYLOAD_H

@@ -136,7 +136,6 @@ ConnectionStyle::loadJsonFromByteArray(QByteArray const& byteArray)
     CONNECTION_STYLE_READ_FLOAT(obj, LineWidth);
     CONNECTION_STYLE_READ_FLOAT(obj, ConstructionLineWidth);
     CONNECTION_STYLE_READ_FLOAT(obj, PointDiameter);
-    CONNECTION_STYLE_READ_FLOAT(obj, RandSeed);
 
     CONNECTION_STYLE_READ_BOOL(obj, UseDataDefinedColors);
 }
@@ -158,30 +157,17 @@ ConnectionStyle::normalColor(QString typeId) const
 {
     if(colorTableObject.contains(typeId))
     {
-        QColor res;
         QJsonValue val = colorTableObject.value(typeId);
         if(val.isArray() && val.toArray().size() == 3)
         {
-            QJsonArray array = val.toArray();
-            std::vector<int> rgb;
-            rgb.reserve(3);
-            for (auto it = array.begin(); it != array.end(); ++it)
-            {
-                rgb.push_back((*it).toInt());
-            }
-            res = QColor(rgb[0], rgb[1], rgb[2]);
+
         }
-        else
-        {
-            res = QColor(val.toString());
-        }
-        return res;
     }
     std::size_t hash = qHash(typeId);
 
     std::size_t const hue_range = 0xFF;
 
-    qsrand(hash + RandSeed);
+    qsrand(hash);
     std::size_t hue = qrand() % hue_range;
 
     std::size_t sat = 120 + hash % 129;

@@ -37,6 +37,12 @@
     "ConstructionLineWidth": 2.0,
     "PointDiameter": 10.0,
 
-    "UseDataDefinedColors": false
+    "UseDataDefinedColors": true,
+    "RandSeed": 1234,
+    "ColorTable": {
+      "Payload": "darkcyan",
+      "Stream": "green",
+      "Event": "red"
+    }
   }
 }

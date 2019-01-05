@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtGui/QColor>
+#include <QtCore/QJsonObject>
 
 #include "Export.hpp"
 #include "Style.hpp"
@@ -51,7 +52,9 @@ private:
   QColor SelectedColor;
   QColor SelectedHaloColor;
   QColor HoveredColor;
+  QJsonObject colorTableObject;
 
+  float RandSeed;
   float LineWidth;
   float ConstructionLineWidth;
   float PointDiameter;
