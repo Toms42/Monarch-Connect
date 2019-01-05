@@ -82,12 +82,12 @@ NodeGraphicsObject::~NodeGraphicsObject()
 {
   // TODO I think it is dangerous - user have to delete widget if he allocated
   // it
-  if (_proxyWidget) {
-    delete _proxyWidget->widget();
-  }
+  //if (_proxyWidget) {
+  //  delete _proxyWidget->widget();
+  //}
   // TODO here can be problem, when item have a parent, then parent remove item
   // when it will be removed
-  _scene.removeItem(this);
+  //_scene.removeItem(this);
 }
 
 NodeIndex

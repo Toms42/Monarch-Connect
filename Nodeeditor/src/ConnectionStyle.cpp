@@ -177,11 +177,11 @@ ConnectionStyle::normalColor(QString typeId) const
         }
         return res;
     }
-    std::size_t hash = qHash(typeId);
+    std::size_t hash = qHash(typeId) * RandSeed;
 
     std::size_t const hue_range = 0xFF;
 
-    qsrand(hash + RandSeed);
+    qsrand(hash);
     std::size_t hue = qrand() % hue_range;
 
     std::size_t sat = 120 + hash % 129;

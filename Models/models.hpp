@@ -41,7 +41,7 @@ class MyDataModel : public NodeDataModel
 
 public:
     MyDataModel()
-        : _button(),
+        : _button(new QPushButton()),
         _stream(new StreamSender()),
         _data(),
         _listener()
@@ -49,8 +49,8 @@ public:
         auto &t = Project::getInstance().getTagList();
         auto type = std::make_unique<TagType>("test", "foo", 10, "bar");
         t.insert(std::move(type));
-        _button.setText("press");
-        connect(&_button, SIGNAL(pressed()),
+        _button->setText("press");
+        connect(_button, SIGNAL(pressed()),
                 this, SLOT(button_pressed()));
         connect(&_listener, &StreamReceiver::dataReady,
                 this, &MyDataModel::streamIn);
@@ -148,7 +148,7 @@ public:
     }
 
     QWidget *
-    embeddedWidget() override { return &_button; }
+    embeddedWidget() override { return _button; }
 public slots:
     void button_pressed()
     {
@@ -169,7 +169,7 @@ public slots:
                  << payload.getFieldUnit(0);
     }
 protected:
-    QPushButton _button;
+    QPushButton *_button;
     std::shared_ptr<StreamSender> _stream;
     std::shared_ptr<MyNodeData> _data;
     StreamReceiver _listener;
