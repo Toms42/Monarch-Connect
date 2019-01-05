@@ -11,12 +11,12 @@ StreamReceiver::StreamReceiver(QObject *parent)
 void StreamReceiver::setSender(std::shared_ptr<StreamSender> sender)
 {
     qDebug() << "connected: " << sender.get();
-    if(_sender.get() != nullptr) //disconnect current sender if there is one
+    if(_sender.get() != nullptr) && (sender.get() == nullptr) //disconnect current sender
     {
         disconnect(_sender.get(), &StreamSender::sent, this, &StreamReceiver::place);
     }
     _sender = sender;
-    if(sender.get() != nullptr) //connect new sender
+    if(sender.get() != nullptr)
     {
         connect(_sender.get(), &StreamSender::sent, this, &StreamReceiver::place);
     }

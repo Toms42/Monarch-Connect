@@ -134,6 +134,7 @@ public:
     void
     setInData(std::shared_ptr<NodeData> data, PortIndex index) override
     {
+        qDebug() << "input data updated";
         switch(index)
         {
         case 0:
