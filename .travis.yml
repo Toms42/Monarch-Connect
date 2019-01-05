@@ -31,10 +31,10 @@ matrix:
 install:
 before_install:
  - sudo apt-get update -qq ; fi
- - sudo apt-get install build-essential libgl1-mesa-dev ; fi
- - sudo apt-get -yy install qtbase5-dev qt5-qmake; fi
+ - sudo apt-get install build-essential libgl1-mesa-dev
+ - sudo apt-get -yy install qtbase5-dev qt5-qmake
 
 script:
- - qmake -v #shows version
- - qmake Monarch-Connect.pro
+ - qmake-qt5 -v #shows version
+ - qmake-qt5 Monarch-Connect.pro
  - make
