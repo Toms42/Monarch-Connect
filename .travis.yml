@@ -35,6 +35,6 @@ before_install:
  - sudo apt-get -yy install qtbase5-dev qt5-qmake
 
 script:
- - qmake-qt5 -v #shows version
- - qmake-qt5 Monarch-Connect.pro
+ - qmake -qt=qt5 -v #shows version
+ - qmake -qt=qt5 Monarch-Connect.pro
  - make
