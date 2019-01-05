@@ -2,8 +2,7 @@ language: none
 
 matrix:
   include:
-    - os: linux
-      dist: xenial
+    - dist: xenial
       compiler: clang
       env: CXX=clang++-3.8 CC=clang-3.8
       addons:
@@ -17,8 +16,7 @@ matrix:
               # we need to install g++-5 for a C++14 standard library.
             - g++-5
 
-    - os: linux
-      dist: xenial
+    - dist: xenial
       compiler: gcc
       env: CXX=g++-5 CC=gcc-5 QT=5
       addons:
