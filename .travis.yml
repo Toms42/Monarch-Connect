@@ -3,7 +3,7 @@ language: none
 matrix:
   include:
     - os: linux
-      dist: cosmic
+      dist: xenial
       compiler: clang
       env: CXX=clang++-3.8 CC=clang-3.8
       addons:
@@ -18,7 +18,7 @@ matrix:
             - g++-5
 
     - os: linux
-      dist: cosmic
+      dist: xenial
       compiler: gcc
       env: CXX=g++-5 CC=gcc-5 QT=5
       addons:
