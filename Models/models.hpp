@@ -162,10 +162,10 @@ public slots:
     void streamIn(Payload payload)
     {
         qDebug() << "got: ";
-        qDebug() << payload.getFieldName(1)
+        qDebug() << payload.getFieldName(0)
                  << ": "
-                 << payload.getVal(1)
-                 << payload.getFieldUnit(1);
+                 << payload.getVal(0)
+                 << payload.getFieldUnit(0);
     }
 protected:
     QPushButton _button;
