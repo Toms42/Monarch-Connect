@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <nodes/FlowScene>
+#include "WidgetControllers/tagtreeinterface.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +21,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    TagTreeInterface *tagTreeInterface;
 };
 
 #endif // MAINWINDOW_H

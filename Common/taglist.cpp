@@ -33,15 +33,41 @@ QString TagList::getTag(QUuid tagID) const
 void TagList::insert(std::unique_ptr<TagType> type)
 {
     qDebug() << "inserting";
-    type->setParent(this);
-    _tags.insert(type->getTag(), type->getTagID());
+    auto tag = type->getTag();
     auto tagID = type->getTagID();
+
+    if(_tagTypes.contains(tagID) || _tags.contains(tag))
+    {
+        //bad to assume syncronization?
+        //tbh should just remove tagID's and rely on tag names...
+        _tagTypes.remove(tagID);
+        _tags.remove(tag);
+        qDebug() << "removed older item";
+    }
+    _tags.insert(tag, tagID);
     _tagTypes.insert(tagID, std::move(type));
+
     qDebug() << "inserted";
+    emit(added(tag));
 }
 
 void TagList::remove(QUuid tagID)
 {
-    _tags.remove(this->getTag(tagID));
-    _tagTypes.remove(tagID);
+    if(_tagTypes.contains(tagID))
+    {
+        auto tag = getTag(tagID);
+        _tags.remove(tag);
+        _tagTypes.remove(tagID);
+        emit(removed(tag));
+    }
+}
+void TagList::remove(QString tag)
+{
+    if(_tags.contains(tag))
+    {
+        auto tagID = getTagID(tag);
+        _tags.remove(tag);
+        _tagTypes.remove(tagID);
+        emit(removed(tag));
+    }
 }

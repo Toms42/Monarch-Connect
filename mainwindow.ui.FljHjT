@@ -94,7 +94,7 @@
      <widget class="QFrame" name="frame">
       <property name="minimumSize">
        <size>
-        <width>300</width>
+        <width>250</width>
         <height>0</height>
        </size>
       </property>
@@ -167,14 +167,11 @@
            <item row="0" column="0">
             <widget class="QTreeWidget" name="widget_tagTree">
              <property name="editTriggers">
-              <set>QAbstractItemView::NoEditTriggers</set>
+              <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
              </property>
              <property name="expandsOnDoubleClick">
               <bool>false</bool>
              </property>
-             <attribute name="headerMinimumSectionSize">
-              <number>20</number>
-             </attribute>
              <column>
               <property name="text">
                <string notr="true">1</string>

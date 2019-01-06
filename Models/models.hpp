@@ -56,7 +56,7 @@ public:
                 this, &MyDataModel::streamIn);
     }
     virtual
-    ~MyDataModel() {}
+    ~MyDataModel() override {}
 
 public:
 

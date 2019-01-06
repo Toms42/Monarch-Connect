@@ -37,7 +37,6 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     Models/models.cpp \
-    Connections/event.cpp \
     Connections/payload.cpp \
     Connections/connectionstats.cpp \
     Connections/streamreceiver.cpp \
@@ -70,12 +69,14 @@ SOURCES += \
     Nodeeditor/src/NodeState.cpp \
     Nodeeditor/src/NodeStyle.cpp \
     Nodeeditor/src/Properties.cpp \
-    Nodeeditor/src/StyleCollection.cpp
+    Nodeeditor/src/StyleCollection.cpp \
+    Connections/eventreceiver.cpp \
+    Connections/eventsender.cpp \
+    WidgetControllers/tagtreeinterface.cpp
 
 HEADERS += \
     ui_mainwindow.h \
     Models/models.hpp \
-    Connections/event.h \
     Connections/payload.h \
     Connections/connectionstats.h \
     Connections/streamreceiver.h \
@@ -143,7 +144,10 @@ HEADERS += \
     Nodeeditor/src/Properties.hpp \
     Nodeeditor/src/StyleCollection.hpp \
     Common/config.h \
-    mainwindow.h
+    mainwindow.h \
+    Connections/eventreceiver.h \
+    Connections/eventsender.h \
+    WidgetControllers/tagtreeinterface.h
 
 FORMS += \
         mainwindow.ui

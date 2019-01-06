@@ -19,13 +19,19 @@ public:
     QString getTag(QUuid tagID) const;
 
     void insert(std::unique_ptr<TagType> type);
+    void update(std::unique_ptr<TagType> type);
     void remove(QUuid tagID);
+    void remove(QString tag);
+
 
 private:
     QHash<QString, QUuid> _tags;
-    QHash<QUuid, std::shared_ptr<TagType>> _tagTypes;
+    QHash<QUuid, std::shared_ptr<const TagType>> _tagTypes;
+
 
 signals:
+    void added(QString tag); //(or updated. may be emitted w/out a remove on pre-existing data.)
+    void removed(QString tag);
 
 public slots:
 };

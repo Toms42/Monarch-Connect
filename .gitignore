@@ -45,3 +45,8 @@ CMakeLists.txt.user*
 # project outputs
 /debug
 /release
+
+#those weird temp files. Might cause problems...
+*.cpp.*
+*.hpp.*
+*.h.*

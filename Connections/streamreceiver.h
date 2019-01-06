@@ -13,17 +13,14 @@ class StreamReceiver : public QObject
 public:
     explicit StreamReceiver(QObject *parent = nullptr);
     void setSender(std::shared_ptr<StreamSender> sender);
-    void clearStats(void);
 
 signals:
     void dataReady(Payload payload);
-    void statsUpdated(ConnectionStats &stats);
 
 public slots:
     void place(Payload payload);
 
 private:
-    ConnectionStats _stats;
     std::shared_ptr<StreamSender> _sender;
 
 };
