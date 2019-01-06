@@ -50,3 +50,4 @@ CMakeLists.txt.user*
 *.cpp.*
 *.hpp.*
 *.h.*
+*.ui.*
