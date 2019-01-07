@@ -51,3 +51,4 @@ CMakeLists.txt.user*
 *.hpp.*
 *.h.*
 *.ui.*
+*.pro.*
