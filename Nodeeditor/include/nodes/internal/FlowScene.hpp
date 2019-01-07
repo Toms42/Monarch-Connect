@@ -63,6 +63,9 @@ private slots:
 
   void nodeMoved(NodeIndex const& index);
 
+signals:
+  void modified();
+
 private:
   FlowSceneModel* _model;
 

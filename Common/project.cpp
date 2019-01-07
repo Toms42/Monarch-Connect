@@ -1,13 +1,13 @@
 #include "project.h"
+#include <memory>
 
 Project::Project(QObject *parent)
     : QObject(parent),
       _tags(this),
-      _tunnels(this),
       _flows(this),
       _path()
 {
-
+    _registry = std::make_shared<DataModelRegistry>();
 }
 
 void Project::save()
@@ -46,12 +46,12 @@ TagList &Project::getTagList()
     return _tags;
 }
 
-TunnelList &Project::getTunnelList()
-{
-    return _tunnels;
-}
-
 FlowList &Project::getFlowList()
 {
     return _flows;
+}
+
+std::shared_ptr<DataModelRegistry> Project::getModelRegistry()
+{
+    return _registry;
 }

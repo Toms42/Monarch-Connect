@@ -6,6 +6,9 @@
 #include "Common/taglist.h"
 #include "Common/tunnellist.h"
 #include "Common/flowlist.h"
+#include <nodes/DataModelRegistry>
+
+using namespace QtNodes;
 
 class Project : public QObject
 {
@@ -22,8 +25,8 @@ public:
     void load(QFileInfo path);
 
     TagList &getTagList();
-    TunnelList &getTunnelList();
     FlowList &getFlowList();
+    std::shared_ptr<DataModelRegistry> getModelRegistry();
 
 signals:
 
@@ -35,8 +38,8 @@ private:
     Project &operator=(const Project&) = delete;
 
 private:
+    std::shared_ptr<DataModelRegistry> _registry; //(not saved)
     TagList _tags;
-    TunnelList _tunnels;
     FlowList _flows;
     QFileInfo _path;
 };

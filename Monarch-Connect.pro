@@ -6,7 +6,7 @@
 
 QT       += core gui opengl
 
-# Compile with c++11 standard:
+# Compile with c++14 standard:
 CONFIG += c++14
 
 # let nodeeditor know it's being statically linked
@@ -72,7 +72,8 @@ SOURCES += \
     Nodeeditor/src/StyleCollection.cpp \
     Connections/eventreceiver.cpp \
     Connections/eventsender.cpp \
-    WidgetControllers/tagtreeinterface.cpp
+    WidgetControllers/tagtreeinterface.cpp \
+    Tunnelling/flowscenewrapper.cpp
 
 HEADERS += \
     ui_mainwindow.h \
@@ -147,7 +148,8 @@ HEADERS += \
     mainwindow.h \
     Connections/eventreceiver.h \
     Connections/eventsender.h \
-    WidgetControllers/tagtreeinterface.h
+    WidgetControllers/tagtreeinterface.h \
+    Tunnelling/flowscenewrapper.h
 
 FORMS += \
         mainwindow.ui

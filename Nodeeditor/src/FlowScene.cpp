@@ -126,6 +126,7 @@ FlowScene::nodeRemoved(const QUuid& id)
   auto erased = _nodeGraphicsObjects.erase(id);
   Q_UNUSED(erased);
   Q_ASSERT(erased == 1);
+  emit(modified());
 }
 
 void
@@ -145,6 +146,7 @@ FlowScene::nodeAdded(const QUuid& newID)
   _nodeGraphicsObjects[index.id()] = ngo;
 
   nodeMoved(index);
+  emit(modified());
 }
 
 void
@@ -214,6 +216,7 @@ FlowScene::nodePortUpdated(NodeIndex const& id)
         Q_ASSERT(std::any_of(remoteConns.begin(),
                              remoteConns.end(),
                              [&](std::pair<NodeIndex, PortIndex> this_conn) {
+                               emit(modified());
                                return this_conn.first == id &&
                                       (size_t)this_conn.second == portID;
                              }));
@@ -236,6 +239,7 @@ FlowScene::nodePortUpdated(NodeIndex const& id)
       }
     }
   }
+  emit(modified());
 }
 
 void
@@ -293,6 +297,7 @@ FlowScene::connectionRemoved(NodeIndex const& leftNode,
   // update validation
   nodeValidationUpdated(leftNode);
   nodeValidationUpdated(rightNode);
+  emit(modified());
 }
 
 void
@@ -349,12 +354,14 @@ FlowScene::connectionAdded(NodeIndex const& leftNode,
 
   // add the cgo to the map
   _connGraphicsObjects[cgo->id()] = cgo;
+  emit(modified());
 }
 
 void
 FlowScene::nodeMoved(NodeIndex const& index)
 {
   _nodeGraphicsObjects[index.id()]->setPos(model()->nodeLocation(index));
+  emit(modified());
 }
 
 //------------------------------------------------------------------------------

@@ -2,16 +2,33 @@
 #define FLOWLIST_H
 
 #include <QObject>
+#include "Tunnelling/flowscenewrapper.h"
+
+using namespace QtNodes;
 
 class FlowList : public QObject
 {
     Q_OBJECT
+
+
 public:
     explicit FlowList(QObject *parent = nullptr);
 
+    void registerFlowWrapper(FlowSceneWrapper *wrapper);
+    void unregisterFlowWrapper(FlowSceneWrapper *wrapper);
+    void loadTopLevelFlowWrapper(QFile file);
+    void newTopLevelFlowWrapper();
+
 signals:
+    void refreshWrapper(FlowSceneWrapper *newWrapper);
+    void hierarchyUpdated();
 
 public slots:
+    void updateHierarchy() {emit(hierarchyUpdated());}
+
+private:
+    QVector<std::shared_ptr<FlowSceneWrapper>> _topLevelWrappers;
+    QHash<QString, QVector<FlowSceneWrapper*>> _registry;
 };
 
 #endif // FLOWLIST_H
