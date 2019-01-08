@@ -65,3 +65,9 @@ void FlowList::newTopLevelFlowWrapper()
     connect(newWrap.get(), &FlowSceneWrapper::hierarchyChanged,
             this, &FlowList::hierarchyUpdated);
 }
+
+//_topLevelWrappers getter to implement hierarchyChanged() in
+//projectHierarchyInterface.cpp
+QVector<std::shared_ptr<FlowSceneWrapper>> FlowList::getTopLevelWrappers(){
+    return _topLevelWrappers;
+}

@@ -18,6 +18,9 @@ public:
     void unregisterFlowWrapper(FlowSceneWrapper *wrapper);
     void loadTopLevelFlowWrapper(QFile file);
     void newTopLevelFlowWrapper();
+    //_topLevelWrappers getter to implement hierarchyChanged() in
+    //projectHierarchyInterface.cpp
+    QVector<std::shared_ptr<FlowSceneWrapper>> getTopLevelWrappers();
 
 signals:
     void refreshWrapper(FlowSceneWrapper *newWrapper);

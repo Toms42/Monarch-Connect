@@ -33,9 +33,9 @@ struct hash<::QtNodes::ConnectionID>
 {
   size_t operator()(::QtNodes::ConnectionID const& toHash) const
   {
-    return qHash(toHash.rNodeID) ^ qHash(toHash.lNodeID) ^
-           std::hash<QtNodes::PortIndex>()(toHash.lPortID) ^
-           std::hash<QtNodes::PortIndex>()(toHash.rPortID);
+    return qHash(toHash.rNodeID) ^ qHash(toHash.lNodeID); //^
+           //std::hash<QtNodes::PortIndex>()(toHash.lPortID) ^
+           //std::hash<QtNodes::PortIndex>()(toHash.rPortID);
   }
 };
 

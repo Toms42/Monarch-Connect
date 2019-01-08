@@ -231,7 +231,7 @@
           <enum>QTabWidget::South</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tab_nodes">
           <attribute name="title">
@@ -286,7 +286,7 @@
      <x>0</x>
      <y>0</y>
      <width>1184</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMonarch">
