@@ -7,7 +7,7 @@
 #include <QIODevice>
 #include <QDebug>
 
-FlowSceneWrapper::FlowSceneWrapper(FlowSceneWrapper *parent, QFile &file, QObject *parentObj)
+FlowSceneWrapper::FlowSceneWrapper(std::shared_ptr<FlowSceneWrapper> parent, QFile &file, QObject *parentObj)
     : QObject(parentObj),
       _scene(Project::getInstance().getModelRegistry()),
       _children(),
@@ -20,14 +20,18 @@ FlowSceneWrapper::FlowSceneWrapper(FlowSceneWrapper *parent, QFile &file, QObjec
     _uniqueID = QUuid::createUuid();
 
     if(_parent)
-        _parent->addChild(this);
+        _parent->addChild(std::shared_ptr<FlowSceneWrapper>(this));
+
     reload();
     connect(&_scene, &DataFlowScene::modified,
             this, &FlowSceneWrapper::sceneChanged);
+    emit(updated(this));
+    emit(hierarchyChanged());
+    qDebug() << "FlowSceneWrapper loaded";
 }
 
 
-FlowSceneWrapper::FlowSceneWrapper(FlowSceneWrapper *parent, QObject *parentObj)
+FlowSceneWrapper::FlowSceneWrapper(std::shared_ptr<FlowSceneWrapper> parent, QObject *parentObj)
     : QObject(parentObj),
       _scene(Project::getInstance().getModelRegistry()),
       _children(),
@@ -39,13 +43,16 @@ FlowSceneWrapper::FlowSceneWrapper(FlowSceneWrapper *parent, QObject *parentObj)
     _uniqueID = QUuid::createUuid();
 
     if(_parent)
-        _parent->addChild(this);
+        _parent->addChild(std::shared_ptr<FlowSceneWrapper>(this));
+    emit(updated(this));
+    emit(hierarchyChanged());
+    qDebug() << "New FlowSceneWrapper created";
 }
 
 FlowSceneWrapper::~FlowSceneWrapper()
 {
     if(_parent)
-        _parent->removeChild(this);
+        _parent->removeChild(std::shared_ptr<FlowSceneWrapper>(this));
 }
 
 void FlowSceneWrapper::save()
@@ -53,7 +60,7 @@ void FlowSceneWrapper::save()
     if(!(_file.exists() && _file.isWritable()))
     {
         QString fileName = QFileDialog::getSaveFileName(nullptr,
-                                                        tr("Open Flow"),
+                                                        tr("Save Flow"),
                                                         QDir::homePath(),
                                                         tr("Flow Files").append("(*.flow)"));
         if(!fileName.isEmpty())
@@ -107,16 +114,26 @@ void FlowSceneWrapper::save(QFile &file)
     save();
 }
 
-void FlowSceneWrapper::addChild(FlowSceneWrapper *wrapper)
+void FlowSceneWrapper::addChild(std::shared_ptr<FlowSceneWrapper> wrapper)
 {
-    if(_children.contains(wrapper)) return;
+    for(auto child : _children)
+    {
+        if(*child == *wrapper) return;
+    }
     _children.append(wrapper);
     emit(hierarchyChanged());
 }
 
-void FlowSceneWrapper::removeChild(FlowSceneWrapper *wrapper)
+void FlowSceneWrapper::removeChild(std::shared_ptr<FlowSceneWrapper> wrapper)
 {
-    _children.removeAll(wrapper);
+    for(int i = 0; i < _children.size(); i++)
+    {
+        if(*_children[i] == *wrapper)
+        {
+            _children.remove(i);
+            i--;
+        }
+    }
     emit(hierarchyChanged());
 }
 
@@ -173,11 +190,11 @@ void FlowSceneWrapper::refresh(FlowSceneWrapper *newWrapper)
     _blocking = false;
 }
 
-FlowSceneWrapper *FlowSceneWrapper::parent() const
+std::shared_ptr<FlowSceneWrapper> FlowSceneWrapper::parent() const
 {
     return _parent;
 }
-QVector<FlowSceneWrapper*> &FlowSceneWrapper::children()
+QVector<std::shared_ptr<FlowSceneWrapper>> &FlowSceneWrapper::children()
 {
     return _children;
 }

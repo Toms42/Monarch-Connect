@@ -25,11 +25,11 @@ using QtNodes::DataFlowModel;
 
 static std::shared_ptr<DataModelRegistry> registerDataModels()
 {
-  auto ret = std::make_shared<DataModelRegistry>();
+    auto ret = Project::getInstance().getModelRegistry();
 
-  ret->registerModel<MyDataModel>();
+    ret->registerModel<MyDataModel>();
 
-  /*
+    /*
      We could have more models registered.
      All of them become items in the context meny of the scene.
 
@@ -38,22 +38,16 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
 
    */
 
-  return ret;
+    return ret;
 }
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
+    registerDataModels();
 
     w.show();
-
-    //DataFlowModel model(registerDataModels());
-    //FlowScene scene(&model);
-    DataFlowScene scene(registerDataModels());
-    //FlowView view(&scene);
-    //view.resize(600,400);
-    //view.show();
 
     return a.exec();
 }

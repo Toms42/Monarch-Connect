@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <nodes/FlowScene>
 #include "WidgetControllers/tagtreeinterface.h"
+#include "WidgetControllers/centraltabinterface.h"
+#include "WidgetControllers/projecthierarchyinterface.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,6 +24,9 @@ public:
 private:
     Ui::MainWindow *ui;
     TagTreeInterface *tagTreeInterface;
+    CentralTabInterface *centralTabInterface;
+    ProjectHierarchyInterface *projectHierarchyInterface;
+
 };
 
 #endif // MAINWINDOW_H

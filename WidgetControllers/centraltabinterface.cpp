@@ -14,6 +14,8 @@ CentralTabInterface::CentralTabInterface(QTabWidget &widget, QObject *parent)
     tab_t home = {QUuid::createUuid(), homeWidget, TABTYPE::HOME};
     _tabWidget.addTab(home.widget, "home");
     _tabs.append(home);
+    connect(&_tabWidget, &QTabWidget::tabCloseRequested,
+            this, &CentralTabInterface::tabCloseRequested);
 }
 CentralTabInterface::~CentralTabInterface()
 {
@@ -44,6 +46,7 @@ void CentralTabInterface::addTab(FlowSceneWrapper *wrap)
     newTab.type = TABTYPE::FLOW;
     _tabs.append(newTab);
     _tabWidget.addTab(newTab.widget, wrap->getName());
+    _tabWidget.setCurrentIndex(_tabWidget.count() - 1);
 }
 
 void CentralTabInterface::addTab(QUuid id, QWidget *widget, QString name)
@@ -63,6 +66,7 @@ void CentralTabInterface::addTab(QUuid id, QWidget *widget, QString name)
     newTab.type = TABTYPE::OTHER;
     _tabs.append(newTab);
     _tabWidget.addTab(newTab.widget, name);
+    _tabWidget.setCurrentIndex(_tabWidget.count() - 1);
 }
 
 void CentralTabInterface::tabCloseRequested(int index)

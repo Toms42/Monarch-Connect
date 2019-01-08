@@ -2,6 +2,7 @@
 #include <QQueue>
 #include <QHash>
 #include <QDebug>
+#include <QFileDialog>
 
 //TODO: subclass QTreeWidgetItem to include a pointer to the corresponding
 // wrapper that it represents. read the description!
@@ -42,6 +43,13 @@ ProjectHierarchyInterface::ProjectHierarchyInterface(FlowList &flows,
       _interface(interface)
 
 {
+    _tree.setColumnCount(Columns::_NUMCOLUMNS);
+
+    connect(&_tree, &QTreeWidget::itemDoubleClicked,
+            this, &ProjectHierarchyInterface::itemDoubleClicked);
+    connect(&_flows, &FlowList::hierarchyUpdated,
+            this, &ProjectHierarchyInterface::hierarchyChanged);
+
     hierarchyChanged();
 }
 
@@ -56,28 +64,47 @@ void ProjectHierarchyInterface::itemDoubleClicked(QTreeWidgetItem *item, int col
         wrappedItem = static_cast<FlowTreeItem *>(item);
         wrapper = wrappedItem->getFlowSceneWrapper();
         // open it using the centraltabinterface's "addTab"
-        _interface.addTab(wrapper.get());
+        if(wrapper)
+            _interface.addTab(wrapper.get());
+        else {
+            qDebug() << "oops, no wrapper for clicked item!";
+        }
     }
 }
 
-//cast a QVector<FlowSceneWrapper *> to QVector<std::shared_ptr<FlowSceneWrapper>>
-//since current->children() returns QVector<FlowSceneWrapper *>
-//and FlowList uses QVector<std::shared_ptr<FlowSceneWrapper>>
-QVector<std::shared_ptr<FlowSceneWrapper>>
-castVector(QVector<FlowSceneWrapper*> input){
-    QVector<std::shared_ptr<FlowSceneWrapper>> output;
-
-    for(auto i = input.begin(); i != input.end(); i++){
-        std::shared_ptr<FlowSceneWrapper> si(*i);
-        output.append(si);
-    }
-    return output;
+void ProjectHierarchyInterface::addTopFlow()
+{
+    _flows.newTopLevelFlowWrapper();
 }
+
+void ProjectHierarchyInterface::loadTopFlow()
+{
+    QString fileName = QFileDialog::getOpenFileName(nullptr,
+                                                    tr("Open Flow"),
+                                                    QDir::homePath(),
+                                                    tr("Flow Files").append(" (*.flow)"));
+    if(!fileName.endsWith(".flow"))
+    {
+        return;
+    }
+    QFile file;
+    file.setFileName(fileName);
+
+    _flows.loadTopLevelFlowWrapper(file);
+}
+
+void ProjectHierarchyInterface::deleteTopFlow()
+{
+    qDebug() << "not implemented";
+}
+
 
 //update display: (from flowlist)
 void ProjectHierarchyInterface::hierarchyChanged()
 {
+    qDebug() << "updating hierarchy";
     _tree.clear();
+
     //iterative BFS
     //keep track of the wrappers with a set
     QSet<QUuid> seen;
@@ -92,8 +119,10 @@ void ProjectHierarchyInterface::hierarchyChanged()
     std::shared_ptr<FlowSceneWrapper> child;
     //keep track of the parent item to each node
     //maps wrappers to their parent wrapper's TreeWidgetItem
-    QHash<QUuid, FlowTreeItem *> parent;
+
+    QHash<QUuid, FlowTreeItem *> inserted;
     //subclassed treewidgetitem that will store the wrapper
+
     FlowTreeItem *item;
     //name and file from the wrapper for the item
     QString name;
@@ -113,35 +142,38 @@ void ProjectHierarchyInterface::hierarchyChanged()
             /*create treewidgetitem for the current wrapper
              *based on the parent item
              *provided it's not a root node*/
-            if(current != (*i)){
-                if(parent.find(current->getID()) == parent.end()){
+            if(!current->isRoot()){
+                if(!inserted.contains(current->parent()->getID())){
                     qDebug() << "BFS ERROR: Can't find parent";
                 }
                 else{
-                    item = new FlowTreeItem(parent.value(current->getID()));
+                    auto parent = inserted.value(current->parent()->getID());
+                    item = new FlowTreeItem(parent);
+                    parent->addChild(item);
+                    inserted.insert(current->getID(), item);
                 }
             }
             else{
                 //parent of the root node is the tree
                 item = new FlowTreeItem(&_tree);
+                _tree.addTopLevelItem(item);
+                inserted.insert(current->getID(), item);
             }
-            //set name and file (i'm gonna assume col 0 is name, 1 is file for now)
-            name = current->getName();
-            file = current->getFile();
-            item->setText(0, name);
-            item->setText(1, file);
+
+            //set name and file
+            item->setText(NAME, current->getName());
+            item->setText(FILEPATH, current->getFile());
+            item->setFlowSceneWrapper(current);
+
             //insert the current node into the seen set
             if(!seen.contains(current->getID())){
                 seen.insert(current->getID());
             }
-            neighbors = castVector(current->children());
-            for(auto n = neighbors.begin(); n != neighbors.end(); n++){
-                child = (*n);
-                if(!seen.contains(child->getID())){
-                    //visit child later
-                    queue.enqueue(child);
-                    //note the child's parent wrapper's item
-                    parent.insert(child->getID(),item);
+            neighbors = current->children();
+            for(auto neighbor : neighbors){
+                if(!seen.contains(neighbor->getID())){
+                    //visit neighbor later
+                    queue.enqueue(neighbor);
                 }
             }
 

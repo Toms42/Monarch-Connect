@@ -49,21 +49,23 @@ void FlowList::unregisterFlowWrapper(FlowSceneWrapper *wrapper)
     }
 }
 
-void FlowList::loadTopLevelFlowWrapper(QFile file)
+void FlowList::loadTopLevelFlowWrapper(QFile &file)
 {
     auto newWrap = std::make_shared<FlowSceneWrapper>
-            (static_cast<FlowSceneWrapper*>(nullptr),file,this);
+            (nullptr,file,this);
     _topLevelWrappers.append(newWrap);
     registerFlowWrapper(newWrap.get());
+    emit(hierarchyUpdated());
 }
 
 void FlowList::newTopLevelFlowWrapper()
 {
     auto newWrap = std::make_shared<FlowSceneWrapper>
-            (static_cast<FlowSceneWrapper*>(nullptr),this);
+            (nullptr,this);
     _topLevelWrappers.append(newWrap);
     connect(newWrap.get(), &FlowSceneWrapper::hierarchyChanged,
             this, &FlowList::hierarchyUpdated);
+    emit(hierarchyUpdated());
 }
 
 //_topLevelWrappers getter to implement hierarchyChanged() in

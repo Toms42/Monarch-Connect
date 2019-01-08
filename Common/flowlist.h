@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "Tunnelling/flowscenewrapper.h"
+#include <QDebug>
 
 using namespace QtNodes;
 
@@ -16,7 +17,7 @@ public:
 
     void registerFlowWrapper(FlowSceneWrapper *wrapper);
     void unregisterFlowWrapper(FlowSceneWrapper *wrapper);
-    void loadTopLevelFlowWrapper(QFile file);
+    void loadTopLevelFlowWrapper(QFile &file);
     void newTopLevelFlowWrapper();
     //_topLevelWrappers getter to implement hierarchyChanged() in
     //projectHierarchyInterface.cpp
@@ -27,7 +28,10 @@ signals:
     void hierarchyUpdated();
 
 public slots:
-    void updateHierarchy() {emit(hierarchyUpdated());}
+    void updateHierarchy() {
+        qDebug() << "hierarchy updated";
+        emit(hierarchyUpdated());
+    }
 
 private:
     QVector<std::shared_ptr<FlowSceneWrapper>> _topLevelWrappers;

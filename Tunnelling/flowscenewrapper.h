@@ -14,10 +14,10 @@ class FlowSceneWrapper : public QObject
     Q_OBJECT
 public:
     //will load from file
-    explicit FlowSceneWrapper(FlowSceneWrapper *parent, QFile &file, QObject *parentObj = nullptr);
+    explicit FlowSceneWrapper(std::shared_ptr<FlowSceneWrapper> parent, QFile &file, QObject *parentObj = nullptr);
 
     //will create a new *temporary* flowscene (unsaved).
-    explicit FlowSceneWrapper(FlowSceneWrapper *parent, QObject *parentObj= nullptr);
+    explicit FlowSceneWrapper(std::shared_ptr<FlowSceneWrapper> parent, QObject *parentObj= nullptr);
     ~FlowSceneWrapper();
 
 public:
@@ -25,12 +25,12 @@ public:
     void save(QFile &file);
     void reload();
 
-    FlowSceneWrapper *parent() const;
-    QVector<FlowSceneWrapper*> &children();
+    std::shared_ptr<FlowSceneWrapper> parent() const;
+    QVector<std::shared_ptr<FlowSceneWrapper>> &children();
     bool isRoot() const {return _parent == nullptr;}
 
-    void addChild(FlowSceneWrapper* wrapper);
-    void removeChild(FlowSceneWrapper *wrapper);
+    void addChild(std::shared_ptr<FlowSceneWrapper> wrapper);
+    void removeChild(std::shared_ptr<FlowSceneWrapper> wrapper);
 
     const TunnelList &getExternalTunnels() const;
     DataFlowScene *getFlowScene();
@@ -59,10 +59,10 @@ private:
     bool _blocking = false; //blocks sceneChanged signal to avoid loops
     DataFlowScene _scene;
     QFile _file;
-    FlowSceneWrapper *_parent;
+    std::shared_ptr<FlowSceneWrapper> _parent = nullptr;
 
     //these things are handled by nodes inside the scene:
-    QVector<FlowSceneWrapper*> _children;
+    QVector<std::shared_ptr<FlowSceneWrapper>> _children;
     TunnelList _internalTunnels;
     TunnelList _externalTunnels;
 

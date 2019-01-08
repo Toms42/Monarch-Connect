@@ -29,6 +29,9 @@ private slots:
 
 public slots:
     //update hierarchy: (from external sources)
+    void addTopFlow();
+    void loadTopFlow();
+    void deleteTopFlow();
 
 private:
     void reloadTree();
