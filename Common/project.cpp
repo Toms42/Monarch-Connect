@@ -12,7 +12,7 @@ Project::Project(QObject *parent)
 
 void Project::save()
 {
-    if(_path.isFile() && _path.isWritable())
+    if(_path.exists() && _path.isWritable())
     {
         //save
     }
@@ -22,17 +22,17 @@ void Project::save()
     }
 }
 
-void Project::save(QFileInfo path)
+void Project::save(QFile path)
 {
-    _path = path;
+    _path.setFileName(path.fileName());
     this->save();
 }
 
-void Project::load(QFileInfo path)
+void Project::load(QFile path)
 {
-    if(path.isFile() &&path.exists() && path.isReadable())
+    if(path.exists() &&path.exists() && path.isReadable())
     {
-        _path = path;
+        _path.setFileName(path.fileName());
         //load
     }
     else

@@ -106,7 +106,6 @@ void TagTreeInterface::itemChanged(QTreeWidgetItem * item, int column)
     {
     case Columns::NAME:
         //not allowed, not implemented. ABORT!
-        tagAdded(tag);
         return;
     case Columns::FIELDNAME:
         newType->setFieldName(field, newData);

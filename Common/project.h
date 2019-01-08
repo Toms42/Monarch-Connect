@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QFileInfo>
 #include "Common/taglist.h"
-#include "Common/tunnellist.h"
 #include "Common/flowlist.h"
 #include <nodes/DataModelRegistry>
 
@@ -21,8 +20,8 @@ public:
     }
 
     void save();
-    void save(QFileInfo path);
-    void load(QFileInfo path);
+    void save(QFile path);
+    void load(QFile path);
 
     TagList &getTagList();
     FlowList &getFlowList();
@@ -41,7 +40,7 @@ private:
     std::shared_ptr<DataModelRegistry> _registry; //(not saved)
     TagList _tags;
     FlowList _flows;
-    QFileInfo _path;
+    QFile _path;
 };
 
 #endif // PROJECT_H

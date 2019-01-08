@@ -5,7 +5,7 @@
 #include <memory>
 #include <nodes/DataFlowScene>
 #include <QFile>
-#include "Common/tunnellist.h"
+#include "tunnellist.h"
 
 using namespace QtNodes;
 
@@ -39,6 +39,10 @@ public:
     { return _uniqueID == other._uniqueID;}
 
     QString getFile() const;
+
+    QUuid getID() const {return _uniqueID;}
+    QString getName() const {return _name;}
+
 signals:
     void updated(FlowSceneWrapper *newWrapper);
     void saved();

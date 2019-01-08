@@ -26,7 +26,7 @@ private slots:
     void tagRemoved(QString tag);
 
 public slots:
-    //update taglist: (from button presses)
+    //update taglist: (from external sources)
     void addTagType();
     void addTagField();
     void removeTagType();

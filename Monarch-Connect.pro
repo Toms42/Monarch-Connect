@@ -43,7 +43,6 @@ SOURCES += \
     Connections/streamsender.cpp \
     Common/project.cpp \
     Common/taglist.cpp \
-    Common/tunnellist.cpp \
     Common/flowlist.cpp \
     Common/tagtype.cpp \
     Nodeeditor/src/Connection.cpp \
@@ -73,7 +72,10 @@ SOURCES += \
     Connections/eventreceiver.cpp \
     Connections/eventsender.cpp \
     WidgetControllers/tagtreeinterface.cpp \
-    Tunnelling/flowscenewrapper.cpp
+    Tunnelling/flowscenewrapper.cpp \
+    Tunnelling/tunnellist.cpp \
+    WidgetControllers/projecthierarchyinterface.cpp \
+    WidgetControllers/centraltabinterface.cpp
 
 HEADERS += \
     ui_mainwindow.h \
@@ -84,7 +86,6 @@ HEADERS += \
     Connections/streamsender.h \
     Common/project.h \
     Common/taglist.h \
-    Common/tunnellist.h \
     Common/flowlist.h \
     Common/tagtype.h \
     Nodeeditor/include/nodes/internal/Compiler.hpp \
@@ -149,7 +150,10 @@ HEADERS += \
     Connections/eventreceiver.h \
     Connections/eventsender.h \
     WidgetControllers/tagtreeinterface.h \
-    Tunnelling/flowscenewrapper.h
+    Tunnelling/flowscenewrapper.h \
+    Tunnelling/tunnellist.h \
+    WidgetControllers/projecthierarchyinterface.h \
+    WidgetControllers/centraltabinterface.h
 
 FORMS += \
         mainwindow.ui
