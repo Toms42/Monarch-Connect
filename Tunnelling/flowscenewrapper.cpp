@@ -44,6 +44,8 @@ FlowSceneWrapper::FlowSceneWrapper(std::shared_ptr<FlowSceneWrapper> parent, QOb
 
     if(_parent)
         _parent->addChild(std::shared_ptr<FlowSceneWrapper>(this));
+    connect(&_scene, &DataFlowScene::modified,
+            this, &FlowSceneWrapper::sceneChanged);
     emit(updated(this));
     emit(hierarchyChanged());
     qDebug() << "New FlowSceneWrapper created";
@@ -57,8 +59,9 @@ FlowSceneWrapper::~FlowSceneWrapper()
 
 void FlowSceneWrapper::save()
 {
-    if(!(_file.exists() && _file.isWritable()))
+    if(!_file.exists())
     {
+        qDebug() << "no file yet, prompting.";
         QString fileName = QFileDialog::getSaveFileName(nullptr,
                                                         tr("Save Flow"),
                                                         QDir::homePath(),
@@ -75,29 +78,16 @@ void FlowSceneWrapper::save()
         }
 
         _file.setFileName(fileName);
-        if(_file.exists())
-        {
-            //make sure user is ok w/ overwriting the file:
-            QMessageBox confirmation;
-            confirmation.setText(tr("File already exists!"));
-            confirmation.setInformativeText(tr("Do you want to replace it?"));
-            confirmation.setStandardButtons(QMessageBox::Cancel | QMessageBox::Save);
-            confirmation.setDefaultButton(QMessageBox::Save);
-            int response = confirmation.exec();
-            if(response != QMessageBox::Save)
-            {
-                return;
-            }
-        }
+        Project::getInstance().getFlowList().registerFlowWrapper(this);
     }
 
     if(_file.open(QIODevice::WriteOnly))
     {
         _file.write(_scene.saveToMemory());
+        _file.close();
         _name = QFileInfo(_file).fileName();
         _isSaved = true;
         qDebug() << "saved!";
-        _file.close();
         emit(updated(this));
         emit(hierarchyChanged());
     }
@@ -107,7 +97,7 @@ void FlowSceneWrapper::save()
 }
 void FlowSceneWrapper::save(QFile &file)
 {
-    if(file.exists() && file.isWritable())
+    if(file.exists())
     {
         _file.setFileName(file.fileName());
     }
@@ -139,7 +129,8 @@ void FlowSceneWrapper::removeChild(std::shared_ptr<FlowSceneWrapper> wrapper)
 
 void FlowSceneWrapper::reload()
 {
-    if(!_file.exists() || !_file.isReadable())
+    qDebug() << "loading from file: " << _file.fileName();
+    if(!_file.exists())
     {
         qDebug() << "reloading when no file exists";
         return;
@@ -150,34 +141,34 @@ void FlowSceneWrapper::reload()
         qDebug() << "could not open file";
         return;
     }
+    _name = QFileInfo(_file).fileName();
     _scene.loadFromMemory(_file.readAll());
     _file.close();
+    _isSaved = true;
     qDebug() << "loaded!";
-    emit(updated(this));
     emit(hierarchyChanged());
 }
 
 void FlowSceneWrapper::sceneChanged()
 {
-    qDebug() << "scene was changed!";
     if(_isSaved)
     {
+        qDebug() << "no longer saved!";
         _isSaved = false;
         _name.prepend('~');
+        emit(hierarchyChanged());
     }
-    if(!_blocking)
-    {
-        emit(updated(this));
-    }
-    emit(hierarchyChanged());
 }
 
 void FlowSceneWrapper::refresh(FlowSceneWrapper *newWrapper)
 {
-    if(*newWrapper == *this) return; //ignore self updates...
+    if(*newWrapper == *this)
+    {
+        qDebug() << "ignoring self-refresh";
+        return; //ignore self updates...
+    }
 
     qDebug() << "refreshing flowscene";
-    _blocking = true;
 
     //reload scene:
     _scene.clearScene();
@@ -186,8 +177,6 @@ void FlowSceneWrapper::refresh(FlowSceneWrapper *newWrapper)
     //reload name and saved status:
     _name = newWrapper->_name;
     _isSaved = newWrapper->_isSaved;
-
-    _blocking = false;
 }
 
 std::shared_ptr<FlowSceneWrapper> FlowSceneWrapper::parent() const

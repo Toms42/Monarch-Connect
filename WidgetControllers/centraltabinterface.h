@@ -24,6 +24,8 @@ private slots:
     void tabCloseRequested(int index);
 
 public slots:
+    void saveEvent();
+    void reloadNames();
 
 private:
     QTabWidget &_tabWidget;
@@ -38,6 +40,9 @@ private:
         QUuid id;
         QWidget *widget;
         TABTYPE type;
+        union{
+            FlowSceneWrapper* flowScene;
+        }data;
     };
 
     QVector<tab_t> _tabs;

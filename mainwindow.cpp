@@ -16,6 +16,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //setup centralTabInterface:
     centralTabInterface = new CentralTabInterface(*ui->tabWidget, this);
+    connect(ui->actionSave, &QAction::triggered,
+            centralTabInterface, &CentralTabInterface::saveEvent);
+    connect(&Project::getInstance().getFlowList(), &FlowList::hierarchyUpdated,
+            centralTabInterface, &CentralTabInterface::reloadNames);
+
 
     //setup projectHierarchyInterface:
     auto &flows = Project::getInstance().getFlowList();
@@ -29,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
             projectHierarchyInterface, &ProjectHierarchyInterface::loadTopFlow);
     connect(ui->button_deleteTopFlow, &QPushButton::pressed,
             projectHierarchyInterface, &ProjectHierarchyInterface::deleteTopFlow);
+
 
 
 }

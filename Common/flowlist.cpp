@@ -1,4 +1,5 @@
 #include "flowlist.h"
+#include <QDebug>
 
 FlowList::FlowList(QObject *parent) : QObject(parent)
 {
@@ -12,20 +13,25 @@ void FlowList::registerFlowWrapper(FlowSceneWrapper *wrapper)
 
     auto key = wrapper->getFile();
     auto matches = _registry.value(key);
+    qDebug() << "matches: " << matches;
     for(auto match : matches)
     {
         if(*match == *wrapper)
         {
-            matches.removeAll(match);
+            qDebug() << matches.removeAll(match) << "removed";
         }
     }
     matches.append(wrapper);
+    _registry.insert(key, matches);
+    qDebug() << "wrapper registered.";
     for(auto match : matches)
     {
         //possible to create self loops,
         //but that's ok.
         connect(wrapper, &FlowSceneWrapper::updated,
                 match, &FlowSceneWrapper::refresh);
+        connect(match, &FlowSceneWrapper::updated,
+                wrapper, &FlowSceneWrapper::refresh);
     }
 }
 
