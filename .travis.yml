@@ -35,3 +35,4 @@ script:
  - qmake -qt=qt5 -v #shows version
  - qmake -qt=qt5 Monarch-Connect-Parent.pro
  - make
+ - ./Monarch-Connect-Test/Monarch-Connect-Test # run unit tests
