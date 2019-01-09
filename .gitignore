@@ -43,8 +43,10 @@ target_wrapper.*
 CMakeLists.txt.user*
 
 # project outputs
-/debug
-/release
+/Monarch-Connect/debug
+/Monarch-Connect/release
+/Monarch-Connect-Test/debug
+/Monarch-Connect-Test/release
 
 #those weird temp files. Might cause problems...
 *.cpp.*
