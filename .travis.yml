@@ -28,8 +28,8 @@ matrix:
 install:
 before_install:
  - sudo apt-get update -qq
- - sudo apt-get install build-essential mesa-common-dev libgl1-mesa-dev libglu1-mesa-dev -y
- - sudo apt-get -yy install qtbase5-dev qt5-qmake
+ - sudo apt-get -yy install build-essential mesa-common-dev libgl1-mesa-dev libglu1-mesa-dev
+ - sudo apt-get -yy install qtbase5-dev libqt5opengl5 qt5-qmake
 
 script:
  - qmake -qt=qt5 -v #shows version
