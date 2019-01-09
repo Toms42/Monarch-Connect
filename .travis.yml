@@ -1,4 +1,4 @@
-language: none
+language: generic
 dist: xenial
 
 matrix:
@@ -33,5 +33,5 @@ before_install:
 
 script:
  - qmake -qt=qt5 -v #shows version
- - qmake -qt=qt5 Monarch-Connect.pro
+ - qmake -qt=qt5 Monarch-Connect-Parent.pro
  - make
