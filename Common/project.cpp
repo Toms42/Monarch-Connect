@@ -22,15 +22,15 @@ void Project::save()
     }
 }
 
-void Project::save(QFile &path)
+void Project::save(QFile path)
 {
     _path.setFileName(path.fileName());
-    save();
+    this->save();
 }
 
-void Project::load(QFile &path)
+void Project::load(QFile path)
 {
-    if(path.exists())
+    if(path.exists() &&path.exists() && path.isReadable())
     {
         _path.setFileName(path.fileName());
         //load

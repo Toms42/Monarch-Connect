@@ -19,17 +19,15 @@ public:
         return instance;
     }
 
+    void save();
+    void save(QFile path);
+    void load(QFile path);
+
     TagList &getTagList();
     FlowList &getFlowList();
     std::shared_ptr<DataModelRegistry> getModelRegistry();
 
-public slots:
-    void save();
-    void save(QFile &path);
-    void load(QFile &path);
-
 signals:
-    //void nameUpdated(QString name);
 
 public slots:
 
@@ -42,9 +40,7 @@ private:
     std::shared_ptr<DataModelRegistry> _registry; //(not saved)
     TagList _tags;
     FlowList _flows;
-    //QString _name;
     QFile _path;
-    bool _isSaved = false;
 };
 
 #endif // PROJECT_H
