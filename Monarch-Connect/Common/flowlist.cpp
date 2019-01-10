@@ -2,6 +2,9 @@
 #include <QDebug>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QDir>
+#include <QFileInfo>
+#include "Common/project.h"
 
 FlowList::FlowList(QObject *parent) : QObject(parent)
 {
@@ -88,8 +91,10 @@ QJsonArray FlowList::save()
     QJsonArray topLevelArray;
     for(auto wrap : _topLevelWrappers)
     {
-        qDebug() << "adding file: " << wrap->getFile();
-        QJsonValue jsonFilePath = wrap->getFile();
+        auto path = wrap->getFile();
+        auto rel = Project::getInstance().getDir().relativeFilePath(path);
+        qDebug() << "adding file: " << rel;
+        QJsonValue jsonFilePath = rel;
         topLevelArray.append(jsonFilePath);
     }
     return topLevelArray;
@@ -101,8 +106,9 @@ void FlowList::load(QJsonArray topArray)
     for(auto item : topArray)
     {
         auto fileName = item.toString();
+        auto path = Project::getInstance().getDir().absoluteFilePath(fileName);
         QFile file;
-        file.setFileName(fileName);
+        file.setFileName(path);
         loadTopLevelFlowWrapper(file);
     }
 }

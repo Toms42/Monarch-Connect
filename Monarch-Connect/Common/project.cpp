@@ -117,3 +117,8 @@ std::shared_ptr<DataModelRegistry> Project::getModelRegistry()
 {
     return _registry;
 }
+
+QDir Project::getDir()
+{
+    return QFileInfo(_file).dir();
+}

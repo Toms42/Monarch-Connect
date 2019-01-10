@@ -26,7 +26,7 @@ public:
 
     QByteArray saveToMemory();
     void loadFromMemory(QByteArray file);
-    QDir getPath();
+    QDir getDir();
 
 public slots:
     void save();
