@@ -30,6 +30,10 @@ MainWindow::MainWindow(QWidget *parent) :
                                                               *ui->projectTree,
                                                               *centralTabInterface,
                                                               this);
+    connect(ui->button_newFlow, &QPushButton::pressed,
+            projectHierarchyInterface, &ProjectHierarchyInterface::addTopFlow);
+    connect(ui->button_deleteFlow, &QPushButton::pressed,
+            projectHierarchyInterface, &ProjectHierarchyInterface::deleteTopFlow);
 
     //connect commands to project:
     connect(ui->actionOpen, &QAction::triggered,
