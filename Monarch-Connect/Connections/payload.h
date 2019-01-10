@@ -16,6 +16,7 @@ public:
     Payload(QUuid tagID, int nFields, QVector<double> vals, QObject *parent = nullptr);
     Payload(QUuid tagID, double val, QObject *parent = nullptr);
     Payload(Payload &payload);
+    Payload(QObject *parent = nullptr);
 
 public:
     NodeDataType

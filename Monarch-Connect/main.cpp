@@ -55,11 +55,13 @@ int main(int argc, char *argv[])
 
     FramelessWindow framelessWindow;
     framelessWindow.setWindowTitle("Monarch");
+    framelessWindow.setWindowIcon(QIcon(":icon.png")); //for window
     MainWindow w(&framelessWindow);
     framelessWindow.setContent(&w);
     QObject::connect(&w, &MainWindow::updateTitle,
             &framelessWindow, &FramelessWindow::setWindowTitle);
     framelessWindow.show();
+    a.setWindowIcon(QIcon(":icon.png")); //for taskbar
 
     return a.exec();
 }

@@ -13,6 +13,7 @@ class StreamReceiver : public QObject
 public:
     explicit StreamReceiver(QObject *parent = nullptr);
     void setSender(std::shared_ptr<StreamSender> sender);
+    int getPortIndex();
 
 signals:
     void dataReady(Payload payload);

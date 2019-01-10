@@ -31,6 +31,12 @@ Payload::Payload(Payload &payload)
     _nFields = payload._nFields;
 }
 
+Payload::Payload(QObject *parent)
+    :QObject(parent),
+    _vals(0)
+{
+}
+
 QUuid Payload::getTagID()
 {
     return _tagID;

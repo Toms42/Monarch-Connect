@@ -170,3 +170,5 @@ RESOURCES += \
     resources/resources.qrc \
     Style/darkstyle.qrc \
     Style/framelesswindow.qrc
+
+RC_ICONS = resources/icon.ico
