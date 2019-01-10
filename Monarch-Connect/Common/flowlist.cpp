@@ -79,6 +79,19 @@ void FlowList::newTopLevelFlowWrapper()
     emit(hierarchyUpdated());
 }
 
+void FlowList::deleteTopLevelFlowWrapper(FlowSceneWrapper *wrapper)
+{
+    for(int i = 0; i < _topLevelWrappers.count(); i++)
+    {
+        if(*_topLevelWrappers[i] == *wrapper)
+        {
+            _topLevelWrappers.removeAt(i);
+            if(i) i--;
+        }
+    }
+    emit(hierarchyUpdated());
+}
+
 //_topLevelWrappers getter to implement hierarchyChanged() in
 //projectHierarchyInterface.cpp
 QVector<std::shared_ptr<FlowSceneWrapper>> FlowList::getTopLevelWrappers(){

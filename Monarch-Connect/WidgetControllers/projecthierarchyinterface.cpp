@@ -6,7 +6,7 @@
 
 //TODO: subclass QTreeWidgetItem to include a pointer to the corresponding
 // wrapper that it represents. read the description!
-class FlowTreeItem:public QTreeWidgetItem{
+class FlowTreeItem : public QTreeWidgetItem{
 public:
     //general constructor
     FlowTreeItem()
@@ -49,6 +49,8 @@ ProjectHierarchyInterface::ProjectHierarchyInterface(FlowList &flows,
             this, &ProjectHierarchyInterface::itemDoubleClicked);
     connect(&_flows, &FlowList::hierarchyUpdated,
             this, &ProjectHierarchyInterface::hierarchyChanged);
+    connect(&_tree, &QTreeWidget::itemSelectionChanged,
+            this, &ProjectHierarchyInterface::itemSelectionChanged);
 
     hierarchyChanged();
 }
@@ -69,6 +71,14 @@ void ProjectHierarchyInterface::itemDoubleClicked(QTreeWidgetItem *item, int col
         else {
             qDebug() << "oops, no wrapper for clicked item!";
         }
+    }
+}
+
+void ProjectHierarchyInterface::itemSelectionChanged()
+{
+    if(_tree.selectedItems().count() > 0)
+    {
+        _selected = _tree.selectedItems()[0];
     }
 }
 
@@ -95,7 +105,13 @@ void ProjectHierarchyInterface::loadTopFlow()
 
 void ProjectHierarchyInterface::deleteTopFlow()
 {
-    qDebug() << "not implemented";
+    if(!_selected) return;
+    if(_selected->type() == QTreeWidgetItem::UserType)
+    {
+        auto toDelete = static_cast<FlowTreeItem *>(_selected);
+        _interface.removeTab(toDelete->getFlowSceneWrapper().get());
+        _flows.deleteTopLevelFlowWrapper(toDelete->getFlowSceneWrapper().get());
+    }
 }
 
 

@@ -31,6 +31,11 @@ CentralTabInterface::~CentralTabInterface()
 void CentralTabInterface::saveEvent()
 {
     int activeIndex = _tabWidget.currentIndex();
+    if(activeIndex < 0)
+    {
+        Project::getInstance().save();
+        return;
+    }
     tab_t activeTab = _tabs[activeIndex];
     if(activeTab.type == TABTYPE::FLOW)
     {
@@ -50,6 +55,11 @@ void CentralTabInterface::saveEvent()
 void CentralTabInterface::saveAsEvent()
 {
     int activeIndex = _tabWidget.currentIndex();
+    if(activeIndex < 0)
+    {
+        Project::getInstance().saveAs();
+        return;
+    }
     tab_t activeTab = _tabs[activeIndex];
     if(activeTab.type == TABTYPE::FLOW)
     {
@@ -101,6 +111,24 @@ void CentralTabInterface::addTab(FlowSceneWrapper *wrap)
     _tabs.append(newTab);
     _tabWidget.addTab(newTab.widget, wrap->getName());
     _tabWidget.setCurrentIndex(_tabWidget.count() - 1);
+}
+
+void CentralTabInterface::removeTab(FlowSceneWrapper *wrap)
+{
+    tab_t newTab;
+    newTab.id = wrap->getID();
+
+    for(int i = 0; i < _tabs.size(); i++)
+    {
+        auto tab = _tabs[i];
+        if(tab.id == newTab.id)
+        {
+            _tabs.remove(i);
+            _tabWidget.removeTab(i);
+            delete tab.widget;
+            return;
+        }
+    }
 }
 
 void CentralTabInterface::addTab(QUuid id, QWidget *widget, QString name)

@@ -26,6 +26,8 @@ private slots:
     //update display: (from flowlist)
     void hierarchyChanged();
 
+    void itemSelectionChanged();
+
 
 public slots:
     //update hierarchy: (from external sources)
@@ -38,6 +40,7 @@ private:
     FlowList &_flows;
     QTreeWidget &_tree;
     CentralTabInterface &_interface;
+    QTreeWidgetItem *_selected = nullptr;
 
     enum Columns
     {
