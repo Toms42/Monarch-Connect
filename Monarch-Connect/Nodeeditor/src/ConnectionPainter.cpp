@@ -165,10 +165,10 @@ drawNormalLine(QPainter* painter, ConnectionGraphicsObject const& connection)
   bool gradientColor = false;
 
   if (connectionStyle.useDataDefinedColors()) {
-    using QtNodes::PortType;
+    using QtNodes::PortDirection;
 
-    auto dataTypeOut = connection.dataType(PortType::Out);
-    auto dataTypeIn = connection.dataType(PortType::In);
+    auto dataTypeOut = connection.dataType(PortDirection::Out);
+    auto dataTypeIn = connection.dataType(PortDirection::In);
 
     gradientColor = (dataTypeOut.id != dataTypeIn.id);
 

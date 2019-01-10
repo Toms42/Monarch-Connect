@@ -19,7 +19,7 @@ using QtNodes::Node;
 using QtNodes::NodeData;
 using QtNodes::NodeDataModel;
 using QtNodes::PortIndex;
-using QtNodes::PortType;
+using QtNodes::PortDirection;
 
 Node::Node(std::unique_ptr<NodeDataModel>&& dataModel, QUuid const& id)
   : _uid(id)
@@ -31,8 +31,8 @@ Node::Node(std::unique_ptr<NodeDataModel>&& dataModel, QUuid const& id)
           this,
           &Node::onDataUpdated);
 
-  _inConnections.resize(nodeDataModel()->nPorts(PortType::In));
-  _outConnections.resize(nodeDataModel()->nPorts(PortType::Out));
+  _inConnections.resize(nodeDataModel()->nPorts(PortDirection::In));
+  _outConnections.resize(nodeDataModel()->nPorts(PortDirection::Out));
 }
 
 Node::~Node() = default;
@@ -92,23 +92,23 @@ Node::setPosition(QPointF const& newPos)
 }
 
 std::vector<Connection*> const&
-Node::connections(PortType pType, PortIndex idx) const
+Node::connections(PortDirection pType, PortIndex idx) const
 {
   Q_ASSERT(idx >= 0);
-  Q_ASSERT(pType == PortType::In ? (size_t)idx < _inConnections.size()
+  Q_ASSERT(pType == PortDirection::In ? (size_t)idx < _inConnections.size()
                                  : (size_t)idx < _outConnections.size());
 
-  return pType == PortType::In ? _inConnections[idx] : _outConnections[idx];
+  return pType == PortDirection::In ? _inConnections[idx] : _outConnections[idx];
 }
 
 std::vector<Connection*>&
-Node::connections(PortType pType, PortIndex idx)
+Node::connections(PortDirection pType, PortIndex idx)
 {
   Q_ASSERT(idx >= 0);
-  Q_ASSERT(pType == PortType::In ? (size_t)idx < _inConnections.size()
+  Q_ASSERT(pType == PortDirection::In ? (size_t)idx < _inConnections.size()
                                  : (size_t)idx < _outConnections.size());
 
-  return pType == PortType::In ? _inConnections[idx] : _outConnections[idx];
+  return pType == PortDirection::In ? _inConnections[idx] : _outConnections[idx];
 }
 
 void
@@ -122,7 +122,7 @@ void
 Node::onDataUpdated(PortIndex index)
 {
   auto nodeData = _nodeDataModel->outData(index);
-  auto& conns = connections(PortType::Out, index);
+  auto& conns = connections(PortDirection::Out, index);
 
   for (auto const& c : conns)
     c->propagateData(nodeData);

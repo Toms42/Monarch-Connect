@@ -48,24 +48,24 @@ public:
     NodeIndex const& index) const override;
 
   unsigned int nodePortCount(NodeIndex const& index,
-                             PortType portType) const override;
+                             PortDirection portType) const override;
 
   QString nodePortCaption(NodeIndex const& index,
                           PortIndex pIndex,
-                          PortType portType) const override;
+                          PortDirection portType) const override;
 
   NodeDataType nodePortDataType(NodeIndex const& index,
                                 PortIndex pIndex,
-                                PortType portType) const override;
+                                PortDirection portType) const override;
 
   ConnectionPolicy nodePortConnectionPolicy(NodeIndex const& index,
                                             PortIndex pIndex,
-                                            PortType portType) const override;
+                                            PortDirection portType) const override;
 
   std::vector<std::pair<NodeIndex, PortIndex>> nodePortConnections(
     NodeIndex const& index,
     PortIndex id,
-    PortType portType) const override;
+    PortDirection portType) const override;
 
   // FlowSceneModel write interface
   bool removeConnection(NodeIndex const& leftNode,

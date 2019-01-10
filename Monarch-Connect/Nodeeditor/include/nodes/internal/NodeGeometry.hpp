@@ -64,10 +64,10 @@ public:
 
   // TODO removed default QTransform()
   QPointF portScenePosition(PortIndex index,
-                            PortType portType,
+                            PortDirection portType,
                             QTransform const& t = QTransform()) const;
 
-  PortIndex checkHitScenePoint(PortType portType,
+  PortIndex checkHitScenePoint(PortDirection portType,
                                QPointF point,
                                QTransform const& t = QTransform()) const;
 
@@ -82,10 +82,10 @@ public:
 
   static QPointF calculateNodePositionBetweenNodePorts(
     PortIndex targetPortIndex,
-    PortType targetPort,
+    PortDirection targetPort,
     NodeGraphicsObject const& targetNode,
     PortIndex sourcePortIndex,
-    PortType sourcePort,
+    PortDirection sourcePort,
     NodeGraphicsObject const& sourceNode,
     NodeGeometry const& newNodeGeom);
 
@@ -94,7 +94,7 @@ private:
 
   unsigned int captionWidth() const;
 
-  unsigned int portWidth(PortType portType) const;
+  unsigned int portWidth(PortDirection portType) const;
 
 private:
   NodeGraphicsObject& _obj;

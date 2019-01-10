@@ -14,36 +14,36 @@ using QtNodes::NodeDataType;
 using QtNodes::NodeIndex;
 using QtNodes::NodeState;
 using QtNodes::PortIndex;
-using QtNodes::PortType;
+using QtNodes::PortDirection;
 
 NodeState::NodeState(NodeIndex const& index)
-  : _inConnections(index.model()->nodePortCount(index, PortType::In))
-  , _outConnections(index.model()->nodePortCount(index, PortType::Out))
+  : _inConnections(index.model()->nodePortCount(index, PortDirection::In))
+  , _outConnections(index.model()->nodePortCount(index, PortDirection::Out))
   , _reaction(NOT_REACTING)
-  , _reactingPortType(PortType::None)
+  , _reactingPortType(PortDirection::None)
   , _resizing(false)
 {}
 
 std::vector<NodeState::ConnectionPtrVec> const&
-NodeState::getEntries(PortType portType) const
+NodeState::getEntries(PortDirection portType) const
 {
-  if (portType == PortType::In)
+  if (portType == PortDirection::In)
     return _inConnections;
   else
     return _outConnections;
 }
 
 std::vector<NodeState::ConnectionPtrVec>&
-NodeState::getEntries(PortType portType)
+NodeState::getEntries(PortDirection portType)
 {
-  if (portType == PortType::In)
+  if (portType == PortDirection::In)
     return _inConnections;
   else
     return _outConnections;
 }
 
 NodeState::ConnectionPtrVec
-NodeState::connections(PortType portType, PortIndex portIndex) const
+NodeState::connections(PortDirection portType, PortIndex portIndex) const
 {
   auto const& connections = getEntries(portType);
 
@@ -51,7 +51,7 @@ NodeState::connections(PortType portType, PortIndex portIndex) const
 }
 
 void
-NodeState::setConnection(PortType portType,
+NodeState::setConnection(PortDirection portType,
                          PortIndex portIndex,
                          ConnectionGraphicsObject& connection)
 {
@@ -61,7 +61,7 @@ NodeState::setConnection(PortType portType,
 }
 
 void
-NodeState::eraseConnection(PortType portType,
+NodeState::eraseConnection(PortDirection portType,
                            PortIndex portIndex,
                            ConnectionGraphicsObject& conn)
 {
@@ -78,7 +78,7 @@ NodeState::reaction() const
   return _reaction;
 }
 
-PortType
+PortDirection
 NodeState::reactingPortType() const
 {
   return _reactingPortType;
@@ -92,7 +92,7 @@ NodeState::reactingDataType() const
 
 void
 NodeState::setReaction(ReactToConnectionState reaction,
-                       PortType reactingPortType,
+                       PortDirection reactingPortType,
                        NodeDataType reactingDataType)
 {
   _reaction = reaction;

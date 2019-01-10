@@ -15,7 +15,7 @@ class NodeGraphicsObject;
 class ConnectionState
 {
 public:
-  ConnectionState(PortType port = PortType::None)
+  ConnectionState(PortDirection port = PortDirection::None)
     : _requiredPort(port)
   {}
 
@@ -25,13 +25,13 @@ public:
   ~ConnectionState();
 
 public:
-  void setRequiredPort(PortType end) { _requiredPort = end; }
+  void setRequiredPort(PortDirection end) { _requiredPort = end; }
 
-  PortType requiredPort() const { return _requiredPort; }
+  PortDirection requiredPort() const { return _requiredPort; }
 
-  bool requiresPort() const { return _requiredPort != PortType::None; }
+  bool requiresPort() const { return _requiredPort != PortDirection::None; }
 
-  void setNoRequiredPort() { _requiredPort = PortType::None; }
+  void setNoRequiredPort() { _requiredPort = PortDirection::None; }
 
 public:
   void interactWithNode(NodeGraphicsObject* node);
@@ -43,7 +43,7 @@ public:
   void resetLastHoveredNode();
 
 private:
-  PortType _requiredPort;
+  PortDirection _requiredPort;
 
   NodeGraphicsObject* _lastHoveredNode{ nullptr };
 };

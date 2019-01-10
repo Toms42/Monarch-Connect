@@ -26,7 +26,7 @@ using QtNodes::NodeGeometry;
 using QtNodes::NodeGraphicsObject;
 using QtNodes::NodeIndex;
 using QtNodes::NodeState;
-using QtNodes::PortType;
+using QtNodes::PortDirection;
 
 NodeGraphicsObject::NodeGraphicsObject(FlowScene& scene, NodeIndex const& node)
   : _scene(scene)
@@ -161,7 +161,7 @@ NodeGraphicsObject::boundingRect() const
 void
 NodeGraphicsObject::moveConnections() const
 {
-  for (PortType portType : { PortType::In, PortType::Out }) {
+  for (PortDirection portType : { PortDirection::In, PortDirection::Out }) {
     auto const& connectionEntries = nodeState().getEntries(portType);
 
     for (auto const& connections : connectionEntries) {
@@ -172,7 +172,7 @@ NodeGraphicsObject::moveConnections() const
 }
 
 void
-NodeGraphicsObject::reactToPossibleConnection(PortType reactingPortType,
+NodeGraphicsObject::reactToPossibleConnection(PortDirection reactingPortType,
                                               NodeDataType reactingDataType,
                                               QPointF const& scenePoint)
 {
@@ -234,7 +234,7 @@ NodeGraphicsObject::mousePressEvent(QGraphicsSceneMouseEvent* event)
     _scene.clearSelection();
   }
 
-  for (PortType portToCheck : { PortType::In, PortType::Out }) {
+  for (PortDirection portToCheck : { PortDirection::In, PortDirection::Out }) {
     // TODO do not pass sceneTransform
     PortIndex portIndex = geometry().checkHitScenePoint(
       portToCheck, event->scenePos(), sceneTransform());
@@ -253,46 +253,46 @@ NodeGraphicsObject::mousePressEvent(QGraphicsSceneMouseEvent* event)
         // start connecting anew, except start with the port that this
         // connection was already connected to
         Q_ASSERT(_scene._temporaryConn == nullptr);
-        if (portToCheck == PortType::In) {
+        if (portToCheck == PortDirection::In) {
           _scene._temporaryConn =
-            new ConnectionGraphicsObject(con->node(PortType::Out),
-                                         con->portIndex(PortType::Out),
+            new ConnectionGraphicsObject(con->node(PortDirection::Out),
+                                         con->portIndex(PortDirection::Out),
                                          NodeIndex{},
                                          INVALID,
                                          _scene);
-          _scene._temporaryConn->geometry().setEndPoint(PortType::In,
+          _scene._temporaryConn->geometry().setEndPoint(PortDirection::In,
                                                         event->scenePos());
         } else {
           _scene._temporaryConn =
             new ConnectionGraphicsObject(NodeIndex{},
                                          INVALID,
-                                         con->node(PortType::In),
-                                         con->portIndex(PortType::In),
+                                         con->node(PortDirection::In),
+                                         con->portIndex(PortDirection::In),
                                          _scene);
-          _scene._temporaryConn->geometry().setEndPoint(PortType::Out,
+          _scene._temporaryConn->geometry().setEndPoint(PortDirection::Out,
                                                         event->scenePos());
         }
         _scene._temporaryConn->grabMouse();
 
         // remove it
-        flowScene().model()->removeConnection(con->node(PortType::Out),
-                                              con->portIndex(PortType::Out),
-                                              con->node(PortType::In),
-                                              con->portIndex(PortType::In));
+        flowScene().model()->removeConnection(con->node(PortDirection::Out),
+                                              con->portIndex(PortDirection::Out),
+                                              con->node(PortDirection::In),
+                                              con->portIndex(PortDirection::In));
 
       } else // initialize new Connection
       {
-        if (portToCheck == PortType::In) {
+        if (portToCheck == PortDirection::In) {
           Q_ASSERT(_scene._temporaryConn == nullptr);
           _scene._temporaryConn = new ConnectionGraphicsObject(
             NodeIndex{}, INVALID, _nodeIndex, portIndex, _scene);
-          _scene._temporaryConn->geometry().setEndPoint(PortType::Out,
+          _scene._temporaryConn->geometry().setEndPoint(PortDirection::Out,
                                                         event->scenePos());
         } else {
           Q_ASSERT(_scene._temporaryConn == nullptr);
           _scene._temporaryConn = new ConnectionGraphicsObject(
             _nodeIndex, portIndex, NodeIndex{}, INVALID, _scene);
-          _scene._temporaryConn->geometry().setEndPoint(PortType::In,
+          _scene._temporaryConn->geometry().setEndPoint(PortDirection::In,
                                                         event->scenePos());
         }
 

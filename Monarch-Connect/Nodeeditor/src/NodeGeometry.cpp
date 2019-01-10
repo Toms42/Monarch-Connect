@@ -24,8 +24,8 @@ NodeGeometry::NodeGeometry(const NodeIndex& index, NodeGraphicsObject& obj)
   , _entryHeight(20)
   , _spacing(20)
   , _hovered(false)
-  , _nSources(index.model()->nodePortCount(index, PortType::Out))
-  , _nSinks(index.model()->nodePortCount(index, PortType::In))
+  , _nSources(index.model()->nodePortCount(index, PortDirection::Out))
+  , _nSinks(index.model()->nodePortCount(index, PortDirection::In))
   , _draggingPos(-1000, -1000)
   , _nodeIndex(index)
   , _fontMetrics(QFont())
@@ -82,8 +82,8 @@ NodeGeometry::recalculateSize() const
 
   _height += captionHeight();
 
-  _inputPortWidth = portWidth(PortType::In);
-  _outputPortWidth = portWidth(PortType::Out);
+  _inputPortWidth = portWidth(PortDirection::In);
+  _outputPortWidth = portWidth(PortDirection::Out);
 
   _width = _inputPortWidth + _outputPortWidth + 2 * _spacing;
 
@@ -120,7 +120,7 @@ NodeGeometry::recalculateSize(QFont const& font) const
 
 QPointF
 NodeGeometry::portScenePosition(PortIndex index,
-                                PortType portType,
+                                PortDirection portType,
                                 QTransform const& t) const
 {
   auto const& nodeStyle = StyleCollection::nodeStyle();
@@ -139,14 +139,14 @@ NodeGeometry::portScenePosition(PortIndex index,
   totalHeight += step / 2.0;
 
   switch (portType) {
-    case PortType::Out: {
+    case PortDirection::Out: {
       double x = _width + nodeStyle.ConnectionPointDiameter;
 
       result = QPointF(x, totalHeight);
       break;
     }
 
-    case PortType::In: {
+    case PortDirection::In: {
       double x = 0.0 - nodeStyle.ConnectionPointDiameter;
 
       result = QPointF(x, totalHeight);
@@ -161,7 +161,7 @@ NodeGeometry::portScenePosition(PortIndex index,
 }
 
 PortIndex
-NodeGeometry::checkHitScenePoint(PortType portType,
+NodeGeometry::checkHitScenePoint(PortDirection portType,
                                  QPointF const scenePoint,
                                  QTransform const& sceneTransform) const
 {
@@ -169,7 +169,7 @@ NodeGeometry::checkHitScenePoint(PortType portType,
 
   PortIndex result = INVALID;
 
-  if (portType == PortType::None)
+  if (portType == PortDirection::None)
     return result;
 
   double const tolerance = 2.0 * nodeStyle.ConnectionPointDiameter;
@@ -205,13 +205,13 @@ NodeGeometry::widgetPosition() const
   if (auto w = _nodeIndex.model()->nodeWidget(_nodeIndex)) {
     if (_nodeIndex.model()->nodeValidationState(_nodeIndex) !=
         NodeValidationState::Valid) {
-      return QPointF(_spacing + portWidth(PortType::In),
+      return QPointF(_spacing + portWidth(PortDirection::In),
                      (captionHeight() + _height - validationHeight() -
                       _spacing - w->height()) /
                        2.0);
     }
 
-    return QPointF(_spacing + portWidth(PortType::In),
+    return QPointF(_spacing + portWidth(PortDirection::In),
                    (captionHeight() + _height - w->height()) / 2.0);
   }
 
@@ -255,10 +255,10 @@ NodeGeometry::validationWidth() const
 QPointF
 NodeGeometry::calculateNodePositionBetweenNodePorts(
   PortIndex targetPortIndex,
-  PortType targetPort,
+  PortDirection targetPort,
   const NodeGraphicsObject& targetNode,
   PortIndex sourcePortIndex,
-  PortType sourcePort,
+  PortDirection sourcePort,
   const NodeGraphicsObject& sourceNode,
   const NodeGeometry& newNodeGeom)
 {
@@ -280,7 +280,7 @@ NodeGeometry::calculateNodePositionBetweenNodePorts(
 }
 
 unsigned int
-NodeGeometry::portWidth(PortType portType) const
+NodeGeometry::portWidth(PortDirection portType) const
 {
   unsigned width = 0;
 

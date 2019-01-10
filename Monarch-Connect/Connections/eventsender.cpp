@@ -3,7 +3,7 @@
 #include <nodes/NodeDataModel>
 #include <QDebug>
 
-using QtNodes::PortType;
+using QtNodes::PortDirection;
 using QtNodes::PortIndex;
 using QtNodes::NodeData;
 using QtNodes::NodeDataType;

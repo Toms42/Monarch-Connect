@@ -46,15 +46,15 @@ public:
 public:
   ConnectionID id() const;
 
-  Node *getNode(PortType portType) const;
+  Node *getNode(PortDirection portType) const;
 
 private:
-  Node *&getNodePtrRef(PortType portType);
+  Node *&getNodePtrRef(PortDirection portType);
 
 public:
-  PortIndex getPortIndex(PortType portType) const;
+  PortIndex getPortIndex(PortDirection portType) const;
 
-  NodeDataType dataType(PortType portType) const;
+  NodeDataType dataType(PortDirection portType) const;
 
   void setTypeConverter(TypeConverter converter);
 
@@ -67,7 +67,7 @@ private:
   QUuid _uid;
 
 private:
-  void setNodeToPort(Node &node, PortType portType, PortIndex portIndex);
+  void setNodeToPort(Node &node, PortDirection portType, PortIndex portIndex);
 
   Node *_outNode = nullptr;
   Node *_inNode = nullptr;

@@ -12,7 +12,7 @@ using QtNodes::NodeConnectionInteraction;
 using QtNodes::NodeDataModel;
 using QtNodes::NodeIndex;
 using QtNodes::PortIndex;
-using QtNodes::PortType;
+using QtNodes::PortDirection;
 using QtNodes::TypeConverter;
 
 NodeConnectionInteraction::NodeConnectionInteraction(
@@ -28,9 +28,9 @@ NodeConnectionInteraction::canConnect(PortIndex& portIndex,
 {
   // 1) Connection requires a port
 
-  PortType requiredPort = connectionRequiredPort();
+  PortDirection requiredPort = connectionRequiredPort();
 
-  if (requiredPort == PortType::None) {
+  if (requiredPort == PortDirection::None) {
     return false;
   }
 
@@ -68,10 +68,10 @@ NodeConnectionInteraction::canConnect(PortIndex& portIndex,
   // if the types don't match, try a conversion
   if (connectionDataType.id != candidateNodeDataType.id) {
     converted = true;
-    if (requiredPort == PortType::In) {
+    if (requiredPort == PortDirection::In) {
       return modelTarget->getTypeConvertable(
         { connectionDataType, candidateNodeDataType });
-    } else if (requiredPort == PortType::Out) {
+    } else if (requiredPort == PortDirection::Out) {
       return modelTarget->getTypeConvertable(
         { candidateNodeDataType, connectionDataType });
     }
@@ -103,7 +103,7 @@ NodeConnectionInteraction::tryConnect() const
 
   auto model = _connection->flowScene().model();
 
-  if (requiredPort == PortType::In) {
+  if (requiredPort == PortDirection::In) {
     return model->addConnection(outNode, outNodePortIndex, _node, portIndex);
   }
   return model->addConnection(_node, portIndex, outNode, outNodePortIndex);
@@ -111,7 +111,7 @@ NodeConnectionInteraction::tryConnect() const
 
 // ------------------ util functions below
 
-PortType
+PortDirection
 NodeConnectionInteraction::connectionRequiredPort() const
 {
   auto const& state = _connection->state();
@@ -120,7 +120,7 @@ NodeConnectionInteraction::connectionRequiredPort() const
 }
 
 QPointF
-NodeConnectionInteraction::connectionEndScenePosition(PortType portType) const
+NodeConnectionInteraction::connectionEndScenePosition(PortDirection portType) const
 {
   ConnectionGeometry& geometry = _connection->geometry();
 
@@ -130,7 +130,7 @@ NodeConnectionInteraction::connectionEndScenePosition(PortType portType) const
 }
 
 QPointF
-NodeConnectionInteraction::nodePortScenePosition(PortType portType,
+NodeConnectionInteraction::nodePortScenePosition(PortDirection portType,
                                                  PortIndex portIndex) const
 {
 
@@ -146,7 +146,7 @@ NodeConnectionInteraction::nodePortScenePosition(PortType portType,
 
 PortIndex
 NodeConnectionInteraction::nodePortIndexUnderScenePoint(
-  PortType portType,
+  PortDirection portType,
   QPointF const& scenePoint) const
 {
   NodeGraphicsObject const& ngo =
@@ -161,7 +161,7 @@ NodeConnectionInteraction::nodePortIndexUnderScenePoint(
 }
 
 bool
-NodeConnectionInteraction::nodePortIsEmpty(PortType portType,
+NodeConnectionInteraction::nodePortIsEmpty(PortDirection portType,
                                            PortIndex portIndex) const
 {
   NodeState const& nodeState =

@@ -34,10 +34,10 @@ public:
   virtual bool captionVisible() const { return true; }
 
   /// Port caption is used in GUI to label individual ports
-  virtual QString portCaption(PortType, PortIndex) const { return QString(); }
+  virtual QString portCaption(PortDirection, PortIndex) const { return QString(); }
 
   /// It is possible to hide port caption in GUI
-  virtual bool portCaptionVisible(PortType, PortIndex) const { return false; }
+  virtual bool portCaptionVisible(PortDirection, PortIndex) const { return false; }
 
   /// Name makes this model unique
   virtual QString name() const = 0;
@@ -46,9 +46,9 @@ public:
   QJsonObject save() const override;
 
 public:
-  virtual unsigned int nPorts(PortType portType) const = 0;
+  virtual unsigned int nPorts(PortDirection portType) const = 0;
 
-  virtual NodeDataType dataType(PortType portType,
+  virtual NodeDataType dataType(PortDirection portType,
                                 PortIndex portIndex) const = 0;
 
 public:

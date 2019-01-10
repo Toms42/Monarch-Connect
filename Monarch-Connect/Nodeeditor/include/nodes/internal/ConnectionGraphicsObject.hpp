@@ -45,13 +45,13 @@ public:
   int type() const override { return Type; }
 
 public:
-  NodeIndex node(PortType pType) const
+  NodeIndex node(PortDirection pType) const
   {
-    return pType == PortType::In ? _rightNode : _leftNode;
+    return pType == PortDirection::In ? _rightNode : _leftNode;
   }
-  PortIndex portIndex(PortType pType) const
+  PortIndex portIndex(PortDirection pType) const
   {
-    return pType == PortType::In ? _rightPortIndex : _leftPortIndex;
+    return pType == PortDirection::In ? _rightPortIndex : _leftPortIndex;
   }
 
   FlowScene& flowScene() const { return _scene; }
@@ -68,7 +68,7 @@ public:
 
   ConnectionID id() const;
 
-  NodeDataType dataType(PortType ty) const;
+  NodeDataType dataType(PortDirection ty) const;
 
   /// Updates the position of both ends
   void move();

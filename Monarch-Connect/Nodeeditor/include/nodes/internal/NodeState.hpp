@@ -36,28 +36,28 @@ public:
 
   /// Returns vector of connections ID.
   /// Some of them can be empty (null)
-  std::vector<ConnectionPtrVec> const& getEntries(PortType) const;
+  std::vector<ConnectionPtrVec> const& getEntries(PortDirection) const;
 
-  std::vector<ConnectionPtrVec>& getEntries(PortType);
+  std::vector<ConnectionPtrVec>& getEntries(PortDirection);
 
-  ConnectionPtrVec connections(PortType portType, PortIndex portIndex) const;
+  ConnectionPtrVec connections(PortDirection portType, PortIndex portIndex) const;
 
-  void setConnection(PortType portType,
+  void setConnection(PortDirection portType,
                      PortIndex portIndex,
                      ConnectionGraphicsObject& connection);
 
-  void eraseConnection(PortType portType,
+  void eraseConnection(PortDirection portType,
                        PortIndex portIndex,
                        ConnectionGraphicsObject& connection);
 
   ReactToConnectionState reaction() const;
 
-  PortType reactingPortType() const;
+  PortDirection reactingPortType() const;
 
   NodeDataType reactingDataType() const;
 
   void setReaction(ReactToConnectionState reaction,
-                   PortType reactingPortType = PortType::None,
+                   PortDirection reactingPortType = PortDirection::None,
 
                    NodeDataType reactingDataType = NodeDataType());
 
@@ -72,7 +72,7 @@ private:
   std::vector<ConnectionPtrVec> _outConnections;
 
   ReactToConnectionState _reaction;
-  PortType _reactingPortType;
+  PortDirection _reactingPortType;
   NodeDataType _reactingDataType;
 
   bool _resizing;

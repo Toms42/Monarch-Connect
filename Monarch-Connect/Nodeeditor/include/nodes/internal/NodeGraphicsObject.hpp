@@ -52,7 +52,7 @@ public:
   /// their corresponding end points.
   void moveConnections() const;
 
-  void reactToPossibleConnection(PortType,
+  void reactToPossibleConnection(PortDirection,
                                  NodeDataType,
                                  QPointF const& scenePoint);
 

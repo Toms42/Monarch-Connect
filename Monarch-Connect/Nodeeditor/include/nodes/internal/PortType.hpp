@@ -5,7 +5,7 @@
 
 namespace QtNodes {
 
-enum class PortType
+enum class PortDirection
 {
   None,
   In,
@@ -18,39 +18,39 @@ using PortIndex = int;
 
 struct Port
 {
-  PortType type;
+  PortDirection type;
 
   PortIndex index;
 
   Port()
-    : type(PortType::None)
+    : type(PortDirection::None)
     , index(INVALID)
   {}
 
-  Port(PortType t, PortIndex i)
+  Port(PortDirection t, PortIndex i)
     : type(t)
     , index(i)
   {}
 
   bool indexIsValid() { return index != INVALID; }
 
-  bool portTypeIsValid() { return type != PortType::None; }
+  bool portTypeIsValid() { return type != PortDirection::None; }
 };
 
 // using PortAddress = std::pair<QUuid, PortIndex>;
 
-inline PortType
-oppositePort(PortType port)
+inline PortDirection
+oppositePort(PortDirection port)
 {
-  PortType result = PortType::None;
+  PortDirection result = PortDirection::None;
 
   switch (port) {
-    case PortType::In:
-      result = PortType::Out;
+    case PortDirection::In:
+      result = PortDirection::Out;
       break;
 
-    case PortType::Out:
-      result = PortType::In;
+    case PortDirection::Out:
+      result = PortDirection::In;
       break;
 
     default:

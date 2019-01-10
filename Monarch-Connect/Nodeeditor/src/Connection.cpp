@@ -27,7 +27,7 @@ using QtNodes::Node;
 using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 using QtNodes::PortIndex;
-using QtNodes::PortType;
+using QtNodes::PortDirection;
 using QtNodes::TypeConverter;
 
 Connection::Connection(Node& nodeIn,
@@ -43,8 +43,8 @@ Connection::Connection(Node& nodeIn,
   , _connectionState()
   , _converter(std::move(typeConverter))
 {
-  setNodeToPort(nodeIn, PortType::In, portIndexIn);
-  setNodeToPort(nodeOut, PortType::Out, portIndexOut);
+  setNodeToPort(nodeIn, PortDirection::In, portIndexIn);
+  setNodeToPort(nodeOut, PortDirection::Out, portIndexOut);
 }
 
 Connection::~Connection()
@@ -68,7 +68,7 @@ Connection::save() const
     connectionJson["out_index"] = _outPortIndex;
 
     if (_converter) {
-      auto getTypeJson = [this](PortType type) {
+      auto getTypeJson = [this](PortDirection type) {
         QJsonObject typeJson;
         NodeDataType nodeType = this->dataType(type);
         typeJson["id"] = nodeType.id;
@@ -79,8 +79,8 @@ Connection::save() const
 
       QJsonObject converterTypeJson;
 
-      converterTypeJson["in"] = getTypeJson(PortType::In);
-      converterTypeJson["out"] = getTypeJson(PortType::Out);
+      converterTypeJson["in"] = getTypeJson(PortDirection::In);
+      converterTypeJson["out"] = getTypeJson(PortDirection::Out);
 
       connectionJson["converter"] = converterTypeJson;
     }
@@ -93,23 +93,23 @@ ConnectionID
 Connection::id() const
 {
   ConnectionID ret;
-  ret.lNodeID = getNode(PortType::Out)->id();
-  ret.rNodeID = getNode(PortType::In)->id();
+  ret.lNodeID = getNode(PortDirection::Out)->id();
+  ret.rNodeID = getNode(PortDirection::In)->id();
 
-  ret.lPortID = getPortIndex(PortType::Out);
-  ret.rPortID = getPortIndex(PortType::In);
+  ret.lPortID = getPortIndex(PortDirection::Out);
+  ret.rPortID = getPortIndex(PortDirection::In);
 
   return ret;
 }
 
 void
-Connection::setNodeToPort(Node& node, PortType portType, PortIndex portIndex)
+Connection::setNodeToPort(Node& node, PortDirection portType, PortIndex portIndex)
 {
   auto& nodeWeak = getNodePtrRef(portType);
 
   nodeWeak = &node;
 
-  if (portType == PortType::Out)
+  if (portType == PortDirection::Out)
     _outPortIndex = portIndex;
   else
     _inPortIndex = portIndex;
@@ -120,16 +120,16 @@ Connection::setNodeToPort(Node& node, PortType portType, PortIndex portIndex)
 }
 
 PortIndex
-Connection::getPortIndex(PortType portType) const
+Connection::getPortIndex(PortDirection portType) const
 {
   PortIndex result = INVALID;
 
   switch (portType) {
-    case PortType::In:
+    case PortDirection::In:
       result = _inPortIndex;
       break;
 
-    case PortType::Out:
+    case PortDirection::Out:
       result = _outPortIndex;
 
       break;
@@ -142,14 +142,14 @@ Connection::getPortIndex(PortType portType) const
 }
 
 Node*
-Connection::getNode(PortType portType) const
+Connection::getNode(PortDirection portType) const
 {
   switch (portType) {
-    case PortType::In:
+    case PortDirection::In:
       return _inNode;
       break;
 
-    case PortType::Out:
+    case PortDirection::Out:
       return _outNode;
       break;
 
@@ -161,14 +161,14 @@ Connection::getNode(PortType portType) const
 }
 
 Node*&
-Connection::getNodePtrRef(PortType portType)
+Connection::getNodePtrRef(PortDirection portType)
 {
   switch (portType) {
-    case PortType::In:
+    case PortDirection::In:
       return _inNode;
       break;
 
-    case PortType::Out:
+    case PortDirection::Out:
       return _outNode;
       break;
 
@@ -180,12 +180,12 @@ Connection::getNodePtrRef(PortType portType)
 }
 
 NodeDataType
-Connection::dataType(PortType portType) const
+Connection::dataType(PortDirection portType) const
 {
   if (_inNode && _outNode) {
-    auto const& model = (portType == PortType::In) ? _inNode->nodeDataModel()
+    auto const& model = (portType == PortDirection::In) ? _inNode->nodeDataModel()
                                                    : _outNode->nodeDataModel();
-    PortIndex index = (portType == PortType::In) ? _inPortIndex : _outPortIndex;
+    PortIndex index = (portType == PortDirection::In) ? _inPortIndex : _outPortIndex;
 
     return model->dataType(portType, index);
   } else {
@@ -194,10 +194,10 @@ Connection::dataType(PortType portType) const
 
     if ((validNode = _inNode)) {
       index = _inPortIndex;
-      portType = PortType::In;
+      portType = PortDirection::In;
     } else if ((validNode = _outNode)) {
       index = _outPortIndex;
-      portType = PortType::Out;
+      portType = PortDirection::Out;
     }
 
     if (validNode) {

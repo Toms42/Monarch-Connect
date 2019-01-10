@@ -22,11 +22,11 @@ public:
   explicit ConnectionGeometry(ConnectionGraphicsObject& obj);
 
 public:
-  QPointF const& getEndPoint(PortType portType) const;
+  QPointF const& getEndPoint(PortDirection portType) const;
 
-  void setEndPoint(PortType portType, QPointF const& point);
+  void setEndPoint(PortDirection portType, QPointF const& point);
 
-  void moveEndPoint(PortType portType, QPointF const& offset);
+  void moveEndPoint(PortDirection portType, QPointF const& offset);
 
   QRectF boundingRect() const;
 

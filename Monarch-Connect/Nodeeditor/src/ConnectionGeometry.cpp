@@ -6,7 +6,7 @@
 #include "StyleCollection.hpp"
 
 using QtNodes::ConnectionGeometry;
-using QtNodes::PortType;
+using QtNodes::PortDirection;
 
 ConnectionGeometry::ConnectionGeometry(QtNodes::ConnectionGraphicsObject& obj)
   : _obj{ obj }
@@ -26,23 +26,23 @@ ConnectionGeometry::ConnectionGeometry(QtNodes::ConnectionGraphicsObject& obj)
 }
 
 QPointF const&
-ConnectionGeometry::getEndPoint(PortType portType) const
+ConnectionGeometry::getEndPoint(PortDirection portType) const
 {
-  Q_ASSERT(portType != PortType::None);
+  Q_ASSERT(portType != PortDirection::None);
 
-  return (portType == PortType::Out ? _out : _in);
+  return (portType == PortDirection::Out ? _out : _in);
 }
 
 void
-ConnectionGeometry::setEndPoint(PortType portType, QPointF const& point)
+ConnectionGeometry::setEndPoint(PortDirection portType, QPointF const& point)
 {
   _obj.prepareGeometryChange();
   switch (portType) {
-    case PortType::Out:
+    case PortDirection::Out:
       _out = point;
       break;
 
-    case PortType::In:
+    case PortDirection::In:
       _in = point;
       break;
 
@@ -52,15 +52,15 @@ ConnectionGeometry::setEndPoint(PortType portType, QPointF const& point)
 }
 
 void
-ConnectionGeometry::moveEndPoint(PortType portType, QPointF const& offset)
+ConnectionGeometry::moveEndPoint(PortDirection portType, QPointF const& offset)
 {
   _obj.prepareGeometryChange();
   switch (portType) {
-    case PortType::Out:
+    case PortDirection::Out:
       _out += offset;
       break;
 
-    case PortType::In:
+    case PortDirection::In:
       _in += offset;
       break;
 

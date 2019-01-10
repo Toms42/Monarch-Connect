@@ -26,7 +26,7 @@ using QtNodes::FlowScene;
 using QtNodes::NodeDataType;
 using QtNodes::NodeIndex;
 using QtNodes::PortIndex;
-using QtNodes::PortType;
+using QtNodes::PortDirection;
 
 ConnectionGraphicsObject::ConnectionGraphicsObject(NodeIndex const& leftNode,
                                                    PortIndex leftPortIndex,
@@ -36,8 +36,8 @@ ConnectionGraphicsObject::ConnectionGraphicsObject(NodeIndex const& leftNode,
   : _scene{ scene }
   , _geometry{ *this }
   , _state(leftNode.isValid()
-             ? (rightNode.isValid() ? PortType::None : PortType::In)
-             : PortType::Out)
+             ? (rightNode.isValid() ? PortDirection::None : PortDirection::In)
+             : PortDirection::Out)
   , _leftNode{ leftNode }
   , _rightNode{ rightNode }
   , _leftPortIndex{ leftPortIndex }
@@ -61,18 +61,18 @@ ConnectionGraphicsObject::ConnectionGraphicsObject(NodeIndex const& leftNode,
     Q_ASSERT(ngo != nullptr);
 
     geometry().moveEndPoint(
-      PortType::Out,
+      PortDirection::Out,
       ngo->geometry().portScenePosition(
-        leftPortIndex, PortType::Out, ngo->sceneTransform()));
+        leftPortIndex, PortDirection::Out, ngo->sceneTransform()));
   }
   if (rightNode.isValid()) {
     auto ngo = _scene.nodeGraphicsObject(rightNode);
     Q_ASSERT(ngo != nullptr);
 
     geometry().moveEndPoint(
-      PortType::In,
+      PortDirection::In,
       ngo->geometry().portScenePosition(
-        rightPortIndex, PortType::In, ngo->sceneTransform()));
+        rightPortIndex, PortDirection::In, ngo->sceneTransform()));
   }
 }
 
@@ -121,7 +121,7 @@ ConnectionGraphicsObject::id() const
 }
 
 NodeDataType
-ConnectionGraphicsObject::dataType(PortType ty) const
+ConnectionGraphicsObject::dataType(PortDirection ty) const
 {
   // get a valid node
   auto n = node(ty);
@@ -133,7 +133,7 @@ ConnectionGraphicsObject::dataType(PortType ty) const
 void
 ConnectionGraphicsObject::move()
 {
-  for (PortType portType : { PortType::In, PortType::Out }) {
+  for (PortDirection portType : { PortDirection::In, PortDirection::Out }) {
     auto nodeIndex = node(portType);
     if (nodeIndex.isValid()) {
       // here we dereference pointer, which can be nullptr! So we first check
@@ -203,7 +203,7 @@ ConnectionGraphicsObject::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
   QPointF offset = event->pos() - event->lastPos();
 
   auto requiredPort = _state.requiredPort();
-  if (requiredPort != PortType::None) {
+  if (requiredPort != PortDirection::None) {
     _geometry.moveEndPoint(requiredPort, offset);
   }
 

@@ -31,16 +31,16 @@ public:
   bool tryConnect() const;
 
 private:
-  PortType connectionRequiredPort() const;
+  PortDirection connectionRequiredPort() const;
 
-  QPointF connectionEndScenePosition(PortType) const;
+  QPointF connectionEndScenePosition(PortDirection) const;
 
-  QPointF nodePortScenePosition(PortType portType, PortIndex portIndex) const;
+  QPointF nodePortScenePosition(PortDirection portType, PortIndex portIndex) const;
 
-  PortIndex nodePortIndexUnderScenePoint(PortType portType,
+  PortIndex nodePortIndexUnderScenePoint(PortDirection portType,
                                          QPointF const& p) const;
 
-  bool nodePortIsEmpty(PortType portType, PortIndex portIndex) const;
+  bool nodePortIsEmpty(PortDirection portType, PortIndex portIndex) const;
 
 private:
   NodeIndex _node;

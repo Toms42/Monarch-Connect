@@ -50,10 +50,10 @@ public:
 public:
   NodeDataModel* nodeDataModel() const;
 
-  std::vector<Connection*> const& connections(PortType pType,
+  std::vector<Connection*> const& connections(PortDirection pType,
                                               PortIndex pIdx) const;
 
-  std::vector<Connection*>& connections(PortType pType, PortIndex pIdx);
+  std::vector<Connection*>& connections(PortDirection pType, PortIndex pIdx);
 
 public slots: // data propagation
 

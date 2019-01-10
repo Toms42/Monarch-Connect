@@ -94,30 +94,30 @@ public:
 
   /// Get the count of DataPorts
   virtual unsigned int nodePortCount(NodeIndex const& index,
-                                     PortType portType) const = 0;
+                                     PortDirection portType) const = 0;
 
   /// Get the port caption
   virtual QString nodePortCaption(NodeIndex const& index,
                                   PortIndex portID,
-                                  PortType portType) const = 0;
+                                  PortDirection portType) const = 0;
 
   /// Get the port data type
   virtual NodeDataType nodePortDataType(NodeIndex const& index,
                                         PortIndex portID,
-                                        PortType portType) const = 0;
+                                        PortDirection portType) const = 0;
 
   /// Port Policy
   virtual ConnectionPolicy nodePortConnectionPolicy(
     NodeIndex const& index,
     PortIndex portID,
-    PortType portType) const = 0;
+    PortDirection portType) const = 0;
 
   /// Get a connection at a port
   /// Returns the remote node and the remote port index for that node
   virtual std::vector<std::pair<NodeIndex, PortIndex>> nodePortConnections(
     NodeIndex const& index,
     PortIndex portID,
-    PortType portTypes) const = 0;
+    PortDirection portTypes) const = 0;
 
   // Mutation functions
   /////////////////////
