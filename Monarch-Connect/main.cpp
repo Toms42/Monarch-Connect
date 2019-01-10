@@ -2,7 +2,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QApplication>
-
+#include <QObject>
 #include <nodes/NodeData>
 #include <nodes/FlowScene>
 #include <nodes/FlowView>
@@ -55,8 +55,10 @@ int main(int argc, char *argv[])
 
     FramelessWindow framelessWindow;
     framelessWindow.setWindowTitle("Monarch");
-    MainWindow w;
+    MainWindow w(&framelessWindow);
     framelessWindow.setContent(&w);
+    QObject::connect(&w, &MainWindow::updateTitle,
+            &framelessWindow, &FramelessWindow::setWindowTitle);
     framelessWindow.show();
 
     return a.exec();

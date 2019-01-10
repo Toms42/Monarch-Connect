@@ -30,12 +30,6 @@ MainWindow::MainWindow(QWidget *parent) :
                                                               *ui->projectTree,
                                                               *centralTabInterface,
                                                               this);
-    connect(ui->button_newTopFlow, &QPushButton::pressed,
-            projectHierarchyInterface, &ProjectHierarchyInterface::addTopFlow);
-    connect(ui->button_loadTopFlow, &QPushButton::pressed,
-            projectHierarchyInterface, &ProjectHierarchyInterface::loadTopFlow);
-    connect(ui->button_deleteTopFlow, &QPushButton::pressed,
-            projectHierarchyInterface, &ProjectHierarchyInterface::deleteTopFlow);
 
     //connect commands to project:
     connect(ui->actionOpen, &QAction::triggered,
@@ -45,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionSave_Project_As, &QAction::triggered,
             &Project::getInstance(), &Project::saveAs);
     connect(&Project::getInstance(), &Project::nameUpdated,
-            this, &MainWindow::setWindowTitle);
+            this, &MainWindow::updateTitle);
 
 
 }

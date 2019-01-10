@@ -41,7 +41,7 @@ void Project::save()
             _file.close();
             _name = QFileInfo(_file).fileName();
             _isSaved = true;
-            emit(nameUpdated(_name));
+            emit(nameUpdated(_name.prepend("Monarch - ")));
         }
     }
     else
@@ -54,7 +54,7 @@ void Project::saveAs()
 {
     QString fileName = QFileDialog::getSaveFileName(nullptr,
                                                     tr("Save Project"),
-                                                    QDir::homePath(),
+                                                    getDir().path(),
                                                     tr("Project Files").append("(*.monarch)"));
     if(!fileName.isEmpty())
     {
@@ -73,7 +73,7 @@ void Project::saveAs()
         _file.close();
         _name = QFileInfo(_file).fileName();
         _isSaved = true;
-        emit(nameUpdated(_name));
+        emit(nameUpdated(_name.prepend("Monarch - ")));
     }
 }
 
@@ -81,7 +81,7 @@ void Project::open()
 {
     QString fileName = QFileDialog::getOpenFileName(nullptr,
         tr("Open File"),
-        QDir::homePath(),
+        getDir().path(),
         tr("Project Files").append("(*.monarch)").append(";;")
         .append(tr("Flow Files")).append("(*.flow)"));
     if(fileName.endsWith(".flow"))
@@ -99,7 +99,9 @@ void Project::open()
         if(!file.open(QIODevice::ReadOnly))
             return;
         _file.setFileName(fileName);
+        _name = QFileInfo(_file).fileName();
         loadFromMemory(file.readAll());
+        emit(nameUpdated(_name.prepend("Monarch - ")));
     }
 }
 
@@ -120,5 +122,9 @@ std::shared_ptr<DataModelRegistry> Project::getModelRegistry()
 
 QDir Project::getDir()
 {
+    if(!_file.exists())
+    {
+        return QDir::home();
+    }
     return QFileInfo(_file).dir();
 }

@@ -1,4 +1,8 @@
 {
+  "ApplicationStyle": {
+    "Opacity": 0.98
+  },
+
   "FlowViewStyle": {
     "BackgroundColor": [53, 53, 53],
     "FineGridColor": [60, 60, 60],

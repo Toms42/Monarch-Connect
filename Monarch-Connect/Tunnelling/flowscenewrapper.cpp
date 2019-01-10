@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QIODevice>
 #include <QDebug>
+#include "Common/project.h"
 
 FlowSceneWrapper::FlowSceneWrapper(std::shared_ptr<FlowSceneWrapper> parent, QFile &file, QObject *parentObj)
     : QObject(parentObj),
@@ -83,7 +84,7 @@ void FlowSceneWrapper::saveAs()
     qDebug() << "no file yet, prompting.";
     QString fileName = QFileDialog::getSaveFileName(nullptr,
                                                     tr("Save Flow"),
-                                                    QDir::homePath(),
+                                                    Project::getInstance().getDir().path(),
                                                     tr("Flow Files").append("(*.flow)"));
     if(!fileName.isEmpty())
     {

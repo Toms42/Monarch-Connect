@@ -6,6 +6,7 @@
 #include "WidgetControllers/tagtreeinterface.h"
 #include "WidgetControllers/centraltabinterface.h"
 #include "WidgetControllers/projecthierarchyinterface.h"
+#include <QString>
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +21,8 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+signals:
+    void updateTitle(const QString &title);
 
 private:
     Ui::MainWindow *ui;
