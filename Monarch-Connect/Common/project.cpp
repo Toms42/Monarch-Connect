@@ -1,43 +1,105 @@
 #include "project.h"
 #include <memory>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
 
 Project::Project(QObject *parent)
     : QObject(parent),
       _tags(this),
-      _flows(this),
-      _path()
+      _flows(this)
 {
     _registry = std::make_shared<DataModelRegistry>();
 }
 
+QByteArray Project::saveToMemory()
+{
+    qDebug() << "saving monarch project...";
+    QJsonObject projectJson;
+    projectJson.insert("flows",_flows.save());
+    QJsonDocument document(projectJson);
+    return document.toJson();
+
+}
+
+void Project::loadFromMemory(QByteArray file)
+{
+    qDebug() << "loading monarch project...";
+    QJsonObject const document = QJsonDocument::fromJson(file).object();
+    _flows.load(document["flows"].toArray());
+}
+
 void Project::save()
 {
-    if(_path.exists() && _path.isWritable())
+    if(_file.exists())
     {
-        //save
+        if(_file.open(QIODevice::WriteOnly))
+        {
+            _file.write(saveToMemory());
+            _file.close();
+            _name = QFileInfo(_file).fileName();
+            _isSaved = true;
+            emit(nameUpdated(_name));
+        }
     }
     else
     {
-        //prompt user for file
+        saveAs();
     }
 }
 
-void Project::save(QFile &path)
+void Project::saveAs()
 {
-    _path.setFileName(path.fileName());
-    save();
+    QString fileName = QFileDialog::getSaveFileName(nullptr,
+                                                    tr("Save Project"),
+                                                    QDir::homePath(),
+                                                    tr("Project Files").append("(*.monarch)"));
+    if(!fileName.isEmpty())
+    {
+        if(!fileName.endsWith(".monarch", Qt::CaseInsensitive))
+        {
+            fileName += ".monarch";
+        }
+    }
+    else {
+        return;
+    }
+    _file.setFileName(fileName);
+    if(_file.open(QIODevice::WriteOnly))
+    {
+        _file.write(saveToMemory());
+        _file.close();
+        _name = QFileInfo(_file).fileName();
+        _isSaved = true;
+        emit(nameUpdated(_name));
+    }
 }
 
-void Project::load(QFile &path)
+void Project::open()
 {
-    if(path.exists())
+    QString fileName = QFileDialog::getOpenFileName(nullptr,
+        tr("Open File"),
+        QDir::homePath(),
+        tr("Project Files").append("(*.monarch)").append(";;")
+        .append(tr("Flow Files")).append("(*.flow)"));
+    if(fileName.endsWith(".flow"))
     {
-        _path.setFileName(path.fileName());
-        //load
+        //open flow file
+        QFile file;
+        file.setFileName(fileName);
+        _flows.loadTopLevelFlowWrapper(file);
     }
-    else
+    else if(fileName.endsWith(".monarch"))
     {
-        //error
+        //open monarch file
+        QFile file;
+        file.setFileName(fileName);
+        if(!file.open(QIODevice::ReadOnly))
+            return;
+        _file.setFileName(fileName);
+        loadFromMemory(file.readAll());
     }
 }
 

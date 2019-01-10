@@ -14,6 +14,10 @@
 
 #include "models.hpp"
 
+#include "Style/DarkStyle.h"
+#include "Style/framelesswindow/windowdragger.h"
+#include "Style/framelesswindow/framelesswindow.h"
+
 using QtNodes::DataModelRegistry;
 using QtNodes::FlowScene;
 using QtNodes::FlowView;
@@ -44,10 +48,16 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
     registerDataModels();
 
-    w.show();
+    //load stylesheet:
+    a.setStyle(new DarkStyle);
+
+    FramelessWindow framelessWindow;
+    framelessWindow.setWindowTitle("Monarch");
+    MainWindow w;
+    framelessWindow.setContent(&w);
+    framelessWindow.show();
 
     return a.exec();
 }

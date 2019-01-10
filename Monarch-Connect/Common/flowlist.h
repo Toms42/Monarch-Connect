@@ -22,6 +22,8 @@ public:
     //_topLevelWrappers getter to implement hierarchyChanged() in
     //projectHierarchyInterface.cpp
     QVector<std::shared_ptr<FlowSceneWrapper>> getTopLevelWrappers();
+    QJsonArray save();
+    void load(QJsonArray topArray);
 
 signals:
     void refreshWrapper(FlowSceneWrapper *newWrapper);

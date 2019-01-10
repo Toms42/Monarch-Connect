@@ -2,6 +2,7 @@
 #include <QLabel>
 #include <QDebug>
 #include <nodes/FlowView>
+#include "Common/project.h"
 
 using namespace QtNodes;
 
@@ -38,6 +39,30 @@ void CentralTabInterface::saveEvent()
         activeTab.data.flowScene->save();
         QString newName = activeTab.data.flowScene->getName();
         _tabWidget.setTabText(activeIndex, newName);
+    }
+    else
+    {
+        //save project:
+        Project::getInstance().save();
+    }
+}
+
+void CentralTabInterface::saveAsEvent()
+{
+    int activeIndex = _tabWidget.currentIndex();
+    tab_t activeTab = _tabs[activeIndex];
+    if(activeTab.type == TABTYPE::FLOW)
+    {
+        qDebug() << "saving current scene";
+        //save flow:
+        activeTab.data.flowScene->saveAs();
+        QString newName = activeTab.data.flowScene->getName();
+        _tabWidget.setTabText(activeIndex, newName);
+    }
+    else
+    {
+        //save project:
+        Project::getInstance().saveAs();
     }
 }
 

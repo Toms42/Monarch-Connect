@@ -22,7 +22,7 @@ public:
 
 public:
     void save();
-    void save(QFile &file);
+    void saveAs();
     void reload();
 
     std::shared_ptr<FlowSceneWrapper> parent() const;

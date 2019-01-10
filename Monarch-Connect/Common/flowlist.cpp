@@ -1,5 +1,7 @@
 #include "flowlist.h"
 #include <QDebug>
+#include <QJsonArray>
+#include <QJsonDocument>
 
 FlowList::FlowList(QObject *parent) : QObject(parent)
 {
@@ -78,4 +80,29 @@ void FlowList::newTopLevelFlowWrapper()
 //projectHierarchyInterface.cpp
 QVector<std::shared_ptr<FlowSceneWrapper>> FlowList::getTopLevelWrappers(){
     return _topLevelWrappers;
+}
+
+QJsonArray FlowList::save()
+{
+    qDebug() << "saving flow list...";
+    QJsonArray topLevelArray;
+    for(auto wrap : _topLevelWrappers)
+    {
+        qDebug() << "adding file: " << wrap->getFile();
+        QJsonValue jsonFilePath = wrap->getFile();
+        topLevelArray.append(jsonFilePath);
+    }
+    return topLevelArray;
+}
+
+void FlowList::load(QJsonArray topArray)
+{
+    _topLevelWrappers.clear();
+    for(auto item : topArray)
+    {
+        auto fileName = item.toString();
+        QFile file;
+        file.setFileName(fileName);
+        loadTopLevelFlowWrapper(file);
+    }
 }

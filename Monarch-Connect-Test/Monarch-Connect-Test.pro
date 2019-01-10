@@ -2,6 +2,20 @@ QT       += core gui testlib opengl
 # Compile with c++14 standard:
 CONFIG += c++14
 
+#enable coverage analysis
+QMAKE_CXXFLAGS += --coverage
+LIBS += -lgcov
+
+#minimal optimization (for better coverage analysis)
+#QMAKE_CXXFLAGS -= -O1
+#QMAKE_CXXFLAGS -= -O2
+#QMAKE_CXXFLAGS -= -O3
+#QMAKE_CXXFLAGS *= -O0
+#QMAKE_LFLAGS -= -O1
+#QMAKE_LFLAGS -= -O2
+#QMAKE_LFLAGS -= -O3
+#QMAKE_LFLAGS *= -O0
+
 # let nodeeditor know it's being statically linked
 DEFINES += NODE_EDITOR_STATIC
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -172,4 +186,5 @@ DISTFILES += \
     ../Monarch-Connect/resources/convert.png
 
 RESOURCES += \
+    ../Monarch-Connect/resources/resources.qrc \
     ../Monarch-Connect/resources/resources.qrc

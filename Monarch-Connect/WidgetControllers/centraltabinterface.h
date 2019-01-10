@@ -25,6 +25,7 @@ private slots:
 
 public slots:
     void saveEvent();
+    void saveAsEvent();
     void reloadNames();
 
 private:

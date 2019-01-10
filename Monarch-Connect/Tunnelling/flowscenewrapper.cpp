@@ -61,24 +61,7 @@ void FlowSceneWrapper::save()
 {
     if(!_file.exists())
     {
-        qDebug() << "no file yet, prompting.";
-        QString fileName = QFileDialog::getSaveFileName(nullptr,
-                                                        tr("Save Flow"),
-                                                        QDir::homePath(),
-                                                        tr("Flow Files").append("(*.flow)"));
-        if(!fileName.isEmpty())
-        {
-            if(!fileName.endsWith(".flow", Qt::CaseInsensitive))
-            {
-                fileName += ".flow";
-            }
-        }
-        else {
-            return;
-        }
-
-        _file.setFileName(fileName);
-        Project::getInstance().getFlowList().registerFlowWrapper(this);
+        saveAs();
     }
 
     if(_file.open(QIODevice::WriteOnly))
@@ -95,13 +78,36 @@ void FlowSceneWrapper::save()
         qDebug() << "could not open file";
     }
 }
-void FlowSceneWrapper::save(QFile &file)
+void FlowSceneWrapper::saveAs()
 {
-    if(file.exists())
+    qDebug() << "no file yet, prompting.";
+    QString fileName = QFileDialog::getSaveFileName(nullptr,
+                                                    tr("Save Flow"),
+                                                    QDir::homePath(),
+                                                    tr("Flow Files").append("(*.flow)"));
+    if(!fileName.isEmpty())
     {
-        _file.setFileName(file.fileName());
+        if(!fileName.endsWith(".flow", Qt::CaseInsensitive))
+        {
+            fileName += ".flow";
+        }
     }
-    save();
+    else {
+        return;
+    }
+
+    _file.setFileName(fileName);
+    Project::getInstance().getFlowList().registerFlowWrapper(this);
+    if(_file.open(QIODevice::WriteOnly))
+    {
+        _file.write(_scene.saveToMemory());
+        _file.close();
+        _name = QFileInfo(_file).fileName();
+        _isSaved = true;
+        qDebug() << "saved!";
+        emit(updated(this));
+        emit(hierarchyChanged());
+    }
 }
 
 void FlowSceneWrapper::addChild(std::shared_ptr<FlowSceneWrapper> wrapper)

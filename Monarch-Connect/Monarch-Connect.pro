@@ -7,7 +7,7 @@
 QT       += core gui opengl
 
 # Compile with c++14 standard:
-CONFIG += c++14
+CONFIG += c++14 optimize_full
 
 # let nodeeditor know it's being statically linked
 DEFINES += NODE_EDITOR_STATIC
@@ -75,10 +75,12 @@ SOURCES += \
     Tunnelling/flowscenewrapper.cpp \
     Tunnelling/tunnellist.cpp \
     WidgetControllers/projecthierarchyinterface.cpp \
-    WidgetControllers/centraltabinterface.cpp
+    WidgetControllers/centraltabinterface.cpp \
+    Style/DarkStyle.cpp \
+    Style/framelesswindow/windowdragger.cpp \
+    Style/framelesswindow/framelesswindow.cpp
 
 HEADERS += \
-    ui_mainwindow.h \
     Models/models.hpp \
     Connections/payload.h \
     Connections/connectionstats.h \
@@ -153,14 +155,16 @@ HEADERS += \
     Tunnelling/flowscenewrapper.h \
     Tunnelling/tunnellist.h \
     WidgetControllers/projecthierarchyinterface.h \
-    WidgetControllers/centraltabinterface.h
+    WidgetControllers/centraltabinterface.h \
+    Style/DarkStyle.h \
+    Style/framelesswindow/windowdragger.h \
+    Style/framelesswindow/framelesswindow.h
 
 FORMS += \
-        mainwindow.ui
-
-DISTFILES += \
-    resources/DefaultStyle.json \
-    resources/convert.png
+        mainwindow.ui \
+    Style/framelesswindow/framelesswindow.ui
 
 RESOURCES += \
-    resources/resources.qrc
+    resources/resources.qrc \
+    Style/darkstyle.qrc \
+    Style/framelesswindow.qrc

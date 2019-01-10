@@ -6,6 +6,7 @@
 #include "Common/taglist.h"
 #include "Common/flowlist.h"
 #include <nodes/DataModelRegistry>
+#include <QDir>
 
 using namespace QtNodes;
 
@@ -23,13 +24,17 @@ public:
     FlowList &getFlowList();
     std::shared_ptr<DataModelRegistry> getModelRegistry();
 
+    QByteArray saveToMemory();
+    void loadFromMemory(QByteArray file);
+    QDir getPath();
+
 public slots:
     void save();
-    void save(QFile &path);
-    void load(QFile &path);
+    void saveAs();
+    void open();
 
 signals:
-    //void nameUpdated(QString name);
+    void nameUpdated(QString name);
 
 public slots:
 
@@ -42,8 +47,8 @@ private:
     std::shared_ptr<DataModelRegistry> _registry; //(not saved)
     TagList _tags;
     FlowList _flows;
-    //QString _name;
-    QFile _path;
+    QString _name;
+    QFile _file;
     bool _isSaved = false;
 };
 

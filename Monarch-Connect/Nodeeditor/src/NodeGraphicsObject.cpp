@@ -34,7 +34,6 @@ NodeGraphicsObject::NodeGraphicsObject(FlowScene& scene, NodeIndex const& node)
   , _geometry(node, *this)
   , _state(node)
   , _locked(false)
-  , _proxyWidget(nullptr)
 {
   _scene.addItem(this);
 
@@ -87,7 +86,7 @@ NodeGraphicsObject::~NodeGraphicsObject()
   //}
   // TODO here can be problem, when item have a parent, then parent remove item
   // when it will be removed
-  //_scene.removeItem(this);
+  _scene.removeItem(this);
 }
 
 NodeIndex
