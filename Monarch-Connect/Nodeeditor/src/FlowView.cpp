@@ -250,10 +250,10 @@ FlowView::deleteSelectedNodes()
     if (auto c = qgraphicsitem_cast<ConnectionGraphicsObject*>(item)) {
 
       // does't matter if it works or doesn't, at least we tried
-      scene()->model()->removeConnection(c->node(PortType::Out),
-                                         c->portIndex(PortType::Out),
-                                         c->node(PortType::In),
-                                         c->portIndex(PortType::In));
+      scene()->model()->removeConnection(c->node(PortDirection::Out),
+                                         c->portIndex(PortDirection::Out),
+                                         c->node(PortDirection::In),
+                                         c->portIndex(PortDirection::In));
     }
   }
 

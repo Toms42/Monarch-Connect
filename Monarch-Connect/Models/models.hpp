@@ -13,7 +13,7 @@
 
 #include <memory>
 
-using QtNodes::PortType;
+using QtNodes::PortDirection;
 using QtNodes::PortIndex;
 using QtNodes::NodeData;
 using QtNodes::NodeDataType;
@@ -87,15 +87,15 @@ public:
 public:
 
     unsigned int
-    nPorts(PortType) const override
+    nPorts(PortDirection) const override
     {
         return 2;
     }
 
     NodeDataType
-    dataType(PortType type, PortIndex index) const override
+    dataType(PortDirection type, PortIndex index) const override
     {
-        if(type == PortType::In)
+        if(type == PortDirection::In)
         {
             switch(index)
             {
@@ -105,7 +105,7 @@ public:
                 return MyNodeData().type();
             }
         }
-        else if(type == PortType::Out)
+        else if(type == PortDirection::Out)
         {
             switch(index)
             {

@@ -104,7 +104,7 @@ NodePainter::drawConnectionPoints(QPainter* painter,
   float diameter = nodeStyle.ConnectionPointDiameter;
   auto reducedDiameter = diameter * 0.6;
 
-  for (PortType portType : { PortType::Out, PortType::In }) {
+  for (PortDirection portType : { PortDirection::Out, PortDirection::In }) {
     size_t n = state.getEntries(portType).size();
 
     for (unsigned int i = 0; i < n; ++i) {
@@ -114,9 +114,9 @@ NodePainter::drawConnectionPoints(QPainter* painter,
         model.nodePortDataType(graphicsObject.index(), i, portType);
 
       bool canConnect = (state.getEntries(portType)[i].empty() ||
-                         (portType == PortType::Out &&
+                         (portType == PortDirection::Out &&
                           model.nodePortConnectionPolicy(
-                            graphicsObject.index(), i, PortType::Out) ==
+                            graphicsObject.index(), i, PortDirection::Out) ==
                             ConnectionPolicy::Many));
 
       double r = 1.0;
@@ -128,7 +128,7 @@ NodePainter::drawConnectionPoints(QPainter* painter,
         bool typeConvertable = false;
 
         {
-          if (portType == PortType::In) {
+          if (portType == PortDirection::In) {
             typeConvertable =
               model.getTypeConvertable({ state.reactingDataType(), dataType });
           } else {
@@ -170,7 +170,7 @@ NodePainter::drawFilledConnectionPoints(
 
   auto diameter = nodeStyle.ConnectionPointDiameter;
 
-  for (PortType portType : { PortType::Out, PortType::In }) {
+  for (PortDirection portType : { PortDirection::Out, PortDirection::In }) {
     size_t n = state.getEntries(portType).size();
 
     for (size_t i = 0; i < n; ++i) {
@@ -235,7 +235,7 @@ NodePainter::drawEntryLabels(QPainter* painter,
   FlowSceneModel const& model = *graphicsObject.index().model();
   QFontMetrics const& metrics = painter->fontMetrics();
 
-  for (PortType portType : { PortType::Out, PortType::In }) {
+  for (PortDirection portType : { PortDirection::Out, PortDirection::In }) {
     auto const& nodeStyle = model.nodeStyle(graphicsObject.index());
 
     auto& entries = state.getEntries(portType);
@@ -261,11 +261,11 @@ NodePainter::drawEntryLabels(QPainter* painter,
       p.setY(p.y() + rect.height() / 4.0);
 
       switch (portType) {
-        case PortType::In:
+        case PortDirection::In:
           p.setX(5.0);
           break;
 
-        case PortType::Out:
+        case PortDirection::Out:
           p.setX(geom.width() - 5.0 - rect.width());
           break;
 

@@ -45,16 +45,16 @@ FlowScene::FlowScene(FlowSceneModel* model, QObject* parent)
     Q_ASSERT(id.isValid());
 
     // query the number of ports
-    auto numPorts = model->nodePortCount(id, PortType::Out);
+    auto numPorts = model->nodePortCount(id, PortDirection::Out);
 
     // go through them and add the connections
     for (auto portID = 0u; portID < numPorts; ++portID) {
       // go through connections
-      auto connections = model->nodePortConnections(id, portID, PortType::Out);
+      auto connections = model->nodePortConnections(id, portID, PortDirection::Out);
 
       // validate the sanity of the model--make sure if it is marked as one
       // connection per port then there is no more than one connection
-      Q_ASSERT(model->nodePortConnectionPolicy(id, portID, PortType::Out) ==
+      Q_ASSERT(model->nodePortConnectionPolicy(id, portID, PortDirection::Out) ==
                  ConnectionPolicy::Many ||
                connections.size() <= 1);
 
@@ -113,10 +113,10 @@ FlowScene::nodeRemoved(const QUuid& id)
   auto ngo = _nodeGraphicsObjects[id];
 #ifndef QT_NO_DEBUG
   // make sure there are no connections left
-  for (const auto& connPtrSet : ngo->nodeState().getEntries(PortType::In)) {
+  for (const auto& connPtrSet : ngo->nodeState().getEntries(PortDirection::In)) {
     Q_ASSERT(connPtrSet.size() == 0);
   }
-  for (const auto& connPtrSet : ngo->nodeState().getEntries(PortType::Out)) {
+  for (const auto& connPtrSet : ngo->nodeState().getEntries(PortDirection::Out)) {
     Q_ASSERT(connPtrSet.size() == 0);
   }
 #endif
@@ -158,7 +158,7 @@ FlowScene::nodePortUpdated(NodeIndex const& id)
   Q_ASSERT(thisNodeNGO != Q_NULLPTR);
 
   // remove all the connections
-  for (auto ty : { PortType::In, PortType::Out }) {
+  for (auto ty : { PortDirection::In, PortDirection::Out }) {
     for (auto i = 0ull; i < thisNodeNGO->nodeState().getEntries(ty).size();
          ++i) {
 
@@ -199,7 +199,7 @@ FlowScene::nodePortUpdated(NodeIndex const& id)
   nodeMoved(id);
 
   // add the connections back
-  for (auto ty : { PortType::In, PortType::Out }) {
+  for (auto ty : { PortDirection::In, PortDirection::Out }) {
     // query the number of ports
     auto numPorts = model()->nodePortCount(id, ty);
 
@@ -231,7 +231,7 @@ FlowScene::nodePortUpdated(NodeIndex const& id)
 
       for (const auto& conn : connections) {
 
-        if (ty == PortType::Out) {
+        if (ty == PortDirection::Out) {
           connectionAdded(id, portID, conn.first, conn.second);
         } else {
           connectionAdded(conn.first, conn.second, id, portID);
@@ -261,13 +261,13 @@ FlowScene::connectionRemoved(NodeIndex const& leftNode,
   // check the model's sanity
 #ifndef QT_NO_DEBUG
   for (const auto& conn :
-       model()->nodePortConnections(leftNode, leftPortID, PortType::Out)) {
+       model()->nodePortConnections(leftNode, leftPortID, PortDirection::Out)) {
     // if you fail here, then you're emitting connectionRemoved on a connection
     // that is in the model
     Q_ASSERT(conn.first != rightNode || conn.second != rightPortID);
   }
   for (const auto& conn :
-       model()->nodePortConnections(rightNode, rightPortID, PortType::In)) {
+       model()->nodePortConnections(rightNode, rightPortID, PortDirection::In)) {
     // if you fail here, then you're emitting connectionRemoved on a connection
     // that is in the model
     Q_ASSERT(conn.first != leftNode || conn.second != leftPortID);
@@ -285,10 +285,10 @@ FlowScene::connectionRemoved(NodeIndex const& leftNode,
   auto& cgo = *_connGraphicsObjects[id];
   // remove it from the nodes
   auto& lngo = *nodeGraphicsObject(leftNode);
-  lngo.nodeState().eraseConnection(PortType::Out, leftPortID, cgo);
+  lngo.nodeState().eraseConnection(PortDirection::Out, leftPortID, cgo);
 
   auto& rngo = *nodeGraphicsObject(rightNode);
-  rngo.nodeState().eraseConnection(PortType::In, rightPortID, cgo);
+  rngo.nodeState().eraseConnection(PortDirection::In, rightPortID, cgo);
 
   // remove the ConnectionGraphicsObject
   delete &cgo;
@@ -313,13 +313,13 @@ FlowScene::connectionAdded(NodeIndex const& leftNode,
   // if you fail here, then you're emitting connectionAdded on a portID that
   // doesn't exist
   Q_ASSERT((size_t)leftPortID <
-           model()->nodePortCount(leftNode, PortType::Out));
+           model()->nodePortCount(leftNode, PortDirection::Out));
   Q_ASSERT((size_t)rightPortID <
-           model()->nodePortCount(rightNode, PortType::In));
+           model()->nodePortCount(rightNode, PortDirection::In));
 
   bool checkedOut = false;
   for (const auto& conn :
-       model()->nodePortConnections(leftNode, leftPortID, PortType::Out)) {
+       model()->nodePortConnections(leftNode, leftPortID, PortDirection::Out)) {
     if (conn.first == rightNode && conn.second == rightPortID) {
       checkedOut = true;
       break;
@@ -330,7 +330,7 @@ FlowScene::connectionAdded(NodeIndex const& leftNode,
   Q_ASSERT(checkedOut);
   checkedOut = false;
   for (const auto& conn :
-       model()->nodePortConnections(rightNode, rightPortID, PortType::In)) {
+       model()->nodePortConnections(rightNode, rightPortID, PortDirection::In)) {
     if (conn.first == leftNode && conn.second == leftPortID) {
       checkedOut = true;
       break;
@@ -347,10 +347,10 @@ FlowScene::connectionAdded(NodeIndex const& leftNode,
 
   // add it to the nodes
   auto lngo = nodeGraphicsObject(leftNode);
-  lngo->nodeState().setConnection(PortType::Out, leftPortID, *cgo);
+  lngo->nodeState().setConnection(PortDirection::Out, leftPortID, *cgo);
 
   auto rngo = nodeGraphicsObject(rightNode);
-  rngo->nodeState().setConnection(PortType::In, rightPortID, *cgo);
+  rngo->nodeState().setConnection(PortDirection::In, rightPortID, *cgo);
 
   // add the cgo to the map
   _connGraphicsObjects[cgo->id()] = cgo;

@@ -71,10 +71,10 @@ void
 DataFlowScene::deleteConnection(Connection& connection)
 {
   auto deleted = _dataFlowModel->removeConnection(
-    _dataFlowModel->nodeIndex(connection.getNode(PortType::Out)->id()),
-    connection.getPortIndex(PortType::Out),
-    _dataFlowModel->nodeIndex(connection.getNode(PortType::In)->id()),
-    connection.getPortIndex(PortType::Out));
+    _dataFlowModel->nodeIndex(connection.getNode(PortDirection::Out)->id()),
+    connection.getPortIndex(PortDirection::Out),
+    _dataFlowModel->nodeIndex(connection.getNode(PortDirection::In)->id()),
+    connection.getPortIndex(PortDirection::Out));
 
   Q_UNUSED(deleted);
   Q_ASSERT(deleted);
@@ -148,8 +148,8 @@ DataFlowScene::iterateOverNodeDataDependentOrder(
   // A leaf node is a node with no input ports, or all possible input ports
   // empty
   auto isNodeLeaf = [](Node const& node, NodeDataModel const& model) {
-    for (unsigned int i = 0; i < model.nPorts(PortType::In); ++i) {
-      auto connections = node.connections(PortType::In, i);
+    for (unsigned int i = 0; i < model.nPorts(PortDirection::In); ++i) {
+      auto connections = node.connections(PortDirection::In, i);
       if (!connections.empty()) {
         return false;
       }
@@ -171,11 +171,11 @@ DataFlowScene::iterateOverNodeDataDependentOrder(
 
   auto areNodeInputsVisitedBefore = [&](Node const& node,
                                         NodeDataModel const& model) {
-    for (size_t i = 0; i < model.nPorts(PortType::In); ++i) {
-      auto connections = node.connections(PortType::In, i);
+    for (size_t i = 0; i < model.nPorts(PortDirection::In); ++i) {
+      auto connections = node.connections(PortDirection::In, i);
 
       for (auto& conn : connections) {
-        if (visitedNodesSet.find(conn->getNode(PortType::Out)->id()) ==
+        if (visitedNodesSet.find(conn->getNode(PortDirection::Out)->id()) ==
             visitedNodesSet.end()) {
           return false;
         }

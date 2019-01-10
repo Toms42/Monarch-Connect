@@ -1,6 +1,7 @@
 #ifndef MONARCHMODEL_H
 #define MONARCHMODEL_H
 
+#if 0
 #include <nodes/NodeData>
 #include <nodes/NodeDataModel>
 #include <QObject>
@@ -55,5 +56,5 @@ public:
     NodeDataType dataType(PortDirection type, PortIndex index) const override;
 
 };
-
+#endif
 #endif // MONARCHMODEL_H
