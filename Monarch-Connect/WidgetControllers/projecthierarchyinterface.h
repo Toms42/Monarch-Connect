@@ -6,6 +6,7 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include "WidgetControllers/centraltabinterface.h"
+#include "Common/project.h"
 
 
 class ProjectHierarchyInterface : public QObject
@@ -28,12 +29,17 @@ private slots:
 
     void itemSelectionChanged();
 
+    //show context menu: (from tree)
+    void showMenu();
+
 
 public slots:
     //update hierarchy: (from external sources)
     void addTopFlow();
     void loadTopFlow();
     void deleteTopFlow();
+    void saveTopFlow();
+    void saveTopFlowAs();
 
 private:
     void reloadTree();

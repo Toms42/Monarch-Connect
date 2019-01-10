@@ -2,6 +2,7 @@
 #include <QQueue>
 #include <QHash>
 #include <QDebug>
+#include <QMenu>
 #include <QFileDialog>
 
 //TODO: subclass QTreeWidgetItem to include a pointer to the corresponding
@@ -51,8 +52,35 @@ ProjectHierarchyInterface::ProjectHierarchyInterface(FlowList &flows,
             this, &ProjectHierarchyInterface::hierarchyChanged);
     connect(&_tree, &QTreeWidget::itemSelectionChanged,
             this, &ProjectHierarchyInterface::itemSelectionChanged);
-
+    _tree.setContextMenuPolicy(Qt::CustomContextMenu); //on right click _tree emits ContextMenuRequested
+    connect(&_tree,&QTreeWidget::customContextMenuRequested,
+            this, &ProjectHierarchyInterface::showMenu);
     hierarchyChanged();
+}
+
+//show the context menu (from tree)
+void ProjectHierarchyInterface::showMenu(){
+    qDebug() << "showing menu";
+    QMenu *_menu = new QMenu("Actions", &_tree);
+    QAction *newFlowAction = new QAction("New Top Level Flow", _menu);
+    QAction *delFlowAction = new QAction("Delete Selected Flow", _menu);
+    QAction *saveSelAction = new QAction("Save Selected", _menu);
+    QAction *saveSelAsAction = new QAction("Save Selected As...", _menu);
+    QAction *saveProAction = new QAction("Save Project", _menu);
+    QAction *saveProAsAction = new QAction("Save Project As...", _menu);
+    connect(newFlowAction, &QAction::triggered, this, &ProjectHierarchyInterface::addTopFlow);
+    connect(delFlowAction, &QAction::triggered, this, &ProjectHierarchyInterface::deleteTopFlow);
+    connect(saveProAction, &QAction::triggered, &Project::getInstance(), &Project::save);
+    connect(saveProAsAction, &QAction::triggered, &Project::getInstance(), &Project::saveAs);
+    connect(saveSelAsAction, &QAction::triggered, this, &ProjectHierarchyInterface::saveTopFlowAs);
+    connect(saveSelAction, &QAction::triggered, this, &ProjectHierarchyInterface::saveTopFlow);
+    _menu->addAction(newFlowAction);
+    _menu->addAction(delFlowAction);
+    _menu->addAction(saveSelAction);
+    _menu->addAction(saveSelAsAction);
+    _menu->addAction(saveProAction);
+    _menu->addAction(saveProAsAction);
+    _menu->exec(QCursor::pos());
 }
 
 //update flow list: (from tree)
@@ -80,6 +108,9 @@ void ProjectHierarchyInterface::itemSelectionChanged()
     {
         _selected = _tree.selectedItems()[0];
     }
+    else{
+        _selected = nullptr;
+    }
 }
 
 void ProjectHierarchyInterface::addTopFlow()
@@ -106,13 +137,31 @@ void ProjectHierarchyInterface::loadTopFlow()
 void ProjectHierarchyInterface::deleteTopFlow()
 {
     if(!_selected) return;
+    if(!((static_cast<FlowTreeItem *>(_selected))->getFlowSceneWrapper()->isRoot())) return;
     if(_selected->type() == QTreeWidgetItem::UserType)
     {
         auto toDelete = static_cast<FlowTreeItem *>(_selected);
         _interface.removeTab(toDelete->getFlowSceneWrapper().get());
         _flows.deleteTopLevelFlowWrapper(toDelete->getFlowSceneWrapper().get());
+        _selected = nullptr;
+    }
+
+}
+
+void ProjectHierarchyInterface::saveTopFlow(){
+    if(!_selected) return;
+    if(_selected->type() == QTreeWidgetItem::UserType){
+        (static_cast<FlowTreeItem *>(_selected)->getFlowSceneWrapper())->save();
     }
 }
+
+void ProjectHierarchyInterface::saveTopFlowAs(){
+    if(!_selected) return;
+    if(_selected->type() == QTreeWidgetItem::UserType){
+        (static_cast<FlowTreeItem *>(_selected)->getFlowSceneWrapper())->saveAs();
+    }
+}
+
 
 
 //update display: (from flowlist)

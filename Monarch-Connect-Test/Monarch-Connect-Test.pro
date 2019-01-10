@@ -3,8 +3,8 @@ QT       += core gui testlib opengl
 CONFIG += c++14
 
 #enable coverage analysis
-QMAKE_CXXFLAGS += --coverage
-LIBS += -lgcov
+#QMAKE_CXXFLAGS += --coverage
+#LIBS += -lgcov
 
 #minimal optimization (for better coverage analysis)
 #QMAKE_CXXFLAGS -= -O1
