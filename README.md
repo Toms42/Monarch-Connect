@@ -38,3 +38,5 @@ Current internal test build:
 ## Progress
 See the "projects" page for current status.
 First release is aimed for the around late January 2019.
+
+<!--- Donation link: (for later) https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=VRDHBJCEL5PEE&item_name=Creating+useful,+open+source+software&currency_code=USD&source=url --->
