@@ -41,4 +41,5 @@ First release is aimed for the around late January 2019.
 
 ### Like the project? Buy me a beer!
 [![donate](https://img.shields.io/badge/Paypal-Donate-green.svg?logo=paypal)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=VRDHBJCEL5PEE&item_name=Creating+useful,+open+source+software&currency_code=USD&source=url)
+
 I make no money from this project, and it's development is motivated by a passion for software and connected devices with the goal of creating a useful program for other people. Donations are highly appreciated, but not required!
