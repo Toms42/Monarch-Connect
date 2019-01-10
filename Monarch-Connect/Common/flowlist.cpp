@@ -105,10 +105,14 @@ QJsonArray FlowList::save()
     for(auto wrap : _topLevelWrappers)
     {
         auto path = wrap->getFile();
-        auto rel = Project::getInstance().getDir().relativeFilePath(path);
-        qDebug() << "adding file: " << rel;
-        QJsonValue jsonFilePath = rel;
-        topLevelArray.append(jsonFilePath);
+        if(QFileInfo(path).exists())
+        {
+            auto rel = Project::getInstance().getDir().relativeFilePath(path);
+            qDebug() << "adding file: " << rel;
+            QJsonValue jsonFilePath = rel;
+            topLevelArray.append(jsonFilePath);
+        }
+
     }
     return topLevelArray;
 }
