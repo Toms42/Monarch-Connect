@@ -5,6 +5,7 @@
 #include <nodes/NodeData>
 #include "Connections/payload.h"
 #include <nodes/NodeDataModel>
+#include "Connections/connectionstats.h"
 
 using QtNodes::NodeData;
 using QtNodes::NodeDataType;
@@ -21,9 +22,12 @@ public:
     explicit EventSender(QObject *parent = nullptr);
 
     void send();
+    ConnectionStats::stats getMetrics(){return _stats.getStats();}
 
 signals:
     void sent();
+private:
+    ConnectionStats _stats;
 };
 
 #endif // EVENTSENDER_H

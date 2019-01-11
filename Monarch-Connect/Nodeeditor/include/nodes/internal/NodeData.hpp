@@ -2,6 +2,7 @@
 
 #include <QtCore/QString>
 
+//#include "Connections/connectionstats.h" //THIS WILL CREATE CIRCULAR DEPENDENCY ->NODEDATA->CONNECTIONSTATS->PAYLOAD-
 #include "Export.hpp"
 
 namespace QtNodes {
@@ -24,7 +25,6 @@ public:
   {
     return (this->type().id == nodeData.type().id);
   }
-
   /// Type for inner use
   virtual NodeDataType type() const = 0;
 };
