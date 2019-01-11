@@ -26,3 +26,13 @@ void StreamReceiver::place(Payload payload)
     qDebug() << "receiving";
     emit(dataReady(payload));
 }
+
+void StreamReceiver::setPortIndex(int i)
+{
+    _index = i;
+}
+
+int StreamReceiver::getPortIndex()
+{
+    return _index;
+}

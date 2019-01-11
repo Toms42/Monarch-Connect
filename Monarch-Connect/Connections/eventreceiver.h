@@ -13,6 +13,8 @@ class EventReceiver : public QObject
 public:
     explicit EventReceiver(QObject *parent = nullptr);
     void setSender(std::shared_ptr<EventSender> sender);
+    void setPortIndex(int i);
+    int getPortIndex();
 
 signals:
     void dataReady();
@@ -22,6 +24,7 @@ public slots:
 
 private:
     std::shared_ptr<EventSender> _sender;
+    int _index;
 
 };
 

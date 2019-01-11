@@ -29,20 +29,19 @@ protected:
 
     struct MonarchInputPort{
         PortType type;
-        std::function<void(std::shared_ptr<Payload>)> dataReadyCallback; //for all inputs
-        //int payloadNumFields = 0; //0 means don't check. Filters all payloads through this port.
+        std::function<void(int, Payload)> dataReadyCallback; //for all inputs
         int idx = -1; //internal use only: idx of corresponding receiver
     };
     struct MonarchOutputPort{
         PortType type;
-        std::function<std::shared_ptr<Payload>(void)> getDataCallback; //for payload outputs
-        //int payloadNumFields = 0; //0 means don't check. Filters all payloads through this port.
+        std::function<Payload(int)> getDataCallback; //for payload outputs
         int idx = -1; //internal use only: idx of corresponding sender
     };
 
 public:
     MonarchModel();
     virtual ~MonarchModel() override;
+    void setup(); //call this in your constructor to setup the base stuff
 
 /*
  * PURE VIRTUAL FUNCTIONS: you must override these when creating your node.
@@ -66,10 +65,6 @@ protected:
  * IMPLEMENTED FUNCTIONS: use these to get stuff done
  */
 protected:
-    //to propagate output data. Use for Payload outputs only.
-    //data will then be read from your callback function.
-    void outputUpdated(int index);
-
     //send on a stream. Use for stream outputs only.
     void sendOnStream(int index, Payload payload);
 
@@ -91,7 +86,7 @@ private:
 
 private slots:
     void streamIn(Payload payload);
-    void eventIn(Payload payload);
+    void eventIn();
 
 private:
     QVector<std::shared_ptr<StreamSender>> _streamSenders;

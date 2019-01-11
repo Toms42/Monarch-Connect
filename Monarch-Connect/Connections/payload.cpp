@@ -5,35 +5,24 @@
 #include <memory>
 #include <math.h>
 
-Payload::Payload(QUuid tagID, int nFields, QVector<double> vals, QObject *parent)
-    : QObject (parent),
-      _vals(nFields)
+Payload::Payload(QUuid tagID, int nFields, QVector<double> vals)
+    : _vals(nFields)
 {
     _tagID = tagID;
     _nFields = nFields;
     _vals = vals;
 }
 
-Payload::Payload(QUuid tagID, double val, QObject *parent)
-    :QObject (parent),
-      _vals(1)
+Payload::Payload(QUuid tagID, double val)
+   : _vals(1)
 {
     _tagID = tagID;
     _nFields = 1;
     _vals[0] = val;
 }
 
-Payload::Payload(Payload &payload)
-    : QObject (payload.parent()),
-      _vals(payload._vals)
-{
-    _tagID = payload._tagID;
-    _nFields = payload._nFields;
-}
-
-Payload::Payload(QObject *parent)
-    :QObject(parent),
-    _vals(0)
+Payload::Payload()
+    : _vals(0)
 {
 }
 

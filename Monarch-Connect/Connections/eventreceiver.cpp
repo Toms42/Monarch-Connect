@@ -25,3 +25,13 @@ void EventReceiver::place()
     qDebug() << "receiving";
     emit(dataReady());
 }
+
+void EventReceiver::setPortIndex(int i)
+{
+    _index = i;
+}
+
+int EventReceiver::getPortIndex()
+{
+    return _index;
+}

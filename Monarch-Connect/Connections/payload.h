@@ -1,7 +1,6 @@
 #ifndef PAYLOAD_H
 #define PAYLOAD_H
 
-#include <QObject>
 #include <QUuid>
 #include <QVector>
 #include <nodes/NodeData>
@@ -9,14 +8,13 @@
 using QtNodes::NodeData;
 using QtNodes::NodeDataType;
 
-class Payload : public QObject, public NodeData
+class Payload : public NodeData
 {
-    Q_OBJECT
+
 public:
-    Payload(QUuid tagID, int nFields, QVector<double> vals, QObject *parent = nullptr);
-    Payload(QUuid tagID, double val, QObject *parent = nullptr);
-    Payload(Payload &payload);
-    Payload(QObject *parent = nullptr);
+    Payload(QUuid tagID, int nFields, QVector<double> vals);
+    Payload(QUuid tagID, double val);
+    Payload();
 
 public:
     NodeDataType

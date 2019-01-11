@@ -3,5 +3,6 @@
         <file>DefaultStyle.json</file>
         <file>convert.png</file>
         <file>icon.png</file>
+        <file>splash.png</file>
     </qresource>
 </RCC>

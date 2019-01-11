@@ -11,6 +11,9 @@
 #include <nodes/FlowSceneModel>
 #include <nodes/DataFlowScene>
 #include <nodes/DataFlowModel>
+#include <QPixmap>
+#include <QSplashScreen>
+#include <QThread>
 
 #include "models.hpp"
 
@@ -25,7 +28,6 @@ using QtNodes::ConnectionStyle;
 using QtNodes::FlowSceneModel;
 using QtNodes::DataFlowScene;
 using QtNodes::DataFlowModel;
-
 
 static std::shared_ptr<DataModelRegistry> registerDataModels()
 {
@@ -48,6 +50,15 @@ static std::shared_ptr<DataModelRegistry> registerDataModels()
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    //start splash
+    QPixmap splashLogo(":splash.png");
+    QSplashScreen splash(splashLogo);
+    splash.show();
+    QThread::sleep(4); //lol look at the splash
+
+
+    //registry...
     registerDataModels();
 
     //load stylesheet:
@@ -59,9 +70,10 @@ int main(int argc, char *argv[])
     MainWindow w(&framelessWindow);
     framelessWindow.setContent(&w);
     QObject::connect(&w, &MainWindow::updateTitle,
-            &framelessWindow, &FramelessWindow::setWindowTitle);
+                     &framelessWindow, &FramelessWindow::setWindowTitle);
     framelessWindow.show();
     a.setWindowIcon(QIcon(":icon.png")); //for taskbar
 
+    splash.finish(&framelessWindow);
     return a.exec();
 }

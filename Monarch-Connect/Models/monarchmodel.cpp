@@ -8,12 +8,64 @@ MonarchModel::MonarchModel()
       _inPortList(),
       _outPortList()
 {
-
 }
 
 MonarchModel::~MonarchModel()
 {
+}
 
+void MonarchModel::setup()
+{
+    _inPortList.clear();
+    _outPortList.clear();
+    _streamSenders.clear();
+    _streamReceivers.clear();
+    _eventSenders.clear();
+    _eventReceivers.clear();
+
+    _inPortList = getInputPortArray();
+    _outPortList = getOutputPortArray();
+
+
+    int sri = 0;
+    int eri = 0;
+    for(int i = 0; i < _inPortList.count(); i++)
+    {
+        auto port = _inPortList[i];
+        if(port.type == PortType::STREAM)
+        {
+            _streamReceivers.append(std::make_shared<StreamReceiver>());
+            _streamReceivers[sri]->setPortIndex(i);
+            port.idx = sri;
+            sri++;
+        }
+        if(port.type == PortType::EVENT)
+        {
+            _eventReceivers.append(std::make_shared<EventReceiver>());
+            _eventReceivers[eri]->setPortIndex(i);
+            port.idx = eri;
+            eri++;
+        }
+    }
+
+    int ssi = 0;
+    int esi = 0;
+    for(int i = 0; i < _outPortList.count(); i++)
+    {
+        auto port = _outPortList[i];
+        if(port.type == PortType::STREAM)
+        {
+            _streamSenders.append(std::make_shared<StreamSender>());
+            port.idx = ssi;
+            ssi++;
+        }
+        if(port.type == PortType::EVENT)
+        {
+            _eventSenders.append(std::make_shared<EventSender>());
+            port.idx = esi;
+            esi++;
+        }
+    }
 }
 
 QJsonObject MonarchModel::save() const
@@ -54,7 +106,8 @@ std::shared_ptr<NodeData> MonarchModel::outData(PortIndex index)
     auto port = _outPortList[index];
     if(port.type == PortType::PAYLOAD)
     {
-        return port.getDataCallback();
+        auto payload = std::make_shared<Payload>(port.getDataCallback(index));
+        return std::static_pointer_cast<NodeData>(payload);
     }
     else if(port.type == PortType::STREAM)
     {
@@ -73,7 +126,7 @@ void MonarchModel::setInData(std::shared_ptr<NodeData> data, PortIndex index)
     auto port = _inPortList[index];
     if(port.type == PortType::PAYLOAD)
     {
-        port.dataReadyCallback(std::dynamic_pointer_cast<Payload>(data));
+        port.dataReadyCallback(index, *std::dynamic_pointer_cast<Payload>(data));
     }
     else if(port.type == PortType::STREAM)
     {
@@ -88,27 +141,29 @@ void MonarchModel::setInData(std::shared_ptr<NodeData> data, PortIndex index)
 
 void MonarchModel::streamIn(Payload payload)
 {
-    QObject* obj = sender();
+    auto *receiver = static_cast<StreamReceiver*>(sender());
+    int portIdx = receiver->getPortIndex();
+    _inPortList[portIdx].dataReadyCallback(portIdx, payload);
 }
 
-void MonarchModel::eventIn(Payload payload)
+void MonarchModel::eventIn()
 {
-
+    auto *receiver = static_cast<EventReceiver*>(sender());
+    int portIdx = receiver->getPortIndex();
+    Payload payload;
+    _inPortList[portIdx].dataReadyCallback(portIdx, payload);
 }
 
 void MonarchModel::triggerEvent(int index)
 {
-
+    int senderIdx = _outPortList[index].idx;
+    _eventSenders[senderIdx]->send();
 }
 
 void MonarchModel::sendOnStream(int index, Payload payload)
 {
-
-}
-
-void MonarchModel::outputUpdated(int index)
-{
-
+    int senderIdx = _outPortList[index].idx;
+    _streamSenders[senderIdx]->send(payload);
 }
 
 NodeDataType MonarchModel::typeFromEnum(PortType type) const

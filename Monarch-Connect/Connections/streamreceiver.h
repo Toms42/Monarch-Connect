@@ -13,6 +13,7 @@ class StreamReceiver : public QObject
 public:
     explicit StreamReceiver(QObject *parent = nullptr);
     void setSender(std::shared_ptr<StreamSender> sender);
+    void setPortIndex(int i);
     int getPortIndex();
 
 signals:
@@ -23,7 +24,7 @@ public slots:
 
 private:
     std::shared_ptr<StreamSender> _sender;
-
+    int _index;
 };
 
 #endif // STREAM_H
