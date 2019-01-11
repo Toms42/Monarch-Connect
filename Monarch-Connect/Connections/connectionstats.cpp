@@ -2,11 +2,11 @@
 #define CLOCK_REFRESH_MS 100 //clock refresh rate for
 
 ConnectionStats::ConnectionStats(QObject *parent, connectionType type) : QObject(parent),
-    _type(type), _parent(parent), _stats(stats{type, QHash<QUuid, statStruct>()})
+    _type(type), _parent(parent), _stats(stats{type, QHash<QString, statStruct>()}) //hash the string translation of TagType to statStruct for StreamSender
 {
     //if this is tracking events then initialize only one struct for all events
     if(_type == EVENT){
-        _stats._tags.insert("event",statStruct{});
+        _stats._tags.insert("event", statStruct{});
     }
     timer = new QTimer();
     connect(timer, &QTimer::timeout, this, &ConnectionStats::updateTimes);
@@ -16,7 +16,7 @@ ConnectionStats::ConnectionStats(QObject *parent, connectionType type) : QObject
 
 void ConnectionStats::updateTimes(){
     //qDebug() << "Updating items per second";
-    QList<QUuid> keys = _stats._tags.keys();
+    QList<QString> keys = _stats._tags.keys();
     //loop through all structs and update all
     for(auto k = keys.begin(); k != keys.end(); k++){
         auto &it = _stats._tags[*k];
@@ -31,13 +31,17 @@ void ConnectionStats::updateTimes(){
     }
 }
 
-void ConnectionStats::incrTotalSeen(QUuid tag){
-    qDebug() << "Total payloads sent for tag: " + QString::number(_stats._tags[tag].totalSeen);
-    qDebug() << "Time since last send (before reset): " + QString::number(_stats._tags[tag].lastTime);
-    qDebug() << "Average items per second: " + QString::number(_stats._tags[tag].itemsPerSec);
+void ConnectionStats::incrTotalSeen(std::shared_ptr<const TagType> tagtype){
+    //convert tagtype to just the string tag because it's hashable
+    QString tag;
+    if(tagtype == nullptr) tag = "event"; //if it's a nullptr (default param) then it's an event
+    else tag = tagtype->getTag();
     switch(_type){
     case EVENT:{
-        _stats._tags["event"].totalSeen += 1;
+        _stats._tags["events"].totalSeen += 1;
+        qDebug() << "Total events sent: " + QString::number(_stats._tags[tag].totalSeen);
+        qDebug() << "Time since last send (before reset): " + QString::number(_stats._tags[tag].lastTime);
+        qDebug() << "Average events per second: " + QString::number(_stats._tags[tag].itemsPerSec);
         break;
     }
     case STREAM:{
@@ -46,27 +50,28 @@ void ConnectionStats::incrTotalSeen(QUuid tag){
             _stats._tags.insert(tag,statStruct{});
         }
         _stats._tags[tag].totalSeen += 1;
+        qDebug() << "---TAGTYPE " + tag + "---";
+        qDebug() << "Total payloads sent for tag: " + QString::number(_stats._tags[tag].totalSeen);
+        qDebug() << "Time since last send (before reset): " + QString::number(_stats._tags[tag].lastTime);
+        qDebug() << "Average payloads per second: " + QString::number(_stats._tags[tag].itemsPerSec);
         break;
     }
     }
 }
 
-void ConnectionStats::resetLastTime(QUuid tag){
+void ConnectionStats::resetLastTime(std::shared_ptr<const TagType> tagtype){
+    //convert tagtype to just the string tag because it's hashable
+    QString tag;
+    if(tagtype == nullptr) tag = "event"; //if it's a nullptr (default param) then it's an event
+    else tag = tagtype->getTag();
     //qDebug() << "Resetting time last seen sending";
-    switch(_type){
-    case EVENT:{
-        _stats._tags["event"].lastTime = 0.0;
-        break;
-    }
-    case STREAM:{
-        _stats._tags[tag].lastTime = 0.0;
-        break;
-    }
-    }
+    _stats._tags[tag].lastTime = 0.0;
 }
 
 //only used for streams, as events don't have values
-void ConnectionStats::updateLastValue(QUuid tag, Payload *p){
+void ConnectionStats::updateLastValue(std::shared_ptr<const TagType> tagtype, Payload *p){
+    //convert tagtype to just the string tag because it's hashable
+    QString tag = tagtype->getTag();
     //qDebug() << "Updating most recent value";
     _stats._tags[tag].value = p;
 }

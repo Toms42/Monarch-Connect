@@ -2,6 +2,7 @@
 #include <nodes/NodeData>
 #include <nodes/NodeDataModel>
 #include <QDebug>
+#include "Common/project.h"
 
 using QtNodes::PortDirection;
 using QtNodes::PortIndex;
@@ -20,9 +21,10 @@ void StreamSender::send(Payload payload)
     qDebug() << "sending";
     emit(sent(payload));
     //seen one more, last time since seeing a payload sent is 0, last value is payload
-    _stats.incrTotalSeen(payload.getTagID());
-    _stats.resetLastTime(payload.getTagID());
-    _stats.updateLastValue(payload.getTagID(), &payload);
+    const TagList &taglist = Project::getInstance().getTagList();
+    _stats.incrTotalSeen(taglist.getTagType(payload.getTagID()));
+    _stats.resetLastTime(taglist.getTagType(payload.getTagID()));
+    _stats.updateLastValue(taglist.getTagType(payload.getTagID()), &payload);
 }
 
 
