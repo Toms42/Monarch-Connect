@@ -172,3 +172,4 @@ RESOURCES += \
     Style/framelesswindow.qrc
 
 RC_ICONS = resources/icon.ico
+ICON = resources/icon.icns
