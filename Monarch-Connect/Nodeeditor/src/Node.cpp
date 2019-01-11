@@ -58,11 +58,11 @@ void
 Node::restore(QJsonObject const& json)
 {
 
-  QJsonObject positionJson = json["position"].toObject();
-  QPointF point(positionJson["x"].toDouble(), positionJson["y"].toDouble());
-  setPosition(point);
+  //QJsonObject positionJson = json["position"].toObject();
+  //QPointF point(positionJson["x"].toDouble(), positionJson["y"].toDouble());
+  //setPosition(point);
 
-  _nodeDataModel->restore(json["model"].toObject());
+  //_nodeDataModel->restore(json["model"].toObject());
 }
 
 QUuid

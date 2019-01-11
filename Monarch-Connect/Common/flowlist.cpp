@@ -18,7 +18,7 @@ void FlowList::registerFlowWrapper(FlowSceneWrapper *wrapper)
 
     auto key = wrapper->getFile();
     auto matches = _registry.value(key);
-    qDebug() << "matches: " << matches;
+    //qDebug() << "matches: " << matches;
     for(auto match : matches)
     {
         if(*match == *wrapper)
@@ -128,4 +128,11 @@ void FlowList::load(QJsonArray topArray)
         file.setFileName(path);
         loadTopLevelFlowWrapper(file);
     }
+}
+
+void FlowList::clear()
+{
+    _registry.clear();
+    _topLevelWrappers.clear();
+    emit(hierarchyUpdated());
 }

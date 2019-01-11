@@ -44,6 +44,8 @@ MainWindow::MainWindow(QWidget *parent) :
             &Project::getInstance(), &Project::saveAs);
     connect(&Project::getInstance(), &Project::nameUpdated,
             this, &MainWindow::updateTitle);
+    connect(&Project::getInstance(), &Project::clearAll,
+            centralTabInterface, &CentralTabInterface::clear);
 
 
 }

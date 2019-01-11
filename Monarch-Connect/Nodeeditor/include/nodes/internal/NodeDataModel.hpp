@@ -44,6 +44,7 @@ public:
 
 public:
   QJsonObject save() const override;
+  void restore(QJsonObject const& /*p*/) override {}
 
 public:
   virtual unsigned int nPorts(PortDirection portType) const = 0;

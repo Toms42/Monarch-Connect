@@ -95,11 +95,15 @@ DataFlowScene::restoreNode(QJsonObject const& nodeJson)
 
   auto uid = QUuid(nodeJson["id"].toString());
 
-  // set initial point to 0, 0, will be updated in Node::restore
-  _dataFlowModel->addNode(modelName, QPointF(0, 0), uid);
+  auto model = _dataFlowModel->registry().create(modelName);
+  model->restore(nodeJson["model"].toObject());
 
+  QJsonObject positionJson = nodeJson["position"].toObject();
+  QPointF point(positionJson["x"].toDouble(), positionJson["y"].toDouble());
+
+  // set initial point to 0, 0, will be updated in Node::restore
+  _dataFlowModel->addNode(std::move(model), point, uid);
   auto& node = *_dataFlowModel->nodes()[uid];
-  node.restore(nodeJson);
 
   return node;
 }

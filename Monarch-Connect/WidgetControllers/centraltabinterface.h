@@ -18,6 +18,8 @@ public:
     void addTab(FlowSceneWrapper *wrap);
     void addTab(QUuid id, QWidget *widget, QString name);
     void removeTab(FlowSceneWrapper *wrap);
+    void clear();
+    void addHomeTab();
 
 signals:
 

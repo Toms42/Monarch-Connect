@@ -21,6 +21,7 @@ QJsonObject MonarchModel::save() const
     QJsonObject modelJson;
 
     modelJson["name"] = name();
+    modelJson["caption"] = caption();
     modelJson["data"] = saveData();
     return modelJson;
 }
@@ -73,15 +74,6 @@ void MonarchModel::setInData(std::shared_ptr<NodeData> data, PortIndex index)
     if(port.type == PortType::PAYLOAD)
     {
         port.dataReadyCallback(std::dynamic_pointer_cast<Payload>(data));
-
-        //propagate all Payload outputs:
-        for(int i = 0; i < _outPortList.count(); i++)
-        {
-            if(_outPortList[i].type == PortType::PAYLOAD)
-            {
-                emit(dataUpdated(i));
-            }
-        }
     }
     else if(port.type == PortType::STREAM)
     {
@@ -96,11 +88,25 @@ void MonarchModel::setInData(std::shared_ptr<NodeData> data, PortIndex index)
 
 void MonarchModel::streamIn(Payload payload)
 {
-    //get sender:
-    //QObject* obj = sender();
+    QObject* obj = sender();
 }
 
 void MonarchModel::eventIn(Payload payload)
+{
+
+}
+
+void MonarchModel::triggerEvent(int index)
+{
+
+}
+
+void MonarchModel::sendOnStream(int index, Payload payload)
+{
+
+}
+
+void MonarchModel::outputUpdated(int index)
 {
 
 }

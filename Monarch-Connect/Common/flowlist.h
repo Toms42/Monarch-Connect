@@ -25,6 +25,7 @@ public:
     QVector<std::shared_ptr<FlowSceneWrapper>> getTopLevelWrappers();
     QJsonArray save();
     void load(QJsonArray topArray);
+    void clear();
 
 signals:
     void refreshWrapper(FlowSceneWrapper *newWrapper);

@@ -12,10 +12,7 @@ CentralTabInterface::CentralTabInterface(QTabWidget &widget, QObject *parent)
       _tabs()
 {
     _tabWidget.clear();
-    QLabel* homeWidget = new QLabel("Welcome!");
-    tab_t home = {QUuid::createUuid(), homeWidget, TABTYPE::HOME, {0}};
-    _tabWidget.addTab(home.widget, "home");
-    _tabs.append(home);
+    addHomeTab();
     connect(&_tabWidget, &QTabWidget::tabCloseRequested,
             this, &CentralTabInterface::tabCloseRequested);
 }
@@ -26,6 +23,14 @@ CentralTabInterface::~CentralTabInterface()
     {
         delete tab.widget;
     }
+}
+
+void CentralTabInterface::addHomeTab()
+{
+    QLabel* homeWidget = new QLabel("Welcome!");
+    tab_t home = {QUuid::createUuid(), homeWidget, TABTYPE::HOME, {0}};
+    _tabWidget.addTab(home.widget, "home");
+    _tabs.append(home);
 }
 
 void CentralTabInterface::saveEvent()
@@ -158,4 +163,19 @@ void CentralTabInterface::tabCloseRequested(int index)
     _tabWidget.removeTab(index);
 
     delete tab.widget;
+}
+
+void CentralTabInterface::clear()
+{
+    for(int i = 0; i < _tabWidget.count(); i++)
+    {
+        auto tab = _tabs[i];
+        if(tab.type == TABTYPE::FLOW)
+        {
+            _tabs.remove(i);
+            _tabWidget.removeTab(i);
+            delete tab.widget;
+            if(i) i--;
+        }
+    }
 }

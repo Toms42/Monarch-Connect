@@ -21,6 +21,8 @@ NodeDataModel::save() const
   return modelJson;
 }
 
+
+
 NodeStyle const&
 NodeDataModel::nodeStyle() const
 {

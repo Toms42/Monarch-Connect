@@ -35,6 +35,7 @@ public slots:
 
 signals:
     void nameUpdated(QString name);
+    void clearAll();
 
 public slots:
 

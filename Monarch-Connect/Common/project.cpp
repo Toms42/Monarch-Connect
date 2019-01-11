@@ -98,6 +98,10 @@ void Project::open()
         file.setFileName(fileName);
         if(!file.open(QIODevice::ReadOnly))
             return;
+
+        _flows.clear();
+        emit(clearAll());
+
         _file.setFileName(fileName);
         _name = QFileInfo(_file).fileName();
         loadFromMemory(file.readAll());

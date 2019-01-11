@@ -54,11 +54,27 @@ public:
     QWidget *embeddedWidget() override = 0;
 
 protected:
-    //save your data in the node
+    //load/save your internal data in the node, using json.
     virtual QJsonObject saveData() const = 0;
+    virtual void loadData(QJsonObject) const = 0;
+
+    //get arrays of inputs/output ports. Called only on instantiation of node.
     virtual QVector<MonarchInputPort> getInputPortArray()  const = 0;
     virtual QVector<MonarchOutputPort> getOutputPortArray()  const = 0;
 
+/*
+ * IMPLEMENTED FUNCTIONS: use these to get stuff done
+ */
+protected:
+    //to propagate output data. Use for Payload outputs only.
+    //data will then be read from your callback function.
+    void outputUpdated(int index);
+
+    //send on a stream. Use for stream outputs only.
+    void sendOnStream(int index, Payload payload);
+
+    //send an event. Use for event outputs only.
+    void triggerEvent(int index);
 
 /*
  * IMPLEMENTED FUNCTIONS: don't override these unless you know what you're doing.
