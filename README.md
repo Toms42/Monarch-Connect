@@ -1,4 +1,6 @@
-
+<p align="center">
+  <img src ="https://i.imgur.com/lNwM4ac.png" width="350" />
+</p>
 
 # Monarch-Connect
 A generic client for managing control and telemetry streams for embedded devices, such as mobile robots or IOT devices.
@@ -15,6 +17,9 @@ A generic client for managing control and telemetry streams for embedded devices
 * Run qmake on the parent project. This project is configured using qmake to use c++14, which relies on the qmake packaged with qt 5.4 or later. (Note: This means that common qt 5.2 packages will not work out of the box, such as those used by default on Ubuntu 14 (trusty). You can fix by adding the cxx flags manually for your compiler, or updating your qmake version.
 * Run make
 * Run test suite in the test subdir to verify successful setup.
+## Screenshots:
+Current internal test build:
+![screenshot](https://i.imgur.com/5ND1IJh.png)
 ## Features:
 * Modular, node-based creation of telemetry/control flows
 * Saving/Loading of projects with multiple flows
@@ -28,9 +33,6 @@ A generic client for managing control and telemetry streams for embedded devices
 * Convenience nodes for easy-setup arduino-integration*
 * Easily-extended with new nodes
 *\* indicates planned feature for first release* 
-## Screenshots:
-Current internal test build:
-![enter image description here](https://i.imgur.com/b0FfJD1.png)
 
 ## Using
 * [Qt](https://www.qt.io/): Cross-platform c++ gui framework.
