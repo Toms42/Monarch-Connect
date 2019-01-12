@@ -62,6 +62,7 @@ public:
     //functions to access data in/out of the node.
     void inputDataReady(Payload data, int index) override
     {
+        qDebug() << "got data:";
         if(index == 0) qDebug() << data;
     }
 

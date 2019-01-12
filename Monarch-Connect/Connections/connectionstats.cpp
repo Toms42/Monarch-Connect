@@ -39,9 +39,9 @@ void ConnectionStats::incrTotalSeen(std::shared_ptr<const TagType> tagtype){
     switch(_type){
     case EVENT:{
         _stats._tags["events"].totalSeen += 1;
-        qDebug() << "Total events sent: " + QString::number(_stats._tags[tag].totalSeen);
-        qDebug() << "Time since last send (before reset): " + QString::number(_stats._tags[tag].lastTime);
-        qDebug() << "Average events per second: " + QString::number(_stats._tags[tag].itemsPerSec);
+        //qDebug() << "Total events sent: " + QString::number(_stats._tags[tag].totalSeen);
+        //qDebug() << "Time since last send (before reset): " + QString::number(_stats._tags[tag].lastTime);
+        //qDebug() << "Average events per second: " + QString::number(_stats._tags[tag].itemsPerSec);
         break;
     }
     case STREAM:{
@@ -50,10 +50,10 @@ void ConnectionStats::incrTotalSeen(std::shared_ptr<const TagType> tagtype){
             _stats._tags.insert(tag,statStruct{});
         }
         _stats._tags[tag].totalSeen += 1;
-        qDebug() << "---TAGTYPE " + tag + "---";
-        qDebug() << "Total payloads sent for tag: " + QString::number(_stats._tags[tag].totalSeen);
-        qDebug() << "Time since last send (before reset): " + QString::number(_stats._tags[tag].lastTime);
-        qDebug() << "Average payloads per second: " + QString::number(_stats._tags[tag].itemsPerSec);
+        //qDebug() << "---TAGTYPE " + tag + "---";
+        //qDebug() << "Total payloads sent for tag: " + QString::number(_stats._tags[tag].totalSeen);
+        //qDebug() << "Time since last send (before reset): " + QString::number(_stats._tags[tag].lastTime);
+        //qDebug() << "Average payloads per second: " + QString::number(_stats._tags[tag].itemsPerSec);
         break;
     }
     }

@@ -57,7 +57,7 @@ FlowSceneWrapper::~FlowSceneWrapper()
     qDebug() << "deleting flowSceneWrapper at " << _file.fileName();
     if(_parent)
         _parent->removeChild(std::shared_ptr<FlowSceneWrapper>(this));
-    Project::getInstance().getFlowList().unregisterFlowWrapper(this);
+    //Project::getInstance().getFlowList().unregisterFlowWrapper(this);
 }
 
 void FlowSceneWrapper::save()
