@@ -98,7 +98,9 @@ SOURCES += \
     ../Monarch-Connect/Tunnelling/flowscenewrapper.cpp \
     ../Monarch-Connect/Tunnelling/tunnellist.cpp \
     ../Monarch-Connect/WidgetControllers/projecthierarchyinterface.cpp \
-    ../Monarch-Connect/WidgetControllers/centraltabinterface.cpp
+    ../Monarch-Connect/WidgetControllers/centraltabinterface.cpp \
+    ../Monarch-Connect/Models/monarchmodel.cpp \
+    ../Monarch-Connect/Models/printermodel.cpp \
 
 HEADERS += \
     monarchconnecttest.h \
@@ -176,7 +178,9 @@ HEADERS += \
     ../Monarch-Connect/Tunnelling/flowscenewrapper.h \
     ../Monarch-Connect/Tunnelling/tunnellist.h \
     ../Monarch-Connect/WidgetControllers/projecthierarchyinterface.h \
-    ../Monarch-Connect/WidgetControllers/centraltabinterface.h
+    ../Monarch-Connect/WidgetControllers/centraltabinterface.h \
+    ../Monarch-Connect/Models/monarchmodel.h \
+    ../Monarch-Connect/Models/printermodel.h \
 
 FORMS += \
         ../Monarch-Connect/mainwindow.ui

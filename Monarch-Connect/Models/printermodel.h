@@ -12,10 +12,16 @@ class PrinterModel : public MonarchModel
 {
     Q_OBJECT
 
+private:
+    enum InPortTypes{
+        STREAMPORT = 0,
+        _NUMPORTS
+    };
+
 public:
     PrinterModel() : MonarchModel()
     {
-        //setup();
+        setup();
     }
     ~PrinterModel() override
     {
@@ -67,10 +73,9 @@ public:
     //get arrays of inputs/output ports. Called only on instantiation of node.
     QVector<MonarchInputPort> getInputPortArray()  const override
     {
-        return QVector<PrinterModel::MonarchInputPort>();
-        //QVector<PrinterModel::MonarchInputPort> r = {
-        //    {PortType::STREAM, "inputs", -1}
-        //};
+        QVector<PrinterModel::MonarchInputPort> r(_NUMPORTS);
+        r[STREAMPORT] = {PortType::STREAM, QString("print stream"), -1};
+        return r;
     }
 
     QVector<MonarchOutputPort> getOutputPortArray()  const override
