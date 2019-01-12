@@ -222,6 +222,11 @@
             <attribute name="title">
              <string>Console</string>
             </attribute>
+            <layout class="QGridLayout" name="gridLayout_10">
+             <item row="0" column="0">
+              <widget class="QWidget" name="widget" native="true"/>
+             </item>
+            </layout>
            </widget>
           </widget>
          </widget>

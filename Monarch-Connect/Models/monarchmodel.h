@@ -20,6 +20,12 @@ using QtNodes::NodeValidationState;
 //abstract class with some handy stuff for creating nodes for Monarch
 class MonarchModel : public NodeDataModel
 {
+    Q_OBJECT
+
+public:
+    MonarchModel();
+    virtual ~MonarchModel() override;
+    void setup(); //call this in your constructor to setup the base stuff
 
 public:
     enum PortType{
@@ -32,19 +38,15 @@ protected:
 
     struct MonarchInputPort{
         PortType type;
-        std::function<void(int, Payload)> dataReadyCallback; //for all inputs
+        QString name;
         int idx = -1; //internal use only: idx of corresponding receiver
     };
     struct MonarchOutputPort{
         PortType type;
-        std::function<Payload(int)> getDataCallback; //for payload outputs
+        QString name;
         int idx = -1; //internal use only: idx of corresponding sender
     };
 
-public:
-    MonarchModel();
-    virtual ~MonarchModel() override;
-    void setup(); //call this in your constructor to setup the base stuff
 
 /*
  * PURE VIRTUAL FUNCTIONS: you must override these when creating your node.
@@ -53,16 +55,21 @@ public:
     //basic info about the node:
     virtual QString caption() const  override = 0;
     virtual QString name() const  override  = 0;
-    QWidget *embeddedWidget() override = 0;
+    virtual QWidget *embeddedWidget() override = 0;
 
-protected:
+public:
     //load/save your internal data in the node, using json.
     virtual QJsonObject saveData() const = 0;
     virtual void loadData(QJsonObject const& modelJson) const = 0;
 
+    //functions to access data in/out of the node.
+    virtual void inputDataReady(Payload data, int index) = 0;
+    virtual Payload getOutputData(int index) = 0;
+
     //get arrays of inputs/output ports. Called only on instantiation of node.
     virtual QVector<MonarchInputPort> getInputPortArray()  const = 0;
     virtual QVector<MonarchOutputPort> getOutputPortArray()  const = 0;
+
 
 /*
  * IMPLEMENTED FUNCTIONS: use these to get stuff done
@@ -70,9 +77,14 @@ protected:
 protected:
     //send on a stream. Use for stream outputs only.
     void sendOnStream(int index, Payload payload);
-
     //send an event. Use for event outputs only.
     void triggerEvent(int index);
+
+    //get the currently set input/output arrays. Only useful if you modified
+    //the arrays after calling setup()
+    const QVector<MonarchInputPort> inPortList() const {return _inPortList;}
+    const QVector<MonarchOutputPort> outPortList() const {return _outPortList;}
+
 
 /*
  * IMPLEMENTED FUNCTIONS: don't override these unless you know what you're doing.

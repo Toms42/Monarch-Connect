@@ -94,12 +94,16 @@ NodeDataType MonarchModel::dataType(PortDirection type, PortIndex index) const
     if(type == PortDirection::In)
     {
         if(index >= _inPortList.count()) return NodeDataType{"error","error"};
-        return typeFromEnum(_inPortList[index].type);
+        auto t = typeFromEnum(_inPortList[index].type);
+        t.name = _inPortList[index].name;
+        return t;
     }
     if(type == PortDirection::Out)
     {
         if(index >= _outPortList.count()) return NodeDataType{"error","error"};
-        return typeFromEnum(_outPortList[index].type);
+        auto t = typeFromEnum(_outPortList[index].type);
+        t.name = _outPortList[index].name;
+        return t;
     }
     return NodeDataType{"error","error"};
 }
@@ -110,7 +114,7 @@ std::shared_ptr<NodeData> MonarchModel::outData(PortIndex index)
     auto port = _outPortList[index];
     if(port.type == PortType::PAYLOAD)
     {
-        auto payload = std::make_shared<Payload>(port.getDataCallback(index));
+        auto payload = std::make_shared<Payload>(getOutputData(index));
         return std::static_pointer_cast<NodeData>(payload);
     }
     else if(port.type == PortType::STREAM)
@@ -130,7 +134,7 @@ void MonarchModel::setInData(std::shared_ptr<NodeData> data, PortIndex index)
     auto port = _inPortList[index];
     if(port.type == PortType::PAYLOAD)
     {
-        port.dataReadyCallback(index, *std::dynamic_pointer_cast<Payload>(data));
+        inputDataReady(*std::dynamic_pointer_cast<Payload>(data), index);
     }
     else if(port.type == PortType::STREAM)
     {
@@ -147,6 +151,7 @@ void MonarchModel::streamIn(Payload payload)
 {
     auto *receiver = static_cast<StreamReceiver*>(sender());
     int portIdx = receiver->getPortIndex();
+    inputDataReady(payload, portIdx);
 }
 
 void MonarchModel::eventIn()
@@ -154,6 +159,7 @@ void MonarchModel::eventIn()
     auto *receiver = static_cast<EventReceiver*>(sender());
     int portIdx = receiver->getPortIndex();
     Payload payload;
+    inputDataReady(payload, portIdx);
 }
 
 void MonarchModel::triggerEvent(int index)
@@ -176,5 +182,6 @@ NodeDataType MonarchModel::typeFromEnum(PortType type) const
     case PortType::STREAM:  return StreamSender().type();
     case PortType::PAYLOAD: return Payload().type();
     }
+    return NodeDataType{"error","error"};
 }
 

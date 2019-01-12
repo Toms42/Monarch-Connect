@@ -3,7 +3,7 @@
 #include "Common/project.h"
 #include "Common/taglist.h"
 #include "functional"
-
+#include "Models/monarchmodel.h"
 
 PrinterModel::PrinterModel()
     : MonarchModel()
@@ -40,16 +40,13 @@ void PrinterModel::loadData(QJsonObject const& modelJson) const
     qDebug() << modelJson["test"].toString();
 }
 
-using namespace std::placeholders;
 //get arrays of inputs/output ports. Called only on instantiation of node.
 QVector<PrinterModel::MonarchInputPort> PrinterModel::getInputPortArray()  const
 {
-    QVector<PrinterModel::MonarchInputPort> inArray;
-    //std::function<void(int,Payload)> f;
-    //f = std::bind(&PrinterModel::printData, this, _1, _2);
-
-    //MonarchInputPort in1 = {PortType::STREAM, std::bind(&PrinterModel::printData, this, _1, _2), -1};
-
+    return QVector<PrinterModel::MonarchInputPort>();
+    //QVector<PrinterModel::MonarchInputPort> r = {
+    //    {PortType::STREAM, "inputs", -1}
+    //};
 }
 
 QVector<PrinterModel::MonarchOutputPort> PrinterModel::getOutputPortArray()  const
@@ -57,14 +54,15 @@ QVector<PrinterModel::MonarchOutputPort> PrinterModel::getOutputPortArray()  con
     return QVector<PrinterModel::MonarchOutputPort>();
 }
 
-void PrinterModel::printData(int idx, Payload payload)
+void PrinterModel::inputDataReady(Payload data, int index)
 {
-    qDebug() << payload;
+    if(index == 0) qDebug() << data;
 }
 
-
-
-
+Payload PrinterModel::getOutputData(int)
+{
+    return Payload();
+}
 
 
 

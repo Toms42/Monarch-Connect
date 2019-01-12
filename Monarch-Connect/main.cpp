@@ -29,24 +29,6 @@ using QtNodes::FlowSceneModel;
 using QtNodes::DataFlowScene;
 using QtNodes::DataFlowModel;
 
-static std::shared_ptr<DataModelRegistry> registerDataModels()
-{
-    auto ret = Project::getInstance().getModelRegistry();
-
-    ret->registerModel<MyDataModel>();
-
-    /*
-     We could have more models registered.
-     All of them become items in the context meny of the scene.
-
-     ret->registerModel<AnotherDataModel>();
-     ret->registerModel<OneMoreDataModel>();
-
-   */
-
-    return ret;
-}
-
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -58,8 +40,8 @@ int main(int argc, char *argv[])
     QThread::sleep(4); //lol look at the splash
 
 
-    //registry...
-    registerDataModels();
+    //setup project:
+    Project::getInstance().setup();
 
     //load stylesheet:
     a.setStyle(new DarkStyle);

@@ -1,30 +1,36 @@
 #ifndef PRINTERMODEL_H
 #define PRINTERMODEL_H
 
+#include <QObject>
 #include "Models/monarchmodel.h"
+#include <nodes/NodeDataModel>
 
 class PrinterModel : public MonarchModel
 {
+    Q_OBJECT
+
 public:
     PrinterModel();
+    ~PrinterModel() override {}
 
 public:
     //basic info about the node:
-    virtual QString caption() const  override;
-    virtual QString name() const  override;
+    QString caption() const  override;
+    QString name() const  override;
     QWidget *embeddedWidget() override;
 
 protected:
     //load/save your internal data in the node, using json.
-    virtual QJsonObject saveData() const override;
-    virtual void loadData(QJsonObject const& modelJson) const override;
+    QJsonObject saveData() const override;
+    void loadData(QJsonObject const& modelJson) const override;
+
+    //functions to access data in/out of the node.
+    void inputDataReady(Payload data, int index) override;
+    Payload getOutputData(int index) override;
 
     //get arrays of inputs/output ports. Called only on instantiation of node.
-    virtual QVector<MonarchInputPort> getInputPortArray()  const override;
-    virtual QVector<MonarchOutputPort> getOutputPortArray()  const override;
-
-public:
-    void printData(int idx, Payload payload);
+    QVector<MonarchInputPort> getInputPortArray()  const override;
+    QVector<MonarchOutputPort> getOutputPortArray()  const override;
 };
 
 #endif // PRINTERMODEL_H

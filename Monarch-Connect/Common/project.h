@@ -20,6 +20,8 @@ public:
         return instance;
     }
 
+    void setup();
+
     TagList &getTagList();
     FlowList &getFlowList();
     std::shared_ptr<DataModelRegistry> getModelRegistry();

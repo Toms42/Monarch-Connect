@@ -6,6 +6,10 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 
+#include "Models/monarchmodel.h"
+#include "Models/printermodel.h"
+#include "Models/models.hpp"
+
 Project::Project(QObject *parent)
     : QObject(parent),
       _tags(this),
@@ -22,6 +26,13 @@ QByteArray Project::saveToMemory()
     QJsonDocument document(projectJson);
     return document.toJson();
 
+}
+
+void Project::setup()
+{
+    //register all the nodes:
+    _registry->registerModel<MyDataModel>("Test Nodes");
+    _registry->registerModel<PrinterModel>("Visualizers");
 }
 
 void Project::loadFromMemory(QByteArray file)

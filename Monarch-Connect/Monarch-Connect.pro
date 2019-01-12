@@ -30,8 +30,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 INCLUDEPATH += "$$PWD/Nodeeditor/include/nodes/internal" \
-            "$$PWD/Nodeeditor/include" \
-            "$$PWD/Models"
+            "$$PWD/Nodeeditor/include"
 
 SOURCES += \
         main.cpp \
