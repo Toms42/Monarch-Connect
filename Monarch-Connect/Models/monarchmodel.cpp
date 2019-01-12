@@ -32,19 +32,19 @@ void MonarchModel::setup()
     int eri = 0;
     for(int i = 0; i < _inPortList.count(); i++)
     {
-        auto port = _inPortList[i];
-        if(port.type == PortType::STREAM)
+        auto *port = &_inPortList[i];
+        if(port->type == PortType::STREAM)
         {
             _streamReceivers.append(std::make_shared<StreamReceiver>());
             _streamReceivers[sri]->setPortIndex(i);
-            port.idx = sri;
+            port->idx = sri;
             sri++;
         }
-        if(port.type == PortType::EVENT)
+        if(port->type == PortType::EVENT)
         {
             _eventReceivers.append(std::make_shared<EventReceiver>());
             _eventReceivers[eri]->setPortIndex(i);
-            port.idx = eri;
+            port->idx = eri;
             eri++;
         }
     }
@@ -53,17 +53,17 @@ void MonarchModel::setup()
     int esi = 0;
     for(int i = 0; i < _outPortList.count(); i++)
     {
-        auto port = _outPortList[i];
-        if(port.type == PortType::STREAM)
+        auto *port = &_outPortList[i];
+        if(port->type == PortType::STREAM)
         {
             _streamSenders.append(std::make_shared<StreamSender>());
-            port.idx = ssi;
+            port->idx = ssi;
             ssi++;
         }
-        if(port.type == PortType::EVENT)
+        if(port->type == PortType::EVENT)
         {
             _eventSenders.append(std::make_shared<EventSender>());
-            port.idx = esi;
+            port->idx = esi;
             esi++;
         }
     }
