@@ -20,12 +20,15 @@ using QtNodes::NodeValidationState;
 //abstract class with some handy stuff for creating nodes for Monarch
 class MonarchModel : public NodeDataModel
 {
-protected:
+
+public:
     enum PortType{
         STREAM,
         EVENT,
         PAYLOAD
     };
+
+protected:
 
     struct MonarchInputPort{
         PortType type;
@@ -55,7 +58,7 @@ public:
 protected:
     //load/save your internal data in the node, using json.
     virtual QJsonObject saveData() const = 0;
-    virtual void loadData(QJsonObject) const = 0;
+    virtual void loadData(QJsonObject const& modelJson) const = 0;
 
     //get arrays of inputs/output ports. Called only on instantiation of node.
     virtual QVector<MonarchInputPort> getInputPortArray()  const = 0;
@@ -76,12 +79,13 @@ protected:
  */
 public:
     QJsonObject save() const override;
+    void restore(QJsonObject const&) override;
     unsigned int nPorts(PortDirection type) const override;
     NodeDataType dataType(PortDirection type, PortIndex index) const override;
     std::shared_ptr<NodeData> outData(PortIndex index) override;
     void setInData(std::shared_ptr<NodeData> data, PortIndex index) override;
 
-private:
+public:
     NodeDataType typeFromEnum(PortType type) const;
 
 private slots:

@@ -1,5 +1,5 @@
 #include "centraltabinterface.h"
-#include <QLabel>
+#include <QTextBrowser>
 #include <QDebug>
 #include <nodes/FlowView>
 #include "Common/project.h"
@@ -27,7 +27,20 @@ CentralTabInterface::~CentralTabInterface()
 
 void CentralTabInterface::addHomeTab()
 {
-    QLabel* homeWidget = new QLabel("Welcome!");
+    QTextBrowser * homeWidget = new QTextBrowser();
+    QFile html;
+    html.setFileName(":home.html");
+    if(html.open(QIODevice::ReadOnly))
+    {
+        homeWidget->setHtml(html.readAll());
+        homeWidget->setOpenExternalLinks(true);
+        homeWidget->setOpenLinks(true);
+    }
+    else
+    {
+        homeWidget->setText("Error loading homepage");
+    }
+    homeWidget->setAlignment(Qt::AlignCenter);
     tab_t home = {QUuid::createUuid(), homeWidget, TABTYPE::HOME, {0}};
     _tabWidget.addTab(home.widget, "home");
     _tabs.append(home);

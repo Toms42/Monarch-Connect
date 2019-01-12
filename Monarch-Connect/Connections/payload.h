@@ -4,6 +4,7 @@
 #include <QUuid>
 #include <QVector>
 #include <nodes/NodeData>
+#include <QDebug>
 
 using QtNodes::NodeData;
 using QtNodes::NodeDataType;
@@ -22,16 +23,18 @@ public:
     { return NodeDataType {"Payload", "Payload"}; }
 
 public:
-    QUuid getTagID();
-    int nFields();
+    QUuid getTagID() const;
+    int nFields() const;
 
-    QString getFieldName(int field);
-    QString getFieldUnit(int field);
-    double getFieldScalar(int field);
+    QString getFieldName(int field) const;
+    QString getFieldUnit(int field) const;
+    double getFieldScalar(int field) const;
 
-    long getValDirect(int field);
+    long getValDirect(int field) const;
 
-    double getVal(int field);
+    double getVal(int field) const;
+
+    friend QDebug operator<<(QDebug debug, const Payload &p);
 
 private:
     QUuid _tagID;

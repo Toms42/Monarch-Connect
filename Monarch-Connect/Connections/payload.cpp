@@ -26,42 +26,58 @@ Payload::Payload()
 {
 }
 
-QUuid Payload::getTagID()
+QUuid Payload::getTagID() const
 {
     return _tagID;
 }
-int Payload::nFields()
+int Payload::nFields() const
 {
     return _nFields;
 }
 
-QString Payload::getFieldName(int field)
+QString Payload::getFieldName(int field) const
 {
     const TagList& taglist = Project::getInstance().getTagList();
     std::shared_ptr<const TagType> tagtype = taglist.getTagType(_tagID);
     return tagtype->getFieldName(field);
 }
-QString Payload::getFieldUnit(int field)
+QString Payload::getFieldUnit(int field) const
 {
     const TagList& taglist = Project::getInstance().getTagList();
     std::shared_ptr<const TagType> tagtype = taglist.getTagType(_tagID);
     return tagtype->getFieldUnit(field);
 }
-double Payload::getFieldScalar(int field)
+double Payload::getFieldScalar(int field) const
 {
     const TagList& taglist = Project::getInstance().getTagList();
     std::shared_ptr<const TagType> tagtype = taglist.getTagType(_tagID);
     return tagtype->getFieldScalar(field);
 }
 
-long Payload::getValDirect(int field)
+long Payload::getValDirect(int field) const
 {
     if(field < 0 || field >= _nFields) return 0;
     return static_cast<long>(round(_vals[field] * getFieldScalar(field)));
 }
 
-double Payload::getVal(int field)
+double Payload::getVal(int field) const
 {
     if(field < 0 || field >= _nFields) return 0;
     return static_cast<double>(_vals[field]);
+}
+
+QDebug operator<<(QDebug debug, const Payload &p)
+{
+    QDebugStateSaver saver(debug);
+    auto &l = Project::getInstance().getTagList();
+    QString tag = l.getTag(p.getTagID());
+    debug << tag << ":";
+    for(int i = 0; i < p.nFields(); i++)
+    {
+        debug << "-" << p.getFieldName(i)
+              << ":" << p.getVal(i)
+              << " " << p.getFieldUnit(i)
+              << "(" << p.getFieldScalar(i) <<")";
+    }
+    return debug;
 }

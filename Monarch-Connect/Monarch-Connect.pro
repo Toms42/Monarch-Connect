@@ -79,7 +79,8 @@ SOURCES += \
     Style/DarkStyle.cpp \
     Style/framelesswindow/windowdragger.cpp \
     Style/framelesswindow/framelesswindow.cpp \
-    Models/monarchmodel.cpp
+    Models/monarchmodel.cpp \
+    Models/printermodel.cpp
 
 HEADERS += \
     Models/models.hpp \
@@ -160,7 +161,8 @@ HEADERS += \
     Style/DarkStyle.h \
     Style/framelesswindow/windowdragger.h \
     Style/framelesswindow/framelesswindow.h \
-    Models/monarchmodel.h
+    Models/monarchmodel.h \
+    Models/printermodel.h
 
 FORMS += \
         mainwindow.ui \

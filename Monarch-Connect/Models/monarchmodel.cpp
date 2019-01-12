@@ -77,6 +77,10 @@ QJsonObject MonarchModel::save() const
     modelJson["data"] = saveData();
     return modelJson;
 }
+void MonarchModel::restore(QJsonObject const& modelJson)
+{
+    loadData(modelJson["data"].toObject());
+}
 
 unsigned int MonarchModel::nPorts(PortDirection type) const
 {
@@ -143,7 +147,6 @@ void MonarchModel::streamIn(Payload payload)
 {
     auto *receiver = static_cast<StreamReceiver*>(sender());
     int portIdx = receiver->getPortIndex();
-    _inPortList[portIdx].dataReadyCallback(portIdx, payload);
 }
 
 void MonarchModel::eventIn()
@@ -151,7 +154,6 @@ void MonarchModel::eventIn()
     auto *receiver = static_cast<EventReceiver*>(sender());
     int portIdx = receiver->getPortIndex();
     Payload payload;
-    _inPortList[portIdx].dataReadyCallback(portIdx, payload);
 }
 
 void MonarchModel::triggerEvent(int index)

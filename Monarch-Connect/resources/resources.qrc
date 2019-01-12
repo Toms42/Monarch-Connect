@@ -4,5 +4,7 @@
         <file>convert.png</file>
         <file>icon.png</file>
         <file>splash.png</file>
+        <file>home.html</file>
+        <file>logo-full.png</file>
     </qresource>
 </RCC>
