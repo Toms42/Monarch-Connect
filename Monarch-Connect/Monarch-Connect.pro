@@ -36,6 +36,8 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     Models/models.cpp \
+    Models/monarchmodel.cpp \
+    Models/printermodel.cpp \
     Connections/payload.cpp \
     Connections/connectionstats.cpp \
     Connections/streamreceiver.cpp \
@@ -77,12 +79,12 @@ SOURCES += \
     WidgetControllers/centraltabinterface.cpp \
     Style/DarkStyle.cpp \
     Style/framelesswindow/windowdragger.cpp \
-    Style/framelesswindow/framelesswindow.cpp \
-    Models/monarchmodel.cpp \
-    Models/printermodel.cpp
+    Style/framelesswindow/framelesswindow.cpp
 
 HEADERS += \
     Models/models.hpp \
+    Models/printermodel.h \
+    Models/monarchmodel.h \
     Connections/payload.h \
     Connections/connectionstats.h \
     Connections/streamreceiver.h \
@@ -159,9 +161,7 @@ HEADERS += \
     WidgetControllers/centraltabinterface.h \
     Style/DarkStyle.h \
     Style/framelesswindow/windowdragger.h \
-    Style/framelesswindow/framelesswindow.h \
-    Models/monarchmodel.h \
-    Models/printermodel.h
+    Style/framelesswindow/framelesswindow.h
 
 FORMS += \
         mainwindow.ui \
