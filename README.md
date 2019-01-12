@@ -32,7 +32,8 @@ Current internal test build:
 * Nodes for COM ports, TCP/UDP sockets, xbox controllers, etc*
 * Convenience nodes for easy-setup arduino-integration*
 * Easily-extended with new nodes
-*\* indicates planned feature for first release* 
+
+\* indicates planned feature for first release* 
 
 ## Using
 * [Qt](https://www.qt.io/): Cross-platform c++ gui framework.
