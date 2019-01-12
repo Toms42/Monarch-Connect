@@ -11,7 +11,7 @@ class PrinterModel : public MonarchModel
 
 public:
     PrinterModel();
-    ~PrinterModel() override {}
+    ~PrinterModel() override;
 
 public:
     //basic info about the node:

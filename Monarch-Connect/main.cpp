@@ -15,7 +15,7 @@
 #include <QSplashScreen>
 #include <QThread>
 
-#include "models.hpp"
+#include "Models/models.hpp"
 
 #include "Style/DarkStyle.h"
 #include "Style/framelesswindow/windowdragger.h"

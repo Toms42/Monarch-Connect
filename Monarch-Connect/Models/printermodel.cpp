@@ -8,7 +8,12 @@
 PrinterModel::PrinterModel()
     : MonarchModel()
 {
-    setup();
+    //setup();
+}
+
+PrinterModel::~PrinterModel()
+{
+
 }
 
 QString PrinterModel::caption() const
@@ -63,9 +68,6 @@ Payload PrinterModel::getOutputData(int)
 {
     return Payload();
 }
-
-
-
 
 
 

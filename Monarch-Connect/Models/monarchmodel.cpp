@@ -1,7 +1,8 @@
 #include "monarchmodel.h"
 
 MonarchModel::MonarchModel()
-    : _streamSenders(),
+    : NodeDataModel(),
+      _streamSenders(),
       _eventSenders(),
       _streamReceivers(),
       _eventReceivers(),

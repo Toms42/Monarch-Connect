@@ -41,7 +41,8 @@ class MyDataModel : public NodeDataModel
 
 public:
     MyDataModel()
-        : _button(new QPushButton()),
+        : NodeDataModel(),
+        _button(new QPushButton()),
         _stream(new StreamSender()),
         _data(),
         _listener()
