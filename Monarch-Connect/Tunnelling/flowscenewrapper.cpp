@@ -57,7 +57,8 @@ FlowSceneWrapper::~FlowSceneWrapper()
     qDebug() << "deleting flowSceneWrapper at " << _file.fileName();
     if(_parent)
         _parent->removeChild(std::shared_ptr<FlowSceneWrapper>(this));
-    //Project::getInstance().getFlowList().unregisterFlowWrapper(this);
+    //TODO: unsafe due to recursive deletion. But was it necessary at all?
+    Project::getInstance().getFlowList().unregisterFlowWrapper(this);
 }
 
 void FlowSceneWrapper::save()

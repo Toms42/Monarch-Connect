@@ -11,6 +11,17 @@ FlowList::FlowList(QObject *parent) : QObject(parent)
 
 }
 
+FlowList::~FlowList()
+{
+    for(auto vect : _registry)
+    {
+        for(auto* wrap : vect)
+        {
+            unregisterFlowWrapper(wrap);
+        }
+    }
+}
+
 void FlowList::registerFlowWrapper(FlowSceneWrapper *wrapper)
 {
     connect(wrapper, &FlowSceneWrapper::hierarchyChanged,
@@ -51,6 +62,7 @@ void FlowList::unregisterFlowWrapper(FlowSceneWrapper *wrapper)
             matches.removeAll(match);
         }
     }
+    _registry.insert(key, matches);
     for(auto top : _topLevelWrappers)
     {
         if(*top == *wrapper)

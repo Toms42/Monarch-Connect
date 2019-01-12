@@ -38,6 +38,8 @@ void MonarchModel::setup()
             _streamReceivers.append(std::make_shared<StreamReceiver>());
             _streamReceivers[sri]->setPortIndex(i);
             port->idx = sri;
+            connect(_streamReceivers[sri].get(), &StreamReceiver::dataReady,
+                    this, &MonarchModel::streamIn);
             sri++;
         }
         if(port->type == PortType::EVENT)
@@ -45,6 +47,8 @@ void MonarchModel::setup()
             _eventReceivers.append(std::make_shared<EventReceiver>());
             _eventReceivers[eri]->setPortIndex(i);
             port->idx = eri;
+            connect(_eventReceivers[sri].get(), &EventReceiver::dataReady,
+                    this, &MonarchModel::eventIn);
             eri++;
         }
     }
@@ -67,9 +71,9 @@ void MonarchModel::setup()
             esi++;
         }
     }
-    qDebug() << "added ports:";
-    nPorts(PortDirection::In);
-    qDebug() << "setup done";
+    //qDebug() << "added ports:";
+    //nPorts(PortDirection::In);
+    //qDebug() << "setup done";
 }
 
 QJsonObject MonarchModel::save() const
@@ -88,7 +92,7 @@ void MonarchModel::restore(QJsonObject const& modelJson)
 
 unsigned int MonarchModel::nPorts(PortDirection type) const
 {
-    qDebug() << "nPorts: " << _inPortList.count() << ", " << _outPortList.count();
+    //qDebug() << "nPorts: " << _inPortList.count() << ", " << _outPortList.count();
     if(type == PortDirection::In) return static_cast<unsigned int>(_inPortList.count());
     if(type == PortDirection::Out) return static_cast<unsigned int>(_outPortList.count());
     return 0;

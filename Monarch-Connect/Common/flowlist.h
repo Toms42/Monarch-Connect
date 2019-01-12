@@ -14,6 +14,7 @@ class FlowList : public QObject
 
 public:
     explicit FlowList(QObject *parent = nullptr);
+    ~FlowList();
 
     void registerFlowWrapper(FlowSceneWrapper *wrapper);
     void unregisterFlowWrapper(FlowSceneWrapper *wrapper);

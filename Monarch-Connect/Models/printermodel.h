@@ -32,7 +32,7 @@ public:
     //basic info about the node:
     QString caption() const  override
     {
-        return "Debugging Printer";
+        return "Printer";
     }
 
     QString name() const  override
