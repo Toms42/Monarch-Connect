@@ -47,6 +47,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&Project::getInstance(), &Project::clearAll,
             centralTabInterface, &CentralTabInterface::clear);
 
+    //setup configwidgetinterface:
+    configWidgetInterface = new ConfigWidgetInterface(*ui->config_layout, this);
+    connect(&Project::getInstance(), &Project::newConfigWidget,
+            configWidgetInterface, &ConfigWidgetInterface::changeWidget);
 
 }
 

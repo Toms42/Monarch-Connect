@@ -6,6 +6,8 @@
 #include <QMessageBox>
 #include <QIODevice>
 #include <QDebug>
+#include <nodes/Node>
+#include <nodes/NodeDataModel>
 #include "Common/project.h"
 
 FlowSceneWrapper::FlowSceneWrapper(std::shared_ptr<FlowSceneWrapper> parent, QFile &file, QObject *parentObj)
@@ -26,6 +28,8 @@ FlowSceneWrapper::FlowSceneWrapper(std::shared_ptr<FlowSceneWrapper> parent, QFi
     reload();
     connect(&_scene, &DataFlowScene::modified,
             this, &FlowSceneWrapper::sceneChanged);
+    connect(&_scene, &DataFlowScene::selectionChanged,
+            this, &FlowSceneWrapper::selectionChanged);
     emit(updated(this));
     emit(hierarchyChanged());
     qDebug() << "FlowSceneWrapper loaded";
@@ -47,6 +51,8 @@ FlowSceneWrapper::FlowSceneWrapper(std::shared_ptr<FlowSceneWrapper> parent, QOb
         _parent->addChild(std::shared_ptr<FlowSceneWrapper>(this));
     connect(&_scene, &DataFlowScene::modified,
             this, &FlowSceneWrapper::sceneChanged);
+    connect(&_scene, &DataFlowScene::selectionChanged,
+            this, &FlowSceneWrapper::selectionChanged);
     emit(updated(this));
     emit(hierarchyChanged());
     qDebug() << "New FlowSceneWrapper created";
@@ -59,6 +65,7 @@ FlowSceneWrapper::~FlowSceneWrapper()
         _parent->removeChild(std::shared_ptr<FlowSceneWrapper>(this));
     //TODO: unsafe due to recursive deletion. But was it necessary at all?
     Project::getInstance().getFlowList().unregisterFlowWrapper(this);
+    _scene.clearScene();
 }
 
 void FlowSceneWrapper::save()
@@ -167,6 +174,20 @@ void FlowSceneWrapper::sceneChanged()
         _isSaved = false;
         _name.prepend('~');
         emit(hierarchyChanged());
+    }
+}
+
+void FlowSceneWrapper::selectionChanged()
+{
+    qDebug() << "selection was changed!";
+    std::vector<Node*> sel = _scene.selectedNodes();
+    if(sel.size() == 0)
+    {
+        Project::getInstance().newConfigWidget(nullptr);
+    }
+    else {
+        QWidget *widg =sel[0]->nodeDataModel()->configWidget();
+        Project::getInstance().newConfigWidget(widg);
     }
 }
 

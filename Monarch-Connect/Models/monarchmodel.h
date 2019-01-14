@@ -55,7 +55,10 @@ public:
     //basic info about the node:
     virtual QString caption() const  override = 0;
     virtual QString name() const  override  = 0;
+
+    //widgets to display
     virtual QWidget *embeddedWidget() override = 0;
+    virtual QWidget *configWidget() override = 0;
 
 public:
     //load/save your internal data in the node, using json.

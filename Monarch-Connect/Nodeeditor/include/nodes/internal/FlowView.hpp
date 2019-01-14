@@ -51,6 +51,9 @@ protected:
 
   void resizeEvent(QResizeEvent* event) override;
 
+signals:
+    void mousePressed();
+
 protected:
   FlowScene* scene();
 

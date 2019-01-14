@@ -48,6 +48,7 @@ FlowView::FlowView(QWidget* parent)
 
   setCacheMode(QGraphicsView::CacheBackground);
 
+
   // setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers)));
 }
 
@@ -306,6 +307,7 @@ FlowView::mousePressEvent(QMouseEvent* event)
   if (event->button() == Qt::LeftButton) {
     _clickPos = mapToScene(event->pos());
   }
+  emit(mousePressed());
 }
 
 void

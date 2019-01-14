@@ -38,6 +38,8 @@ public slots:
 signals:
     void nameUpdated(QString name);
     void clearAll();
+    void newConfigWidget(QWidget *widget);
+    void newConnectionStats();
 
 public slots:
 

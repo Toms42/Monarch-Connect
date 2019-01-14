@@ -71,6 +71,8 @@ public:
 
   virtual QWidget* embeddedWidget() = 0;
 
+  virtual QWidget* configWidget() = 0;
+
   virtual bool resizable() const { return false; }
 
   virtual NodeValidationState validationState() const

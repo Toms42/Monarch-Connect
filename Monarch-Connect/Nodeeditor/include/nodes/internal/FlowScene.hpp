@@ -65,6 +65,7 @@ private slots:
 
 signals:
   void modified();
+  //void selectionChanged();
 
 private:
   FlowSceneModel* _model;

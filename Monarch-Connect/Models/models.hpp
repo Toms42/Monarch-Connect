@@ -150,6 +150,11 @@ public:
 
     QWidget *
     embeddedWidget() override { return _button; }
+
+    QWidget *configWidget() override
+    {
+        return nullptr;
+    }
 public slots:
     void button_pressed()
     {

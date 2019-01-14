@@ -6,6 +6,7 @@
 #include "WidgetControllers/tagtreeinterface.h"
 #include "WidgetControllers/centraltabinterface.h"
 #include "WidgetControllers/projecthierarchyinterface.h"
+#include "WidgetControllers/configwidgetinterface.h"
 #include <QString>
 
 namespace Ui {
@@ -29,6 +30,8 @@ private:
     TagTreeInterface *tagTreeInterface;
     CentralTabInterface *centralTabInterface;
     ProjectHierarchyInterface *projectHierarchyInterface;
+    ConfigWidgetInterface *configWidgetInterface;
+
 
 };
 

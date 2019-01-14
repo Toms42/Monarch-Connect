@@ -277,15 +277,11 @@
            <property name="currentIndex">
             <number>0</number>
            </property>
-           <widget class="QWidget" name="tab_nodes">
+           <widget class="QWidget" name="tab_node_config">
             <attribute name="title">
              <string>Node Configurator</string>
             </attribute>
-            <layout class="QGridLayout" name="gridLayout_3">
-             <item row="0" column="0">
-              <widget class="QWidget" name="widget_2" native="true"/>
-             </item>
-            </layout>
+            <layout class="QGridLayout" name="config_layout"/>
            </widget>
            <widget class="QWidget" name="tab_tunnels">
             <attribute name="title">

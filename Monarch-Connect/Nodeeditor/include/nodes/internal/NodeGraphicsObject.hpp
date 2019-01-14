@@ -94,6 +94,9 @@ protected:
 private:
   void embedQWidget();
 
+signals:
+  //void selectionUpdated();
+
 private:
   FlowScene& _scene;
 

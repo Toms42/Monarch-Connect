@@ -79,7 +79,8 @@ SOURCES += \
     WidgetControllers/centraltabinterface.cpp \
     Style/DarkStyle.cpp \
     Style/framelesswindow/windowdragger.cpp \
-    Style/framelesswindow/framelesswindow.cpp
+    Style/framelesswindow/framelesswindow.cpp \
+    WidgetControllers/configwidgetinterface.cpp
 
 HEADERS += \
     Models/models.hpp \
@@ -161,7 +162,8 @@ HEADERS += \
     WidgetControllers/centraltabinterface.h \
     Style/DarkStyle.h \
     Style/framelesswindow/windowdragger.h \
-    Style/framelesswindow/framelesswindow.h
+    Style/framelesswindow/framelesswindow.h \
+    WidgetControllers/configwidgetinterface.h
 
 FORMS += \
         mainwindow.ui \

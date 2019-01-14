@@ -234,6 +234,12 @@ NodeGraphicsObject::mousePressEvent(QGraphicsSceneMouseEvent* event)
     _scene.clearSelection();
   }
 
+//  if(isSelected())
+//  {
+//      qDebug() << "selected";
+//      emit(selectionUpdated());
+//  }
+
   for (PortDirection portToCheck : { PortDirection::In, PortDirection::Out }) {
     // TODO do not pass sceneTransform
     PortIndex portIndex = geometry().checkHitScenePoint(

@@ -7,6 +7,7 @@
 #include <nodes/NodeDataModel>
 #include "Common/project.h"
 #include "Common/taglist.h"
+#include <QPushButton>
 
 class PrinterModel : public MonarchModel
 {
@@ -19,7 +20,7 @@ private:
     };
 
 public:
-    PrinterModel() : MonarchModel()
+    PrinterModel() : MonarchModel(), _myButton(new QPushButton("hello!"))
     {
         setup();
     }
@@ -43,6 +44,10 @@ public:
     QWidget *embeddedWidget() override
     {
         return nullptr;
+    }
+    QWidget *configWidget() override
+    {
+        return _myButton;
     }
 
 public:
@@ -83,6 +88,9 @@ public:
     {
         return QVector<PrinterModel::MonarchOutputPort>();
     }
+
+private:
+    QPushButton *_myButton;
 };
 
 #endif // PRINTERMODEL_H

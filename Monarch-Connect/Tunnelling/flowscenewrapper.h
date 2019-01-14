@@ -51,6 +51,7 @@ signals:
 public slots:
     void refresh(FlowSceneWrapper *newWrapper);
     void sceneChanged();
+    void selectionChanged();
 
 private:
     QUuid _uniqueID;
