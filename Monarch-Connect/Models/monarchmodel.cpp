@@ -194,7 +194,7 @@ NodeDataType MonarchModel::typeFromEnum(PortType type) const
     return NodeDataType{"error","error"};
 }
 
-ConnectionStats::stats *MonarchModel::getStats(PortIndex i)
+ConnectionStats *MonarchModel::getStats(PortIndex i)
 {
     if(i < 0 || i >= _outPortList.count()) return nullptr;
     if(_outPortList[i].type == STREAM)

@@ -101,7 +101,9 @@ SOURCES += \
     ../Monarch-Connect/WidgetControllers/centraltabinterface.cpp \
     ../Monarch-Connect/Models/monarchmodel.cpp \
     ../Monarch-Connect/Models/printermodel.cpp \
-    ../Monarch-Connect/WidgetControllers/configwidgetinterface.cpp
+    ../Monarch-Connect/WidgetControllers/configwidgetinterface.cpp \
+    ../Monarch-Connect/WidgetControllers/statswidgetcontroller.cpp \
+    ../Monarch-Connect/Models/testmodel.cpp
 
 HEADERS += \
     monarchconnecttest.h \
@@ -182,7 +184,9 @@ HEADERS += \
     ../Monarch-Connect/WidgetControllers/centraltabinterface.h \
     ../Monarch-Connect/Models/monarchmodel.h \
     ../Monarch-Connect/Models/printermodel.h \
-    ../Monarch-Connect/WidgetControllers/configwidgetinterface.h
+    ../Monarch-Connect/WidgetControllers/configwidgetinterface.h \
+    ../Monarch-Connect/WidgetControllers/statswidgetcontroller.h \
+    ../Monarch-Connect/Models/testmodel.h
 
 FORMS += \
         ../Monarch-Connect/mainwindow.ui

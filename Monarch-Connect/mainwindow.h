@@ -7,6 +7,7 @@
 #include "WidgetControllers/centraltabinterface.h"
 #include "WidgetControllers/projecthierarchyinterface.h"
 #include "WidgetControllers/configwidgetinterface.h"
+#include "WidgetControllers/statswidgetcontroller.h"
 #include <QString>
 
 namespace Ui {
@@ -31,7 +32,7 @@ private:
     CentralTabInterface *centralTabInterface;
     ProjectHierarchyInterface *projectHierarchyInterface;
     ConfigWidgetInterface *configWidgetInterface;
-
+    StatsWidgetController *statsWidgetController;
 
 };
 

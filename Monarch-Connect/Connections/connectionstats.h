@@ -34,10 +34,11 @@ public:
     void updateLastValue(std::shared_ptr<const TagType> tagtype, Payload *p); //updates every time a new value sent
     void resetLastTime(std::shared_ptr<const TagType> tagtype = nullptr); //sets creation_timer of tag's stats to 0
 
-signals:
-
 public slots:
     void updateTimes(); //updates for all statStructs lastTime, totalTime and itemsPerSec every second
+
+signals:
+    void updated();
 
 private:
     connectionType _type;

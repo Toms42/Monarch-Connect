@@ -22,7 +22,7 @@ public:
     explicit StreamSender(QObject *parent = nullptr);
 
     void send(Payload payload);
-    ConnectionStats::stats *getMetrics(){return _stats.getStats();}
+    ConnectionStats *getMetrics(){return &_stats;}
 
 signals:
     void sent(Payload payload);

@@ -91,7 +91,8 @@ void ProjectHierarchyInterface::itemDoubleClicked(QTreeWidgetItem *item, int col
     std::shared_ptr<FlowSceneWrapper> wrapper;
     // get the corresponding wrapper from the treewidgetitem
     if(item->type() == QTreeWidgetItem::UserType){
-        wrappedItem = static_cast<FlowTreeItem *>(item);
+        wrappedItem = dynamic_cast<FlowTreeItem *>(item);
+        if(!wrappedItem) return;
         wrapper = wrappedItem->getFlowSceneWrapper();
         // open it using the centraltabinterface's "addTab"
         if(wrapper)
@@ -140,7 +141,8 @@ void ProjectHierarchyInterface::deleteTopFlow()
     if(!((static_cast<FlowTreeItem *>(_selected))->getFlowSceneWrapper()->isRoot())) return;
     if(_selected->type() == QTreeWidgetItem::UserType)
     {
-        auto toDelete = static_cast<FlowTreeItem *>(_selected);
+        auto toDelete = dynamic_cast<FlowTreeItem *>(_selected);
+        if(!toDelete) return;
         _interface.removeTab(toDelete->getFlowSceneWrapper().get());
         _flows.deleteTopLevelFlowWrapper(toDelete->getFlowSceneWrapper().get());
         _selected = nullptr;
@@ -151,14 +153,18 @@ void ProjectHierarchyInterface::deleteTopFlow()
 void ProjectHierarchyInterface::saveTopFlow(){
     if(!_selected) return;
     if(_selected->type() == QTreeWidgetItem::UserType){
-        (static_cast<FlowTreeItem *>(_selected)->getFlowSceneWrapper())->save();
+        auto _selectedDerived = dynamic_cast<FlowTreeItem *>(_selected);
+        if(!_selectedDerived) return;
+        _selectedDerived->getFlowSceneWrapper()->save();
     }
 }
 
 void ProjectHierarchyInterface::saveTopFlowAs(){
     if(!_selected) return;
     if(_selected->type() == QTreeWidgetItem::UserType){
-        (static_cast<FlowTreeItem *>(_selected)->getFlowSceneWrapper())->saveAs();
+        auto _selectedDerived = dynamic_cast<FlowTreeItem *>(_selected);
+        if(!_selectedDerived) return;
+        _selectedDerived->getFlowSceneWrapper()->saveAs();
     }
 }
 

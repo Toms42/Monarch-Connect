@@ -80,7 +80,9 @@ SOURCES += \
     Style/DarkStyle.cpp \
     Style/framelesswindow/windowdragger.cpp \
     Style/framelesswindow/framelesswindow.cpp \
-    WidgetControllers/configwidgetinterface.cpp
+    WidgetControllers/configwidgetinterface.cpp \
+    WidgetControllers/statswidgetcontroller.cpp \
+    Models/testmodel.cpp
 
 HEADERS += \
     Models/models.hpp \
@@ -163,7 +165,9 @@ HEADERS += \
     Style/DarkStyle.h \
     Style/framelesswindow/windowdragger.h \
     Style/framelesswindow/framelesswindow.h \
-    WidgetControllers/configwidgetinterface.h
+    WidgetControllers/configwidgetinterface.h \
+    WidgetControllers/statswidgetcontroller.h \
+    Models/testmodel.h
 
 FORMS += \
         mainwindow.ui \

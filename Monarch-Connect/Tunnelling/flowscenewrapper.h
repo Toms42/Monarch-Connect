@@ -6,6 +6,7 @@
 #include <nodes/DataFlowScene>
 #include <QFile>
 #include "tunnellist.h"
+#include "Connections/connectionstats.h"
 
 using namespace QtNodes;
 
@@ -52,6 +53,7 @@ public slots:
     void refresh(FlowSceneWrapper *newWrapper);
     void sceneChanged();
     void selectionChanged();
+    void sendStats();
 
 private:
     QUuid _uniqueID;
@@ -61,6 +63,7 @@ private:
     DataFlowScene _scene;
     QFile _file;
     std::shared_ptr<FlowSceneWrapper> _parent = nullptr;
+    ConnectionStats *_stats = nullptr;
 
     //these things are handled by nodes inside the scene:
     QVector<std::shared_ptr<FlowSceneWrapper>> _children;

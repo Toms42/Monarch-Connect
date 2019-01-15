@@ -10,6 +10,7 @@
 #include "Models/monarchmodel.h"
 #include "Models/printermodel.h"
 #include "Models/models.hpp"
+#include "Models/testmodel.h"
 
 Project::Project(QObject *parent)
     : QObject(parent),
@@ -34,6 +35,7 @@ void Project::setup()
     //register all the nodes:
     _registry->registerModel<MyDataModel>("Test Nodes");
     _registry->registerModel<PrinterModel>("Visualizers");
+    _registry->registerModel<TestModel>("Test Nodes");
 }
 
 void Project::loadFromMemory(QByteArray file)

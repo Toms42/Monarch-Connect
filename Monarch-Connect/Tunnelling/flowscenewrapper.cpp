@@ -188,6 +188,7 @@ void FlowSceneWrapper::selectionChanged()
     {
         Project::getInstance().newConfigWidget(nullptr);
         Project::getInstance().newConnectionStats(nullptr);
+        _stats = nullptr;
     }
 
     if(nsel.size() != 0)
@@ -202,10 +203,18 @@ void FlowSceneWrapper::selectionChanged()
         auto *model = dynamic_cast<MonarchModel*>(source->nodeDataModel());
         if(model)
         {
-            auto stats = model->getStats(csel[0].lPortID);
-            Project::getInstance().newConnectionStats(stats);
+            _stats = model->getStats(csel[0].lPortID);
+            connect(_stats, &ConnectionStats::updated,
+                    this, &FlowSceneWrapper::sendStats);
+            Project::getInstance().newConnectionStats(_stats->getStats());
         }
     }
+}
+
+void FlowSceneWrapper::sendStats()
+{
+    if(!_stats) return;
+    Project::getInstance().newConnectionStats(_stats->getStats());
 }
 
 void FlowSceneWrapper::refresh(FlowSceneWrapper *newWrapper)

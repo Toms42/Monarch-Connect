@@ -100,7 +100,7 @@ public:
     std::shared_ptr<NodeData> outData(PortIndex index) override;
     void setInData(std::shared_ptr<NodeData> data, PortIndex index) override;
     void setup(); //call this in your constructor to setup the base stuff
-    ConnectionStats::stats *getStats(PortIndex i);
+    ConnectionStats *getStats(PortIndex i);
 
 public:
     NodeDataType typeFromEnum(PortType type) const;

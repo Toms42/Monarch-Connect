@@ -22,7 +22,7 @@ public:
     explicit EventSender(QObject *parent = nullptr);
 
     void send();
-    ConnectionStats::stats *getMetrics(){return _stats.getStats();}
+    ConnectionStats *getMetrics(){return &_stats;}
 
 signals:
     void sent();

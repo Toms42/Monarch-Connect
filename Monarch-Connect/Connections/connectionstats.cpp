@@ -29,6 +29,7 @@ void ConnectionStats::updateTimes(){
             it.itemsPerSec = (static_cast<double>(it.totalSeen)) / it.totalTime;
         }
     }
+    emit(updated());
 }
 
 void ConnectionStats::incrTotalSeen(std::shared_ptr<const TagType> tagtype){

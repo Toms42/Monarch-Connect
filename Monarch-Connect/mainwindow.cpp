@@ -52,6 +52,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&Project::getInstance(), &Project::newConfigWidget,
             configWidgetInterface, &ConfigWidgetInterface::changeWidget);
 
+    //setup statsWidgetController:
+    QTreeWidget *streamExplorer = ui->treeWidget_5;
+    statsWidgetController = new StatsWidgetController(streamExplorer,this);
+    connect(&Project::getInstance(), &Project::newConnectionStats,
+            statsWidgetController, &StatsWidgetController::changeView);
+
 }
 
 MainWindow::~MainWindow()
