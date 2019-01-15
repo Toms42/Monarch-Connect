@@ -6,8 +6,8 @@
 #include "Connections/payload.h"
 #include <QTimer>
 #include <QDebug>
-#include "Common/project.h"
-
+#include <memory>
+#include "Common/tagtype.h"
 
 class ConnectionStats : public QObject
 {
@@ -29,7 +29,7 @@ public:
         QHash<QString, statStruct> _tags;
     };
     explicit ConnectionStats(QObject *parent = nullptr, connectionType type = EVENT);
-    stats getStats(){return _stats;}
+    stats *getStats(){return &_stats;}
     void incrTotalSeen(std::shared_ptr<const TagType> tagtype = nullptr); //if a new event/payload is sent
     void updateLastValue(std::shared_ptr<const TagType> tagtype, Payload *p); //updates every time a new value sent
     void resetLastTime(std::shared_ptr<const TagType> tagtype = nullptr); //sets creation_timer of tag's stats to 0

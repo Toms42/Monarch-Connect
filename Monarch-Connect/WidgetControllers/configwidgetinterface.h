@@ -9,7 +9,6 @@ class ConfigWidgetInterface : public QObject
     Q_OBJECT
 public:
     explicit ConfigWidgetInterface(QGridLayout &layout, QObject *parent = nullptr);
-    ~ConfigWidgetInterface();
 signals:
 
 

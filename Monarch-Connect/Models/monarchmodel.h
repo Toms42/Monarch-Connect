@@ -9,6 +9,7 @@
 #include "Connections/streamreceiver.h"
 #include "Connections/eventsender.h"
 #include "Connections/eventreceiver.h"
+#include "Connections/connectionstats.h"
 
 using QtNodes::PortDirection;
 using QtNodes::PortIndex;
@@ -88,7 +89,6 @@ protected:
     const QVector<MonarchInputPort> inPortList() const {return _inPortList;}
     const QVector<MonarchOutputPort> outPortList() const {return _outPortList;}
 
-
 /*
  * IMPLEMENTED FUNCTIONS: don't override these unless you know what you're doing.
  */
@@ -100,6 +100,7 @@ public:
     std::shared_ptr<NodeData> outData(PortIndex index) override;
     void setInData(std::shared_ptr<NodeData> data, PortIndex index) override;
     void setup(); //call this in your constructor to setup the base stuff
+    ConnectionStats::stats *getStats(PortIndex i);
 
 public:
     NodeDataType typeFromEnum(PortType type) const;

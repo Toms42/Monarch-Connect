@@ -9,23 +9,14 @@ ConfigWidgetInterface::ConfigWidgetInterface(QGridLayout &layout, QObject *paren
 {
 }
 
-ConfigWidgetInterface::~ConfigWidgetInterface()
-{
-    QWidget *widg = _layout.itemAtPosition(0,0)->widget();
-    if(widg)
-    {
-        _layout.removeWidget(widg);
-        widg->hide();
-    }
-}
-
 void ConfigWidgetInterface::changeWidget(QWidget *widget)
 {
     auto *item = _layout.itemAtPosition(0,0);
     if(item && item->widget())
     {
+        auto *widg = item->widget();
         _layout.removeWidget(item->widget());
-        item->widget()->hide();
+        widg->hide();
     }
     if(widget)
     {

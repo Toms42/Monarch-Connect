@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     QPixmap splashLogo(":splash.png");
     QSplashScreen splash(splashLogo);
     splash.show();
-    QThread::sleep(4); //lol look at the splash
+    QThread::sleep(2); //lol look at the splash
 
 
     //setup project:

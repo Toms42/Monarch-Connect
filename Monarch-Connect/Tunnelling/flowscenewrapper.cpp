@@ -9,6 +9,7 @@
 #include <nodes/Node>
 #include <nodes/NodeDataModel>
 #include "Common/project.h"
+#include "Models/monarchmodel.h"
 
 FlowSceneWrapper::FlowSceneWrapper(std::shared_ptr<FlowSceneWrapper> parent, QFile &file, QObject *parentObj)
     : QObject(parentObj),
@@ -180,14 +181,30 @@ void FlowSceneWrapper::sceneChanged()
 void FlowSceneWrapper::selectionChanged()
 {
     qDebug() << "selection was changed!";
-    std::vector<Node*> sel = _scene.selectedNodes();
-    if(sel.size() == 0)
+    std::vector<Node*> nsel = _scene.selectedNodes();
+    std::vector<ConnectionID> csel = _scene.selectedConnections();
+
+    if(nsel.size() == 0 && csel.size() == 0)
     {
         Project::getInstance().newConfigWidget(nullptr);
+        Project::getInstance().newConnectionStats(nullptr);
     }
-    else {
-        QWidget *widg =sel[0]->nodeDataModel()->configWidget();
+
+    if(nsel.size() != 0)
+    {
+        QWidget *widg =nsel[0]->nodeDataModel()->configWidget();
         Project::getInstance().newConfigWidget(widg);
+    }
+    if(csel.size() != 0)
+    {
+        QUuid sourceID = csel[0].lNodeID;
+        Node* source = _scene.nodes().at(sourceID).get();
+        auto *model = dynamic_cast<MonarchModel*>(source->nodeDataModel());
+        if(model)
+        {
+            auto stats = model->getStats(csel[0].lPortID);
+            Project::getInstance().newConnectionStats(stats);
+        }
     }
 }
 

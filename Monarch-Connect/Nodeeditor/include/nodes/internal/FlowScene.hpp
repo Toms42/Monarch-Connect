@@ -41,6 +41,8 @@ public:
 
   std::vector<NodeIndex> selectedNodes() const;
 
+  std::vector<ConnectionID> selectedConnections() const;
+
 private slots:
 
   void nodeRemoved(const QUuid& id);

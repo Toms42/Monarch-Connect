@@ -3,6 +3,7 @@
 #include "FlowSceneModel.hpp"
 #include "NodeGraphicsObject.hpp"
 #include "NodeIndex.hpp"
+#include "ConnectionID.hpp"
 
 #include <algorithm>
 
@@ -11,6 +12,7 @@ using QtNodes::FlowSceneModel;
 using QtNodes::NodeGraphicsObject;
 using QtNodes::NodeIndex;
 using QtNodes::PortIndex;
+using QtNodes::ConnectionID;
 
 FlowScene::FlowScene(FlowSceneModel* model, QObject* parent)
   : QGraphicsScene(parent)
@@ -102,6 +104,26 @@ FlowScene::selectedNodes() const
 
   return ret;
 }
+
+std::vector<ConnectionID>
+FlowScene::selectedConnections() const
+{
+  QList<QGraphicsItem*> graphicsItems = selectedItems();
+
+  std::vector<ConnectionID> ret;
+  ret.reserve(graphicsItems.size());
+
+  for (QGraphicsItem* item : graphicsItems) {
+    auto ngo = qgraphicsitem_cast<ConnectionGraphicsObject*>(item);
+
+    if (ngo != nullptr) {
+      ret.push_back(ngo->id());
+    }
+  }
+
+  return ret;
+}
+
 
 // model slots
 

@@ -5,6 +5,7 @@
 #include <QFileInfo>
 #include "Common/taglist.h"
 #include "Common/flowlist.h"
+#include "Connections/connectionstats.h"
 #include <nodes/DataModelRegistry>
 #include <QDir>
 
@@ -36,10 +37,13 @@ public slots:
     void open();
 
 signals:
+    //from project:
     void nameUpdated(QString name);
     void clearAll();
+
+    //forwarded from flowscenewrappers:
     void newConfigWidget(QWidget *widget);
-    void newConnectionStats();
+    void newConnectionStats(ConnectionStats::stats *stats);
 
 public slots:
 
