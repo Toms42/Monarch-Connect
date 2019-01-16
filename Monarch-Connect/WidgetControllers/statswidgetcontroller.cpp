@@ -19,23 +19,13 @@ void StatsWidgetController::changeView(ConnectionStats::stats *stats){
     }
     //clear current tree
     _tree->clear();
-    switch(stats->_type){
-    case ConnectionStats::EVENT:{
-        qDebug() << "type of connection: event";
-        break;
-    };
-        case ConnectionStats::STREAM:{
-        qDebug() << "type of connection: stream";
-        break;
-    };
-    }
     QHash<QString, ConnectionStats::statStruct> tags = stats->_tags;
     QList<QString> keys = tags.keys();
     int counter = 0;
-    qDebug() << "Number of keys: " + QString::number(keys.length());
+    //qDebug() << "Number of keys: " + QString::number(keys.length());
     for(auto key : keys){
         ConnectionStats::statStruct tagStats = tags[key];
-        qDebug() << "tag stats " + QString::number(tagStats.totalSeen);
+        //qDebug() << "tag stats " + QString::number(tagStats.totalSeen);
         //add top level tree with the key name
         QTreeWidgetItem *text = new QTreeWidgetItem(_tree);
         text->setText(counter,key);

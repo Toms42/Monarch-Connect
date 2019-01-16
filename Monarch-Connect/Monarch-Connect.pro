@@ -82,7 +82,8 @@ SOURCES += \
     Style/framelesswindow/framelesswindow.cpp \
     WidgetControllers/configwidgetinterface.cpp \
     WidgetControllers/statswidgetcontroller.cpp \
-    Models/testmodel.cpp
+    Models/testmodel.cpp \
+    WidgetControllers/console.cpp
 
 HEADERS += \
     Models/models.hpp \
@@ -167,7 +168,8 @@ HEADERS += \
     Style/framelesswindow/framelesswindow.h \
     WidgetControllers/configwidgetinterface.h \
     WidgetControllers/statswidgetcontroller.h \
-    Models/testmodel.h
+    Models/testmodel.h \
+    WidgetControllers/console.h
 
 FORMS += \
         mainwindow.ui \

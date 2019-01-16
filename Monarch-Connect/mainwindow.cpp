@@ -58,6 +58,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&Project::getInstance(), &Project::newConnectionStats,
             statsWidgetController, &StatsWidgetController::changeView);
 
+    //setup console
+    QPlainTextEdit *plainText = ui->plainTextEdit;
+    console = new Console(plainText, this);
+    connect(&Project::getInstance(), &Project::print,
+            console, &Console::changeOutput);
+
 }
 
 MainWindow::~MainWindow()
@@ -66,4 +72,7 @@ MainWindow::~MainWindow()
     delete centralTabInterface;
     delete tagTreeInterface;
     delete ui;
+    delete configWidgetInterface;
+    delete statsWidgetController;
+    delete console;
 }

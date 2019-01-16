@@ -8,6 +8,7 @@
 #include "WidgetControllers/projecthierarchyinterface.h"
 #include "WidgetControllers/configwidgetinterface.h"
 #include "WidgetControllers/statswidgetcontroller.h"
+#include "WidgetControllers/console.h"
 #include <QString>
 
 namespace Ui {
@@ -33,6 +34,7 @@ private:
     ProjectHierarchyInterface *projectHierarchyInterface;
     ConfigWidgetInterface *configWidgetInterface;
     StatsWidgetController *statsWidgetController;
+    Console *console;
 
 };
 

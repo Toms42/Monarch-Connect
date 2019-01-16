@@ -69,6 +69,8 @@ public:
     {
         qDebug() << "got data:";
         if(index == 0) qDebug() << data;
+        //print out the data
+        if(index == 0) emit(Project::getInstance().print(data.toString()));
     }
 
     Payload getOutputData(int index) override

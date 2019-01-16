@@ -40,6 +40,7 @@ signals:
     //from project:
     void nameUpdated(QString name);
     void clearAll();
+    void print(QString text);
 
     //forwarded from flowscenewrappers:
     void newConfigWidget(QWidget *widget);

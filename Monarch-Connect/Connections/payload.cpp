@@ -66,6 +66,22 @@ double Payload::getVal(int field) const
     return static_cast<double>(_vals[field]);
 }
 
+QString Payload::toString() const
+{
+    auto &l = Project::getInstance().getTagList();
+    QString tag = l.getTag(this->getTagID());
+    QString out;
+    out = out + "\"" + tag + "\"" + ": ";
+    for(int i = 0; i < this->nFields(); i++)
+    {
+        out = out + " - " + "\"" + this->getFieldName(i) + "\""
+              + " : " + QString::number(this->getVal(i))
+              + " " + "\"" + this->getFieldUnit(i) + "\""
+              + " (" + QString::number(this->getFieldScalar(i)) + ")";
+    }
+    return out;
+}
+
 QDebug operator<<(QDebug debug, const Payload &p)
 {
     QDebugStateSaver saver(debug);

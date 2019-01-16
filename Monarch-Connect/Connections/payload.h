@@ -34,6 +34,8 @@ public:
 
     double getVal(int field) const;
 
+    QString toString() const;
+
     friend QDebug operator<<(QDebug debug, const Payload &p);
 
 private:
