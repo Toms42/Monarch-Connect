@@ -15,6 +15,7 @@ class Payload : public NodeData
 public:
     Payload(QUuid tagID, int nFields, QVector<double> vals);
     Payload(QUuid tagID, double val);
+    Payload(QByteArray bytes);
     Payload();
 
 public:
@@ -25,6 +26,7 @@ public:
 public:
     QUuid getTagID() const;
     int nFields() const;
+    QByteArray encode() const;
 
     QString getFieldName(int field) const;
     QString getFieldUnit(int field) const;

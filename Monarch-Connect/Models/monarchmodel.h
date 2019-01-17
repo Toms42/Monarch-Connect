@@ -108,6 +108,7 @@ public:
 private slots:
     void streamIn(Payload payload);
     void eventIn();
+    void updateAllPayloads();
 
 private:
     QVector<std::shared_ptr<StreamSender>> _streamSenders;

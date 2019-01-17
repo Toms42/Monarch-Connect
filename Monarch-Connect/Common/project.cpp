@@ -11,6 +11,7 @@
 #include "Models/printermodel.h"
 #include "Models/models.hpp"
 #include "Models/testmodel.h"
+#include "Models/payloadvismodel.h"
 
 Project::Project(QObject *parent)
     : QObject(parent),
@@ -36,6 +37,7 @@ void Project::setup()
     _registry->registerModel<MyDataModel>("Test Nodes");
     _registry->registerModel<PrinterModel>("Visualizers");
     _registry->registerModel<TestModel>("Test Nodes");
+    _registry->registerModel<PayloadVisModel>("Visualizers");
 }
 
 void Project::loadFromMemory(QByteArray file)

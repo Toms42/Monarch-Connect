@@ -21,9 +21,32 @@ Payload::Payload(QUuid tagID, double val)
     _vals[0] = val;
 }
 
+Payload::Payload(QByteArray bytes){
+    QString stringdata = QString(bytes);
+    //assume it's a qbytearray of the payload in toString's output form
+
+}
+
 Payload::Payload()
     : _vals(0)
 {
+}
+
+QByteArray Payload::encode() const{
+    auto &l = Project::getInstance().getTagList();
+    QString payloadString = l.getTag(this->getTagID());;
+    payloadString = payloadString.toUpper() + ":";
+    for(int i = 0; i < this->nFields(); i++){
+        if(i != 0){
+            payloadString += ",";
+        }
+        payloadString += QString::number(this->getValDirect(i));
+    }
+    payloadString += "\r\n";
+    QByteArray output = payloadString.toUtf8();
+    output.append('\0');
+    if(output.length() < 256) return output;
+    else return QByteArray();
 }
 
 QUuid Payload::getTagID() const
@@ -68,15 +91,16 @@ double Payload::getVal(int field) const
 
 QString Payload::toString() const
 {
+    //tag: - fieldname0: value0 fieldunit0 (fieldscalar0) - fieldname1: ...
     auto &l = Project::getInstance().getTagList();
     QString tag = l.getTag(this->getTagID());
     QString out;
-    out = out + "\"" + tag + "\"" + ": ";
+    out = out + tag + ": ";
     for(int i = 0; i < this->nFields(); i++)
     {
-        out = out + " - " + "\"" + this->getFieldName(i) + "\""
-              + " : " + QString::number(this->getVal(i))
-              + " " + "\"" + this->getFieldUnit(i) + "\""
+        out = out + " - " + this->getFieldName(i)
+              + ": " + QString::number(this->getVal(i))
+              + " " + this->getFieldUnit(i) +
               + " (" + QString::number(this->getFieldScalar(i)) + ")";
     }
     return out;

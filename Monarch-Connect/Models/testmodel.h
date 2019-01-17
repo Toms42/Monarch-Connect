@@ -21,6 +21,7 @@ private:
 
     enum OutPortTypes{
         STREAMPORTOUT = 0,
+        PAYLOADOUT = 1,
         _NUMPORTSOUT
     };
 
@@ -70,7 +71,10 @@ public:
     }
 
     Payload getOutputData(int index) override{
-        return Payload();
+        auto t = Project::getInstance().getTagList().getTagID("michael's tag");
+        Payload mypayload(t, 35);
+        //emit(sent());
+        return mypayload;
     }
 
     //get arrays for input and output ports
@@ -83,7 +87,8 @@ public:
     //get arrays for input and output ports
     QVector<MonarchOutputPort> getOutputPortArray()  const override{
         QVector<MonarchOutputPort> ports(_NUMPORTSOUT);
-        ports[STREAMPORTIN] = {PortType::STREAM, QString("output"), -1};
+        ports[STREAMPORTOUT] = {PortType::STREAM, QString("output stream"), -1};
+        ports[PAYLOADOUT] = {PortType::PAYLOAD, QString("output payload"), -1};
         return ports;
     }
 

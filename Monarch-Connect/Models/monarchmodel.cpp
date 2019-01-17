@@ -1,4 +1,5 @@
 #include "monarchmodel.h"
+#include "Common/project.h"
 
 MonarchModel::MonarchModel()
     : NodeDataModel(),
@@ -71,6 +72,8 @@ void MonarchModel::setup()
             esi++;
         }
     }
+    connect(&Project::getInstance(), &Project::updateAllPayloads,
+            this, &MonarchModel::updateAllPayloads);
     //qDebug() << "added ports:";
     //nPorts(PortDirection::In);
     //qDebug() << "setup done";
@@ -139,6 +142,7 @@ std::shared_ptr<NodeData> MonarchModel::outData(PortIndex index)
 
 void MonarchModel::setInData(std::shared_ptr<NodeData> data, PortIndex index)
 {
+    if(data == nullptr) return;
     if(index >= _inPortList.count()) return;
     auto port = _inPortList[index];
     if(port.type == PortType::PAYLOAD)
@@ -182,6 +186,18 @@ void MonarchModel::sendOnStream(int index, Payload payload)
     int senderIdx = _outPortList[index].idx;
     _streamSenders[senderIdx]->send(payload);
 }
+
+void MonarchModel::updateAllPayloads()
+{
+    for(int i = 0; i < _outPortList.count(); i++)
+    {
+        if(_outPortList[i].type == PortType::PAYLOAD)
+        {
+            emit(dataUpdated(i));
+        }
+    }
+}
+
 
 NodeDataType MonarchModel::typeFromEnum(PortType type) const
 {

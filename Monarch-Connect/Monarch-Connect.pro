@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui opengl
+QT       += core gui opengl network
 
 # Compile with c++14 standard:
 CONFIG += c++14 optimize_full
@@ -83,7 +83,9 @@ SOURCES += \
     WidgetControllers/configwidgetinterface.cpp \
     WidgetControllers/statswidgetcontroller.cpp \
     Models/testmodel.cpp \
-    WidgetControllers/console.cpp
+    WidgetControllers/console.cpp \
+    Models/payloadvismodel.cpp \
+    Models/socketmodel.cpp
 
 HEADERS += \
     Models/models.hpp \
@@ -169,7 +171,9 @@ HEADERS += \
     WidgetControllers/configwidgetinterface.h \
     WidgetControllers/statswidgetcontroller.h \
     Models/testmodel.h \
-    WidgetControllers/console.h
+    WidgetControllers/console.h \
+    Models/payloadvismodel.h \
+    Models/socketmodel.h
 
 FORMS += \
         mainwindow.ui \

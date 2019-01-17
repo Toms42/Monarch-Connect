@@ -45,6 +45,7 @@ signals:
     //forwarded from flowscenewrappers:
     void newConfigWidget(QWidget *widget);
     void newConnectionStats(ConnectionStats::stats *stats);
+    void updateAllPayloads();
 
 public slots:
 

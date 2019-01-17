@@ -1,5 +1,6 @@
 #include "taglist.h"
 #include <QDebug>
+#include "project.h"
 
 TagList::TagList(QObject *parent)
     : QObject(parent),
@@ -49,6 +50,7 @@ void TagList::insert(std::unique_ptr<TagType> type)
 
     qDebug() << "inserted";
     emit(added(tag));
+    Project::getInstance().updateAllPayloads();
 }
 
 void TagList::remove(QUuid tagID)

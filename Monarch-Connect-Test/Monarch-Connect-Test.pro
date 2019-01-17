@@ -104,7 +104,8 @@ SOURCES += \
     ../Monarch-Connect/WidgetControllers/configwidgetinterface.cpp \
     ../Monarch-Connect/WidgetControllers/statswidgetcontroller.cpp \
     ../Monarch-Connect/Models/testmodel.cpp \
-    ../Monarch-Connect/WidgetControllers/console.cpp
+    ../Monarch-Connect/WidgetControllers/console.cpp \
+    ../Monarch-Connect/Models/payloadvismodel.cpp
 
 HEADERS += \
     monarchconnecttest.h \
@@ -188,7 +189,8 @@ HEADERS += \
     ../Monarch-Connect/WidgetControllers/configwidgetinterface.h \
     ../Monarch-Connect/WidgetControllers/statswidgetcontroller.h \
     ../Monarch-Connect/Models/testmodel.h \
-    ../Monarch-Connect/WidgetControllers/console.h
+    ../Monarch-Connect/WidgetControllers/console.h \
+    ../Monarch-Connect/Models/payloadvismodel.h
 
 FORMS += \
         ../Monarch-Connect/mainwindow.ui
