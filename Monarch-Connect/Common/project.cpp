@@ -13,6 +13,7 @@
 #include "Models/testmodel.h"
 #include "Models/payloadvismodel.h"
 #include "Models/socketmodel.h"
+#include "Models/convertermodel.h"
 #include "Models/gamepadmodel.h"
 
 Project::Project(QObject *parent)
@@ -42,6 +43,7 @@ void Project::setup()
     _registry->registerModel<PayloadVisModel>("Visualizers");
     _registry->registerModel<SocketModel>("Networking");
     _registry->registerModel<GamepadModel>("Inputs");
+    _registry->registerModel<ConverterModel>("Inputs");
 }
 
 void Project::loadFromMemory(QByteArray file)

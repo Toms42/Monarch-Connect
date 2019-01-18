@@ -110,7 +110,9 @@ SOURCES += \
     ../Monarch-Connect/Models/socketmodel.cpp \
     ../Monarch-Connect/Style/socketview.cpp \
     ../Monarch-Connect/Style/xyvis.cpp \
-    ../Monarch-Connect/Models/gamepadmodel.cpp
+    ../Monarch-Connect/Models/gamepadmodel.cpp \
+    ../Monarch-Connect/Models/convertermodel.cpp \
+    ../Monarch-Connect/Style/converterview.cpp
 
 HEADERS += \
     monarchconnecttest.h \
@@ -199,7 +201,9 @@ HEADERS += \
     ../Monarch-Connect/Models/socketmodel.h \
     ../Monarch-Connect/Style/socketview.h \
     ../Monarch-Connect/Style/xyvis.h \
-    ../Monarch-Connect/Models/gamepadmodel.h
+    ../Monarch-Connect/Models/gamepadmodel.h \
+    ../Monarch-Connect/Models/convertermodel.h \
+    ../Monarch-Connect/Style/converterview.h
 
 FORMS += \
         ../Monarch-Connect/mainwindow.ui

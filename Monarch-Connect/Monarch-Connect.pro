@@ -88,7 +88,9 @@ SOURCES += \
     Models/socketmodel.cpp \
     Style/socketview.cpp \
     Models/gamepadmodel.cpp \
-    Style/xyvis.cpp
+    Style/xyvis.cpp \
+    Models/convertermodel.cpp \
+    Style/converterview.cpp
 
 HEADERS += \
     Models/models.hpp \
@@ -179,7 +181,9 @@ HEADERS += \
     Models/socketmodel.h \
     Style/socketview.h \
     Models/gamepadmodel.h \
-    Style/xyvis.h
+    Style/xyvis.h \
+    Models/convertermodel.h \
+    Style/converterview.h
 
 FORMS += \
         mainwindow.ui \

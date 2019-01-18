@@ -15,7 +15,7 @@ SocketView::SocketView(QWidget *parent) : QWidget(parent)
     layout->addRow(new QLabel(tr("Host:")), _host);
     layout->addRow(new QLabel(tr("Port:")), _port);
     layout->addRow(new QLabel(tr("Status:")), _status);
-    layout->addRow(new QLabel(tr("Connect:")), _confirm);
+    layout->addRow(_confirm);
     _horizontalGroupBox->setLayout(layout);
     connect(_confirm, &QPushButton::pressed, this, &SocketView::pressed);
 }
