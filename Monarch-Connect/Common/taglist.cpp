@@ -33,7 +33,7 @@ QString TagList::getTag(QUuid tagID) const
 
 void TagList::insert(std::unique_ptr<TagType> type)
 {
-    qDebug() << "inserting";
+    //qDebug() << "inserting";
     auto tag = type->getTag();
     auto tagID = type->getTagID();
 

@@ -116,10 +116,11 @@ public:
         sendOnStream(STREAMPORTOUT, Payload(buffer));
     }
     void sendData(Payload data){
-        if(_socket->state() == QAbstractSocket::ConnectedState &&
+        QByteArray encoded = data.encode();
+        if((_socket->state() == QAbstractSocket::ConnectedState) &&
                 _socket->isValid() &&
-                data.encode().length() < 256){
-            _socket->write(data.encode());
+                encoded.count() < 256){
+            _socket->write(encoded);
             qDebug() << "Written";
         }
         else{
@@ -158,7 +159,7 @@ public:
     void inputDataReady(Payload data, int index) override{
         QByteArray encoded = data.encode();
         qDebug() << "Encoded data";
-        sendData(encoded);
+        sendData(data);
     }
 
     Payload getOutputData(int) override{
