@@ -34,6 +34,9 @@ Payload::Payload(QByteArray bytes){
         nFields += 1;
         double number;
         if(stringdata.indexOf(',', index) < 0){
+            if(stringdata.indexOf(';', index) < 0){
+                break;
+            }
             number = stringdata.mid(index, stringdata.indexOf(';', index) - index).toDouble();
             index = stringdata.indexOf(';', index) + 1;
         }
@@ -45,7 +48,7 @@ Payload::Payload(QByteArray bytes){
         vals.append(number);
     }
     //if tag doesn't exist insert it
-    if(taglist.getTagType(tag) == std::shared_ptr<const TagType>(new TagType())){
+    if(!(Project::getInstance().getTagList().tagExists(tag))){
         qDebug() << "Tag not found from payload";
         //set fieldname, fieldunit, fieldscalar
         QVector<QString> fieldnames = QVector<QString>();
@@ -61,7 +64,7 @@ Payload::Payload(QByteArray bytes){
     //set payload fields
     _vals = vals;
     _nFields = nFields;
-    _tagID = taglist.getTagID(tag);
+    _tagID = Project::getInstance().getTagList().getTagID(tag);
     qDebug() << "Done reading in bytes";
 }
 
@@ -131,7 +134,11 @@ QString Payload::toString() const
 {
     //tag: - fieldname0: value0 fieldunit0 (fieldscalar0) - fieldname1: ...
     auto &l = Project::getInstance().getTagList();
-    QString tag = l.getTag(this->getTagID());
+    QString tag;
+    if(this->getTagID() == Payload().getTagID()){
+        qDebug() <<"Unknown tag";
+        return "Unknown tag";
+    }
     QString out;
     out = out + tag + ": ";
     for(int i = 0; i < this->nFields(); i++)

@@ -113,7 +113,10 @@ public:
             qDebug() << "Reading in data from host";
             buffer.append(_socket->readAll());
         }
-        sendOnStream(STREAMPORTOUT, Payload(buffer));
+        Payload output = Payload(buffer);
+        qDebug() << "Payload created from buffer";
+        qDebug() << output.toString();
+        sendOnStream(STREAMPORTOUT, output);
     }
     void sendData(Payload data){
         QByteArray encoded = data.encode();

@@ -67,10 +67,10 @@ public:
     //functions to access data in/out of the node.
     void inputDataReady(Payload data, int index) override
     {
-        qDebug() << "got data:";
-        if(index == 0) qDebug() << data;
+        qDebug() << "got data";
         //print out the data
-        if(index == 0) emit(Project::getInstance().print(data.toString()));
+        QString dataString = data.toString();
+        if(index == 0) emit(Project::getInstance().print(dataString));
     }
 
     Payload getOutputData(int index) override

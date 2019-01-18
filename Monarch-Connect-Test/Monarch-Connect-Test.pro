@@ -108,7 +108,9 @@ SOURCES += \
     ../Monarch-Connect/WidgetControllers/console.cpp \
     ../Monarch-Connect/Models/payloadvismodel.cpp \
     ../Monarch-Connect/Models/socketmodel.cpp \
-    ../Monarch-Connect/Style/socketview.cpp
+    ../Monarch-Connect/Style/socketview.cpp \
+    ../Monarch-Connect/Style/xyvis.cpp \
+    ../Monarch-Connect/Models/gamepadmodel.cpp
 
 HEADERS += \
     monarchconnecttest.h \
@@ -195,7 +197,9 @@ HEADERS += \
     ../Monarch-Connect/WidgetControllers/console.h \
     ../Monarch-Connect/Models/payloadvismodel.h \
     ../Monarch-Connect/Models/socketmodel.h \
-    ../Monarch-Connect/Style/socketview.h
+    ../Monarch-Connect/Style/socketview.h \
+    ../Monarch-Connect/Style/xyvis.h \
+    ../Monarch-Connect/Models/gamepadmodel.h
 
 FORMS += \
         ../Monarch-Connect/mainwindow.ui
