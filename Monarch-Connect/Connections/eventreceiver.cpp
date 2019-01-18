@@ -9,7 +9,7 @@ EventReceiver::EventReceiver(QObject *parent)
 }
 void EventReceiver::setSender(std::shared_ptr<EventSender> sender)
 {
-    qDebug() << "connected: " << sender.get();
+    //qDebug() << "connected: " << sender.get();
     if(_sender.get() != nullptr) //disconnect current sender if there is one
     {
         disconnect(_sender.get(), &EventSender::sent, this, &EventReceiver::place);
@@ -22,7 +22,7 @@ void EventReceiver::setSender(std::shared_ptr<EventSender> sender)
 }
 void EventReceiver::place()
 {
-    qDebug() << "receiving";
+    //qDebug() << "receiving";
     emit(dataReady());
 }
 

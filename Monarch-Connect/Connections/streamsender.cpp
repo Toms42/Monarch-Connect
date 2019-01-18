@@ -18,7 +18,7 @@ StreamSender::StreamSender(QObject *parent) : QObject(parent),
 
 void StreamSender::send(Payload payload)
 {
-    qDebug() << "sending";
+    //qDebug() << "sending";
     emit(sent(payload));
     //seen one more, last time since seeing a payload sent is 0, last value is payload
     const TagList &taglist = Project::getInstance().getTagList();

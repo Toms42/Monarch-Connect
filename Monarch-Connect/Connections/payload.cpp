@@ -135,18 +135,15 @@ QString Payload::toString() const
     //tag: - fieldname0: value0 fieldunit0 (fieldscalar0) - fieldname1: ...
     auto &l = Project::getInstance().getTagList();
     QString tag;
-    if(this->getTagID() == Payload().getTagID()){
-        qDebug() <<"Unknown tag";
-        return "Unknown tag";
-    }
+    tag = l.getTag(getTagID());
     QString out;
-    out = out + tag + ": ";
+    out = tag + ": ";
     for(int i = 0; i < this->nFields(); i++)
     {
         out = out + " - " + this->getFieldName(i)
               + ": " + QString::number(this->getVal(i))
               + " " + this->getFieldUnit(i) +
-              + " (" + QString::number(this->getFieldScalar(i)) + ")";
+              + " (" + QString::number(this->getFieldScalar(i)) + ")\n";
     }
     return out;
 }
@@ -162,7 +159,7 @@ QDebug operator<<(QDebug debug, const Payload &p)
         debug << "-" << p.getFieldName(i)
               << ":" << p.getVal(i)
               << " " << p.getFieldUnit(i)
-              << "(" << p.getFieldScalar(i) <<")";
+              << "(" << p.getFieldScalar(i) <<")\n";
     }
     return debug;
 }

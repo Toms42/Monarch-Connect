@@ -23,7 +23,7 @@ void StreamReceiver::setSender(std::shared_ptr<StreamSender> sender)
 
 void StreamReceiver::place(Payload payload)
 {
-    qDebug() << "receiving";
+    //qDebug() << "receiving";
     emit(dataReady(payload));
 }
 

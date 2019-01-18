@@ -17,7 +17,7 @@ EventSender::EventSender(QObject *parent) : QObject(parent),
 
 void EventSender::send()
 {
-    qDebug() << "sending event";
+    //qDebug() << "sending event";
     emit(sent());
     //update _stats
     _stats.incrTotalSeen();

@@ -12,7 +12,7 @@
 #include <QTimer>
 #include "gamepadmodel.h"
 
-#define REFRESH 100
+#define REFRESH 50
 
 class ConverterModel:public MonarchModel
 {
@@ -80,6 +80,7 @@ public:
         connect(this, &ConverterModel::dataChanged, _view, &ConverterView::setData);
         timer = new QTimer();
         connect(timer, &QTimer::timeout, this, &ConverterModel::sendPayload);
+        emit(statusChanged("Off"));
         timer->start(REFRESH); //call updateTimes() every REFRESH milliseconds
     }
     ~ConverterModel() override{}
@@ -88,12 +89,12 @@ public:
     //basic info about the node:
     QString caption() const  override
     {
-        return "Gamepad to Stream Converter";
+        return "Monarch Converter";
     }
 
     QString name() const  override
     {
-        return "Gamepad to Stream Converter";
+        return "Monarch";
     }
 
     QWidget *embeddedWidget() override
@@ -184,11 +185,16 @@ private slots:
             return;
         }
         else{
-            QVector<double> zeros = QVector<double>();
-            for(int i = 0; i < p.nFields(); i++){
-                zeros.append(0);
-            }
-            Payload out = Payload(p.getTagID(), p.nFields(), zeros);
+            auto contID = Project::getInstance().getTagList().getTagID("Cont");
+            QVector<double> vals(ContFields::_NUMFIELDS);
+            vals[ContFields::AMPLITUDE] = 0;
+            vals[ContFields::ROLL] = 0;
+            vals[ContFields::DIHEDRAL] = 0;
+            vals[ContFields::ANG_V] = 0;
+            vals[ContFields::GLIDE_THRESH] = 0;
+
+
+            Payload out(contID, ContFields::_NUMFIELDS, vals);
             sendOnStream(STREAMPORTOUT, out);
             emit(dataChanged(out.toString()));
         }
