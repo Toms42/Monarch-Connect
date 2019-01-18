@@ -1,4 +1,4 @@
-QT       += core gui testlib opengl network
+QT       += core gui testlib opengl network gamepad
 # Compile with c++14 standard:
 CONFIG += c++14
 
@@ -112,7 +112,8 @@ SOURCES += \
     ../Monarch-Connect/Style/xyvis.cpp \
     ../Monarch-Connect/Models/gamepadmodel.cpp \
     ../Monarch-Connect/Models/convertermodel.cpp \
-    ../Monarch-Connect/Style/converterview.cpp
+    ../Monarch-Connect/Style/converterview.cpp \
+    ../Monarch-Connect/Style/gamepadview.cpp
 
 HEADERS += \
     monarchconnecttest.h \
@@ -203,7 +204,9 @@ HEADERS += \
     ../Monarch-Connect/Style/xyvis.h \
     ../Monarch-Connect/Models/gamepadmodel.h \
     ../Monarch-Connect/Models/convertermodel.h \
-    ../Monarch-Connect/Style/converterview.h
+    ../Monarch-Connect/Style/converterview.h \
+    ../Monarch-Connect/Style/gamepadview.h
+
 
 FORMS += \
         ../Monarch-Connect/mainwindow.ui
