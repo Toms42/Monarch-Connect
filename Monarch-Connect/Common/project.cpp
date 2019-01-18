@@ -12,6 +12,7 @@
 #include "Models/models.hpp"
 #include "Models/testmodel.h"
 #include "Models/payloadvismodel.h"
+#include "Models/socketmodel.h"
 
 Project::Project(QObject *parent)
     : QObject(parent),
@@ -38,6 +39,7 @@ void Project::setup()
     _registry->registerModel<PrinterModel>("Visualizers");
     _registry->registerModel<TestModel>("Test Nodes");
     _registry->registerModel<PayloadVisModel>("Visualizers");
+    _registry->registerModel<SocketModel>("Networking");
 }
 
 void Project::loadFromMemory(QByteArray file)

@@ -24,7 +24,42 @@ Payload::Payload(QUuid tagID, double val)
 Payload::Payload(QByteArray bytes){
     QString stringdata = QString(bytes);
     //assume it's a qbytearray of the payload in toString's output form
-
+    QString tag = stringdata.mid(0,stringdata.indexOf(':'));
+    const TagList& taglist = Project::getInstance().getTagList();
+    QVector <double> vals;
+    int nFields = 0;
+    int index = stringdata.indexOf(':') + 1;
+    while(index < stringdata.indexOf(';')){
+        nFields += 1;
+        double number;
+        if(stringdata.indexOf(',', index) < 0){
+            number = stringdata.mid(index, stringdata.indexOf(';', index) - index).toDouble();
+            index = stringdata.indexOf(';', index) + 1;
+        }
+        else{
+            number = stringdata.mid(index, stringdata.indexOf(',', index) - index).toDouble();
+            index = stringdata.indexOf(',', index) + 1;
+        }
+        //append the number to values
+        vals.append(number);
+    }
+    //if tag doesn't exist insert it
+    if(taglist.getTagType(tag) == std::shared_ptr<const TagType>(new TagType())){
+        //set fieldname, fieldunit, fieldscalar
+        QVector<QString> fieldnames = QVector<QString>();
+        fieldnames.append("Field");
+        QVector<double> fieldscalars = QVector<double>();
+        fieldscalars.append(1);
+        QVector<QString> fieldunits = QVector<QString>();
+        fieldunits.append("Unit");
+        TagType *newtag = new TagType(tag, nFields, fieldnames,
+                                      fieldscalars, fieldunits);
+        Project::getInstance().getTagList().insert(std::unique_ptr<TagType>(newtag));
+    }
+    //set payload fields
+    _vals = vals;
+    _nFields = nFields;
+    _tagID = taglist.getTagID(tag);
 }
 
 Payload::Payload()
@@ -42,11 +77,10 @@ QByteArray Payload::encode() const{
         }
         payloadString += QString::number(this->getValDirect(i));
     }
-    payloadString += "\r\n";
+    payloadString += ";\r\n";
     QByteArray output = payloadString.toUtf8();
     output.append('\0');
-    if(output.length() < 256) return output;
-    else return QByteArray();
+    return output;
 }
 
 QUuid Payload::getTagID() const

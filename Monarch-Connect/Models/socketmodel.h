@@ -4,35 +4,120 @@
 #include <QObject>
 #include "QDebug"
 #include "Models/monarchmodel.h"
+#include "Common/config.h"
 #include <nodes/NodeDataModel>
 #include "Common/project.h"
 #include <QDataStream>
 #include <QtNetwork>
 #include <QTcpSocket>
 #include <QPushButton>
+#include <QLineEdit>
 
-class SocketModel : public MonarchModel
+class Worker:public QObject{
+    Q_OBJECT
+private:
+    QTcpSocket &_socket;
+    Payload _data;
+public:
+    explicit Worker(QTcpSocket &socket):_socket(socket), _data(Payload()){
+        _socket.connectToHost(HOST, PORT);
+        qDebug() << "Connecting to " + QString(HOST);
+        if(_socket.waitForConnected()){
+            qDebug() << "Connected!";
+        }else{
+            qDebug() << "Failed to connect";
+            qDebug() << _socket.errorString();
+        }
+        //read data when ready to read
+        connect(&_socket, &QIODevice::readyRead, this, &Worker::readData);
+    }
+    ~Worker() override{
+        if(_socket.state() != QAbstractSocket::ConnectedState) return;
+        _socket.disconnectFromHost();
+    }
+signals:
+    void dataArrived(QByteArray data);
+public slots:
+    void readData(){
+        QByteArray buffer = QByteArray();
+        while(_socket.bytesAvailable() > 0){
+            qDebug() << "Reading in data from host";
+            buffer.append(_socket.readAll());
+        }
+        emit(dataArrived(buffer));
+    }
+    void sendData(QByteArray data){
+        if(_socket.state() == QAbstractSocket::ConnectedState &&
+                data.length() < 256){
+            _socket.write(data);
+            qDebug() << "Waiting for payload to write";
+            if(_socket.waitForBytesWritten()){
+                qDebug() << "Bytes written!";
+            }
+            else{
+                qDebug() << "Failed to write";
+            }
+        }
+    }
+};
+
+
+class SocketModel:public MonarchModel
 {
     Q_OBJECT
 private:
     QTcpSocket *_socket;
+    QPushButton *_button;
     enum InPortTypes{
         STREAMPORTIN = 0,
         _NUMPORTSIN
-    };
-
+     };
     enum OutPortTypes{
         STREAMPORTOUT = 0,
         _NUMPORTSOUT
      };
-public:
-    explicit SocketModel():MonarchModel(),_socket(new QTcpSocket(this)){
-        connectToHost("172.20.10.2", 80);
+    enum ConnectionStatus{
+        CONNECTED = 0,
+        DISCONNECTED
+    };
+    ConnectionStatus _status;
 
+public:
+    explicit SocketModel():MonarchModel(),
+    _socket(nullptr), _button(new QPushButton("Disconnected")){
+        setup();
+        _socket = new QTcpSocket(this);
+        connect(_socket, &QIODevice::readyRead, this, &SocketModel::readData);
+        connect(_button, &QPushButton::pressed, this, &SocketModel::changeButton);
+        connect(_socket, &QTcpSocket::connected, this, &SocketModel::connected);
+        connect(_socket, &QTcpSocket::disconnected, this, &SocketModel::disconnected);
     }
 
     ~SocketModel() override{
-        disconnectFromHost();
+    }
+
+    void readData(){
+        if(_status == DISCONNECTED) return;
+        QByteArray buffer = QByteArray();
+        while(_socket->bytesAvailable() > 0){
+            qDebug() << "Reading in data from host";
+            buffer.append(_socket->readAll());
+        }
+        sendOnStream(STREAMPORTOUT, Payload(buffer));
+    }
+    void sendData(Payload data){
+        if(_status == DISCONNECTED) return;
+        if(_socket->state() == QAbstractSocket::ConnectedState &&
+                data.encode().length() < 256){
+            _socket->write(data.encode());
+            qDebug() << "Waiting for payload to write";
+            if(_socket->waitForBytesWritten()){
+                qDebug() << "Bytes written!";
+            }
+            else{
+                qDebug() << "Failed to write";
+            }
+        }
     }
 
     QString caption() const override{
@@ -44,13 +129,12 @@ public:
     }
 
     QWidget *embeddedWidget() override{
-        return nullptr;
+        return _button;
     }
 
     QWidget *configWidget() override{
         return nullptr;
     }
-
 
     ////WHAT TO INSERT HERE?????
     QJsonObject saveData() const override{
@@ -64,7 +148,7 @@ public:
     }
 
     void inputDataReady(Payload data, int index) override{
-        writeData(data);
+        sendData(data.encode());
     }
 
     Payload getOutputData(int) override{
@@ -74,7 +158,7 @@ public:
     //get arrays for input and output ports
     QVector<MonarchInputPort> getInputPortArray()  const override{
         QVector<MonarchInputPort> ports(_NUMPORTSIN);
-        ports[STREAMPORTIN] = {PortType::STREAM, QString("input"), -1};
+        ports[STREAMPORTIN] = {PortType::STREAM, QString("input stream"), -1};
         return ports;
     }
 
@@ -84,38 +168,32 @@ public:
         ports[STREAMPORTOUT] = {PortType::STREAM, QString("output stream"), -1};
         return ports;
     }
-
-    //returns whether the socket connected to host successfully
-    bool connectToHost(QString host, quint16 port){
-        _socket->connectToHost(host, port);
-        return _socket->waitForConnected();
-    }
-
-    void disconnectFromHost(){
-        if(_socket->state() != QAbstractSocket::ConnectedState) return;
-        return _socket->disconnectFromHost();
-    }
-
-    //returns whether the data wrote successfully
-    bool writeData(Payload payload){
-        if(_socket->state() == QAbstractSocket::ConnectedState){
-            _socket->write(payload.encode());
-            return _socket->waitForBytesWritten();
-        }
-        else return false;
-    }
-
-    QByteArray readData(){
-        QByteArray buffer = QByteArray();
-        while(_socket->bytesAvailable() > 0){
-            buffer.append(_socket->readAll());
-        }
-        return buffer;
-    }
-
-signals:
-
 public slots:
+    void connected(){
+        qDebug() << "Connected!";
+        _button->setText("Connected");
+        _status = CONNECTED;
+    }
+    void disconnected(){
+        _socket->disconnectFromHost();
+        _button->setText("Disconnected");
+        _status = DISCONNECTED;
+    }
+    void changeButton(){
+        switch(_status){
+        case CONNECTED:{
+            _socket->disconnectFromHost();
+            break;
+        }
+        case DISCONNECTED:{
+            QString host = HOST;
+            quint16 port = PORT;
+            _socket->connectToHost(host, port);
+            qDebug() << "Connecting to " + QString(HOST);
+        }
+        }
+    }
+signals:
 };
 
 #endif // SOCKETMODEL_H

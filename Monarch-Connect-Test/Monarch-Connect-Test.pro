@@ -1,4 +1,4 @@
-QT       += core gui testlib opengl
+QT       += core gui testlib opengl network
 # Compile with c++14 standard:
 CONFIG += c++14
 
@@ -105,7 +105,8 @@ SOURCES += \
     ../Monarch-Connect/WidgetControllers/statswidgetcontroller.cpp \
     ../Monarch-Connect/Models/testmodel.cpp \
     ../Monarch-Connect/WidgetControllers/console.cpp \
-    ../Monarch-Connect/Models/payloadvismodel.cpp
+    ../Monarch-Connect/Models/payloadvismodel.cpp \
+    ../Monarch-Connect/Models/socketmodel.cpp
 
 HEADERS += \
     monarchconnecttest.h \
@@ -190,7 +191,8 @@ HEADERS += \
     ../Monarch-Connect/WidgetControllers/statswidgetcontroller.h \
     ../Monarch-Connect/Models/testmodel.h \
     ../Monarch-Connect/WidgetControllers/console.h \
-    ../Monarch-Connect/Models/payloadvismodel.h
+    ../Monarch-Connect/Models/payloadvismodel.h \
+    ../Monarch-Connect/Models/socketmodel.h
 
 FORMS += \
         ../Monarch-Connect/mainwindow.ui
