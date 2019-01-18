@@ -18,6 +18,7 @@ class ConverterModel:public MonarchModel
 {
     Q_OBJECT
 private:
+    double _max,_min;
     bool dataReady;
     Payload toSend;
     QTimer *timer;
@@ -74,10 +75,13 @@ public:
         t.insert(std::move(type));
         toSend = Payload();
         dataReady = false;
+        _max = 1;
+        _min = -1;
         setup();
         connect(this, &ConverterModel::statusChanged, _view, &ConverterView::setStatus);
         connect(_view, &ConverterView::pressed, this, &ConverterModel::changeStatus);
         connect(this, &ConverterModel::dataChanged, _view, &ConverterView::setData);
+        connect(_view, &ConverterView::rangePressed, this, &ConverterModel::setRange);
         timer = new QTimer();
         connect(timer, &QTimer::timeout, this, &ConverterModel::sendPayload);
         emit(statusChanged("Off"));
@@ -148,6 +152,11 @@ public:
     }
 
 private:
+    //scale to new range
+    double scaleValue(double min, double max, double input){
+        double slope = (max-min)/2;
+        return min + slope*(input - min);
+    }
     void convertAndSend(Payload p)
     {
         auto gpID = Project::getInstance().getTagList().getTagID("Gamepad");
@@ -161,6 +170,13 @@ private:
         vals[ContFields::ANG_V] = p.getVal(GamepadModel::GamepadFields::LEFTY) + 1;
         vals[ContFields::GLIDE_THRESH] = 5;
 
+        //scale values
+        vals[ContFields::AMPLITUDE] = scaleValue(_min,_max,vals[ContFields::AMPLITUDE]);
+        vals[ContFields::ROLL] = scaleValue(_min,_max,vals[ContFields::ROLL]);
+        vals[ContFields::DIHEDRAL] = scaleValue(_min,_max,vals[ContFields::DIHEDRAL]);
+        vals[ContFields::ANG_V] = scaleValue(_min,_max,vals[ContFields::ANG_V]);
+        vals[ContFields::GLIDE_THRESH] = scaleValue(_min,_max,vals[ContFields::GLIDE_THRESH]);
+
 
         Payload out(contID, ContFields::_NUMFIELDS, vals);
         sendOnStream(STREAMPORTOUT, out);
@@ -169,6 +185,15 @@ private:
 signals:
     void statusChanged(QString data);
     void dataChanged(QString data);
+public slots:
+    void setRange(){
+        _max = _view->getMax().toDouble();
+        _min = _view->getMin().toDouble();
+        if(_min >= _max){ //if it's invalid go to default
+            _max = 1;
+            _min = -1;
+        }
+    }
 private slots:
     void sendPayload(){
         if(!dataReady){

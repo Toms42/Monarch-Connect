@@ -15,8 +15,18 @@ ConverterView::ConverterView(QWidget *parent) : QWidget(parent)
     layout->addRow(new QLabel(tr("Status:")), _status);
     layout->addRow(new QLabel(tr("Data:")), _data);
     layout->addRow(_power);
+    //range
+    _min = new QLineEdit();
+    _max = new QLineEdit();
+    _min->setPlaceholderText("-1.0");
+    _max->setPlaceholderText("1.0");
+    _range = new QPushButton("Set sensitivity");
+    layout->addRow(new QLabel(tr("Min:")), _min);
+    layout->addRow(new QLabel(tr("Max:")), _max);
+    layout->addRow(_range);
     _horizontalGroupBox->setLayout(layout);
     connect(_power, &QPushButton::pressed, this, &ConverterView::pressed);
+    connect(_range, &QPushButton::pressed, this, &ConverterView::rangePressed);
 }
 
 void ConverterView::setData(QString data){
