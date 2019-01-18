@@ -83,13 +83,15 @@ private:
     ConnectionStatus _status;
 
 public:
-    explicit SocketModel():MonarchModel(),
+    explicit SocketModel():MonarchModel(),_status(DISCONNECTED),
     _socket(nullptr), _button(new QPushButton("Disconnected")){
         setup();
         _socket = new QTcpSocket(this);
         connect(_socket, &QIODevice::readyRead, this, &SocketModel::readData);
         connect(_button, &QPushButton::pressed, this, &SocketModel::changeButton);
         connect(_socket, &QTcpSocket::connected, this, &SocketModel::connected);
+        connect(_socket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error),
+        this, &SocketModel::error);
         connect(_socket, &QTcpSocket::disconnected, this, &SocketModel::disconnected);
     }
 
@@ -174,22 +176,27 @@ public slots:
         _button->setText("Connected");
         _status = CONNECTED;
     }
+    void error(QAbstractSocket::SocketError socketError){
+        qDebug() << "Error connecting";
+    }
     void disconnected(){
-        _socket->disconnectFromHost();
         _button->setText("Disconnected");
         _status = DISCONNECTED;
     }
     void changeButton(){
         switch(_status){
         case CONNECTED:{
+            qDebug() << "Pressed disconnect!";
             _socket->disconnectFromHost();
             break;
         }
         case DISCONNECTED:{
             QString host = HOST;
             quint16 port = PORT;
+            qDebug() << "Pressed connect!";
             _socket->connectToHost(host, port);
             qDebug() << "Connecting to " + QString(HOST);
+            break;
         }
         }
     }
