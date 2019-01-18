@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui opengl network
+QT       += core gui opengl network gamepad
 
 # Compile with c++14 standard:
 CONFIG += c++14 optimize_full
@@ -86,7 +86,9 @@ SOURCES += \
     WidgetControllers/console.cpp \
     Models/payloadvismodel.cpp \
     Models/socketmodel.cpp \
-    Style/socketview.cpp
+    Style/socketview.cpp \
+    Models/gamepadmodel.cpp \
+    Style/xyvis.cpp
 
 HEADERS += \
     Models/models.hpp \
@@ -175,7 +177,9 @@ HEADERS += \
     WidgetControllers/console.h \
     Models/payloadvismodel.h \
     Models/socketmodel.h \
-    Style/socketview.h
+    Style/socketview.h \
+    Models/gamepadmodel.h \
+    Style/xyvis.h
 
 FORMS += \
         mainwindow.ui \

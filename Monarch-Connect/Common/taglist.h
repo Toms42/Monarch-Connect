@@ -17,6 +17,7 @@ public:
 
     QUuid getTagID(QString tag) const;
     QString getTag(QUuid tagID) const;
+    bool tagExists(QString tag) const;
 
     void insert(std::unique_ptr<TagType> type);
     void update(std::unique_ptr<TagType> type);

@@ -13,6 +13,7 @@
 #include "Models/testmodel.h"
 #include "Models/payloadvismodel.h"
 #include "Models/socketmodel.h"
+#include "Models/gamepadmodel.h"
 
 Project::Project(QObject *parent)
     : QObject(parent),
@@ -40,6 +41,7 @@ void Project::setup()
     _registry->registerModel<TestModel>("Test Nodes");
     _registry->registerModel<PayloadVisModel>("Visualizers");
     _registry->registerModel<SocketModel>("Networking");
+    _registry->registerModel<GamepadModel>("Inputs");
 }
 
 void Project::loadFromMemory(QByteArray file)

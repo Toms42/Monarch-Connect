@@ -26,6 +26,11 @@ QUuid TagList::getTagID(QString tag) const
     return _tags.value(tag);
 }
 
+bool TagList::tagExists(QString tag) const
+{
+    return _tags.contains(tag);
+}
+
 QString TagList::getTag(QUuid tagID) const
 {
     return _tagTypes.value(tagID)->getTag();
