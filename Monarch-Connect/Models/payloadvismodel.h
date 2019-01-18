@@ -53,7 +53,7 @@ public:
         return test;
     }
 
-    void loadData(QJsonObject const& modelJson) const override
+    void loadData(QJsonObject const& modelJson) override
     {
         qDebug() << modelJson["test"].toString();
     }

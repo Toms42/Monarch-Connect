@@ -151,12 +151,13 @@ public:
     QJsonObject saveData() const override{
         QJsonObject data;
         data["host"] = _host;
-        data["port"] = QString::number(_port);
+        data["port"] = _port;
         return data;
     }
 
-    void loadData(QJsonObject const& modelJson) const override{
-        qDebug() << modelJson["test"].toString();
+    void loadData(QJsonObject const& modelJson) override{
+        _host = modelJson["host"].toString();
+        _port = modelJson["port"].toInt();
     }
 
     void inputDataReady(Payload data, int index) override{

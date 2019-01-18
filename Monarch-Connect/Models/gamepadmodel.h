@@ -9,8 +9,8 @@
 #include "Common/taglist.h"
 #include <QPushButton>
 #include "Style/gamepadview.h"
-#include <QGamepad>
-#include <QGamepadManager>
+#include "gamepadbackend/gamepad.h"
+#include "gamepadbackend/gamepadmanager.h"
 
 class GamepadModel : public MonarchModel
 {
@@ -75,6 +75,7 @@ public:
                         QVector<double>(GamepadFields::_NUMFIELDS, 0));
 
         _view = new GamepadView();
+        _gpmanager = new QGamepadManager();
 
         setup();
 
@@ -117,11 +118,11 @@ private slots:
     {
         qDebug() << "scanning usb controllers";
         _view->selector()->clear();
-        QList<int> gps = QGamepadManager::instance()->connectedGamepads();
+        QList<int> gps = _gpmanager->getConnectedGamepads();
         for(auto id : gps)
         {
             qDebug() << "adding one";
-            QString name = QGamepad(id, this).name();
+            QString name = QGamepad(id, this, _gpmanager).getName();
             if(name == "")
             {
                 name = QString("USB Controller %1").arg(QString::number(id));
@@ -133,8 +134,8 @@ private slots:
     void onSet()
     {
         int id = _view->selector()->currentData().toInt();
-        _gp = new QGamepad(id, this);
-        if(_gp == nullptr || !QGamepadManager::instance()->isGamepadConnected(id) || !_gp->isConnected())
+        _gp = new QGamepad(id, this,  _gpmanager);
+        if(_gp == nullptr || !_gpmanager->isGamepadConnected(id) || !_gp->isConnected())
         {
             _gp = nullptr;
             _view->connectedID()->setText("N/A");
@@ -143,14 +144,15 @@ private slots:
             sendZero();
             return;
         }
-        _view->connectedID()->setText(QString::number(_gp->deviceId()));
-        _view->connectedName()->setText(_gp->name());
+        _view->connectedID()->setText(QString::number(_gp->getDeviceId()));
+        _view->connectedName()->setText(_gp->getName());
         _pollTimer.start(20);
     }
 
     void sample()
     {
-        if(_gp == nullptr || !QGamepadManager::instance()->isGamepadConnected(_gp->deviceId()) || !_gp->isConnected())
+        //qDebug() << "sampling";
+        if(_gp == nullptr || !_gpmanager->isGamepadConnected(_gp->getDeviceId()) || !_gp->isConnected())
         {
             _gp = nullptr;
             _view->connectedID()->setText("N/A");
@@ -160,20 +162,20 @@ private slots:
             return;
         }
         QVector<double> newVals(GamepadFields::_NUMFIELDS);
-        newVals[LEFTX] = _gp->axisLeftX();
-        newVals[LEFTY] = _gp->axisLeftY();
-        newVals[RIGHTX] = _gp->axisRightX();
-        newVals[RIGHTY] = _gp->axisRightY();
-        newVals[BUTTONL1] = _gp->buttonL1() ? 1 : 0;
-        newVals[BUTTONL2] = _gp->buttonL2() ? 1 : 0;
-        newVals[BUTTONL3] = _gp->buttonL3() ? 1 : 0;
-        newVals[BUTTONR1] = _gp->buttonR1() ? 1 : 0;
-        newVals[BUTTONR2] = _gp->buttonR2() ? 1 : 0;
-        newVals[BUTTONR3] = _gp->buttonR3() ? 1 : 0;
-        newVals[BUTTONA] = _gp->buttonA() ? 1 : 0;
-        newVals[BUTTONB] = _gp->buttonB() ? 1 : 0;
-        newVals[BUTTONX] = _gp->buttonX() ? 1 : 0;
-        newVals[BUTTONY] = _gp->buttonY() ? 1 : 0;
+        newVals[LEFTX] = _gp->getAxisLeftX();
+        newVals[LEFTY] = _gp->getAxisLeftY();
+        newVals[RIGHTX] = _gp->getAxisRightX();
+        newVals[RIGHTY] = _gp->getAxisRightY();
+        newVals[BUTTONL1] = _gp->getButtonL1() ? 1 : 0;
+        newVals[BUTTONL2] = _gp->getButtonL2() ? 1 : 0;
+        newVals[BUTTONL3] = _gp->getButtonL3() ? 1 : 0;
+        newVals[BUTTONR1] = _gp->getButtonR1() ? 1 : 0;
+        newVals[BUTTONR2] = _gp->getButtonR2() ? 1 : 0;
+        newVals[BUTTONR3] = _gp->getButtonR3() ? 1 : 0;
+        newVals[BUTTONA] = _gp->getButtonA() ? 1 : 0;
+        newVals[BUTTONB] = _gp->getButtonB() ? 1 : 0;
+        newVals[BUTTONX] = _gp->getButtonX() ? 1 : 0;
+        newVals[BUTTONY] = _gp->getButtonY() ? 1 : 0;
 
         _view->leftVis()->setCoords(newVals[LEFTX], newVals[LEFTY]);
         _view->rightVis()->setCoords(newVals[RIGHTX], newVals[RIGHTY]);
@@ -193,7 +195,7 @@ public:
         return test;
     }
 
-    void loadData(QJsonObject const& modelJson) const override
+    void loadData(QJsonObject const& modelJson) override
     {
         qDebug() << modelJson["test"].toString();
     }
@@ -237,6 +239,7 @@ private:
     }
     Payload _vals;
     GamepadView *_view;
+    QGamepadManager *_gpmanager;
     QGamepad *_gp = nullptr;
     QTimer _pollTimer;
 };

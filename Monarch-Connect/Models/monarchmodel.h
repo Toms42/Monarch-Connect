@@ -64,7 +64,7 @@ public:
 public:
     //load/save your internal data in the node, using json.
     virtual QJsonObject saveData() const = 0;
-    virtual void loadData(QJsonObject const& modelJson) const = 0;
+    virtual void loadData(QJsonObject const& modelJson) = 0;
 
     //functions to access data in/out of the node.
     virtual void inputDataReady(Payload data, int index) = 0;

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui opengl network gamepad
+QT       += core gui opengl network
 
 # Compile with c++14 standard:
 CONFIG += c++14 optimize_full
@@ -91,7 +91,11 @@ SOURCES += \
     Style/xyvis.cpp \
     Style/gamepadview.cpp \
     Models/convertermodel.cpp \
-    Style/converterview.cpp
+    Style/converterview.cpp \
+    gamepadbackend/gamepad.cpp \
+    gamepadbackend/gamepadbackend.cpp \
+    gamepadbackend/gamepadmanager.cpp \
+    gamepadbackend/xinputbackend.cpp
 
 HEADERS += \
     Models/models.hpp \
@@ -185,7 +189,11 @@ HEADERS += \
     Style/xyvis.h \
     Models/convertermodel.h \
     Style/converterview.h \
-    Style/gamepadview.h
+    Style/gamepadview.h \
+    gamepadbackend/gamepad.h \
+    gamepadbackend/gamepadbackend.h \
+    gamepadbackend/gamepadmanager.h \
+    gamepadbackend/xinputbackend.h
 
 FORMS += \
         mainwindow.ui \

@@ -10,6 +10,8 @@
 #include <QPushButton>
 #include "Style/converterview.h"
 #include <QTimer>
+#include "gamepadmodel.h"
+
 #define REFRESH 100
 
 class ConverterModel:public MonarchModel
@@ -35,7 +37,41 @@ private:
     Status _status;
 
 public:
+    enum ContFields{
+        AMPLITUDE,
+        DIHEDRAL,
+        ROLL,
+        ANG_V,
+        GLIDE_THRESH,
+        _NUMFIELDS
+    };
+
+private:
+    QVector<QString> contFieldNames = {
+        "Amplitude",
+        "Dihedral",
+        "Roll",
+        "Angular Velocity",
+        "Glide Threshold"
+    };
+    QVector<QString> contFieldUnits = {
+        "Degrees",
+        "Degrees",
+        "Degrees",
+        "Degrees per Second",
+        "Degrees per Second"
+    };
+    QVector<double> contFieldScalars = QVector<double>(ContFields::_NUMFIELDS, 10);
+
+public:
     ConverterModel() : MonarchModel(), _view(new ConverterView()), _status(OFF){
+
+        auto &t = Project::getInstance().getTagList();
+        auto type = std::make_unique<TagType>("Cont", ContFields::_NUMFIELDS,
+                                              contFieldNames,
+                                              contFieldScalars,
+                                              contFieldUnits);
+        t.insert(std::move(type));
         toSend = Payload();
         dataReady = false;
         setup();
@@ -78,7 +114,7 @@ public:
         return test;
     }
 
-    void loadData(QJsonObject const& modelJson) const override
+    void loadData(QJsonObject const& modelJson) override
     {
         qDebug() << modelJson["test"].toString();
     }
@@ -99,27 +135,51 @@ public:
     QVector<MonarchInputPort> getInputPortArray()  const override
     {
         return QVector<MonarchModel::MonarchInputPort> {
-            {PortType::PAYLOAD, QString("controller input"), -1}
+            {PortType::PAYLOAD, QString("x360"), -1}
         };
     }
 
     QVector<MonarchOutputPort> getOutputPortArray()  const override
     {
         return QVector<MonarchModel::MonarchOutputPort> {
-            {PortType::STREAM, QString("stream to uart"), -1}
+            {PortType::STREAM, QString("stream"), -1}
         };
     }
+
+private:
+    void convertAndSend(Payload p)
+    {
+        auto gpID = Project::getInstance().getTagList().getTagID("Gamepad");
+        if(p.getTagID() != gpID) return;
+
+        auto contID = Project::getInstance().getTagList().getTagID("Cont");
+        QVector<double> vals(ContFields::_NUMFIELDS);
+        vals[ContFields::AMPLITUDE] = p.getVal(GamepadModel::GamepadFields::RIGHTY) + 1;
+        vals[ContFields::ROLL] = p.getVal(GamepadModel::GamepadFields::RIGHTX) + 1;
+        vals[ContFields::DIHEDRAL] = p.getVal(GamepadModel::GamepadFields::LEFTX);
+        vals[ContFields::ANG_V] = p.getVal(GamepadModel::GamepadFields::LEFTY) + 1;
+        vals[ContFields::GLIDE_THRESH] = 5;
+
+
+        Payload out(contID, ContFields::_NUMFIELDS, vals);
+        sendOnStream(STREAMPORTOUT, out);
+    }
+
 signals:
     void statusChanged(QString data);
     void dataChanged(QString data);
-public slots:
+private slots:
     void sendPayload(){
         if(!dataReady){
             return;
         }
         Payload p = toSend;
+        if(p.getTagID() != Project::getInstance().getTagList().getTagID("Gamepad"))
+        {
+            return;
+        }
         if(_status == ON){
-            sendOnStream(STREAMPORTOUT, p);
+            convertAndSend(p);
             emit(dataChanged(p.toString()));
             return;
         }
