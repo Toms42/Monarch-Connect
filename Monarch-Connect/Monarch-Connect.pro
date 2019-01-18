@@ -85,7 +85,8 @@ SOURCES += \
     Models/testmodel.cpp \
     WidgetControllers/console.cpp \
     Models/payloadvismodel.cpp \
-    Models/socketmodel.cpp
+    Models/socketmodel.cpp \
+    Style/socketview.cpp
 
 HEADERS += \
     Models/models.hpp \
@@ -173,7 +174,8 @@ HEADERS += \
     Models/testmodel.h \
     WidgetControllers/console.h \
     Models/payloadvismodel.h \
-    Models/socketmodel.h
+    Models/socketmodel.h \
+    Style/socketview.h
 
 FORMS += \
         mainwindow.ui \

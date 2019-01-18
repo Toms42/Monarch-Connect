@@ -12,6 +12,7 @@
 #include <QTcpSocket>
 #include <QPushButton>
 #include <QLineEdit>
+#include "Style/socketview.h"
 
 class Worker:public QObject{
     Q_OBJECT
@@ -20,8 +21,8 @@ private:
     Payload _data;
 public:
     explicit Worker(QTcpSocket &socket):_socket(socket), _data(Payload()){
-        _socket.connectToHost(HOST, PORT);
-        qDebug() << "Connecting to " + QString(HOST);
+        //_socket.connectToHost(HOST, PORT);
+        //qDebug() << "Connecting to " + QString(HOST);
         if(_socket.waitForConnected()){
             qDebug() << "Connected!";
         }else{
@@ -67,7 +68,9 @@ class SocketModel:public MonarchModel
     Q_OBJECT
 private:
     QTcpSocket *_socket;
-    QPushButton *_button;
+    SocketView *_view;
+    QString _host;
+    quint16 _port;
     enum InPortTypes{
         STREAMPORTIN = 0,
         _NUMPORTSIN
@@ -84,11 +87,11 @@ private:
 
 public:
     explicit SocketModel():MonarchModel(),_status(DISCONNECTED),
-    _socket(nullptr), _button(new QPushButton("Disconnected")){
+    _socket(nullptr), _view(new SocketView()), _host("hostname"),_port(0){
         setup();
         _socket = new QTcpSocket(this);
         connect(_socket, &QIODevice::readyRead, this, &SocketModel::readData);
-        connect(_button, &QPushButton::pressed, this, &SocketModel::changeButton);
+        connect(_view, &SocketView::pressed, this, &SocketModel::changeFields);
         connect(_socket, &QTcpSocket::connected, this, &SocketModel::connected);
         connect(_socket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error),
         this, &SocketModel::error);
@@ -99,7 +102,12 @@ public:
     }
 
     void readData(){
-        if(_status == DISCONNECTED) return;
+        if(_status == DISCONNECTED ||
+                _socket->state() != QAbstractSocket::ConnectedState ||
+                !(_socket->isValid())){
+            qDebug() << "not connected so not reading";
+            return;
+        }
         QByteArray buffer = QByteArray();
         while(_socket->bytesAvailable() > 0){
             qDebug() << "Reading in data from host";
@@ -108,17 +116,14 @@ public:
         sendOnStream(STREAMPORTOUT, Payload(buffer));
     }
     void sendData(Payload data){
-        if(_status == DISCONNECTED) return;
         if(_socket->state() == QAbstractSocket::ConnectedState &&
+                _socket->isValid() &&
                 data.encode().length() < 256){
             _socket->write(data.encode());
-            qDebug() << "Waiting for payload to write";
-            if(_socket->waitForBytesWritten()){
-                qDebug() << "Bytes written!";
-            }
-            else{
-                qDebug() << "Failed to write";
-            }
+            qDebug() << "Written";
+        }
+        else{
+            qDebug() << "not connected so not sending";
         }
     }
 
@@ -131,7 +136,7 @@ public:
     }
 
     QWidget *embeddedWidget() override{
-        return _button;
+        return _view;
     }
 
     QWidget *configWidget() override{
@@ -141,7 +146,8 @@ public:
     ////WHAT TO INSERT HERE?????
     QJsonObject saveData() const override{
         QJsonObject data;
-        data["test"] = "test data";
+        data["host"] = _host;
+        data["port"] = QString::number(_port);
         return data;
     }
 
@@ -150,7 +156,9 @@ public:
     }
 
     void inputDataReady(Payload data, int index) override{
-        sendData(data.encode());
+        QByteArray encoded = data.encode();
+        qDebug() << "Encoded data";
+        sendData(encoded);
     }
 
     Payload getOutputData(int) override{
@@ -173,17 +181,25 @@ public:
 public slots:
     void connected(){
         qDebug() << "Connected!";
-        _button->setText("Connected");
+        _view->setStatus("Connected");
         _status = CONNECTED;
     }
     void error(QAbstractSocket::SocketError socketError){
+        _view->setStatus("Error connecting");
+        _status = DISCONNECTED;
         qDebug() << "Error connecting";
     }
     void disconnected(){
-        _button->setText("Disconnected");
+        _view->setStatus("Disconnected");
         _status = DISCONNECTED;
     }
-    void changeButton(){
+    void changeFields(){
+        _host = _view->getHost();
+        QString str = _view->getPort();
+        QTextStream ts(&str);
+        ts >> _port;
+        qDebug() << "Host: " + _host;
+        qDebug() << "Port: " + str;
         switch(_status){
         case CONNECTED:{
             qDebug() << "Pressed disconnect!";
@@ -191,15 +207,22 @@ public slots:
             break;
         }
         case DISCONNECTED:{
-            QString host = HOST;
-            quint16 port = PORT;
+            QString host = _host;
+            quint16 port = _port;
             qDebug() << "Pressed connect!";
+            if(_socket->state() == QAbstractSocket::HostLookupState ||
+                    _socket->state() == QAbstractSocket::ConnectingState){
+                qDebug() << "still looking, so will return";
+                return;
+            }
             _socket->connectToHost(host, port);
-            qDebug() << "Connecting to " + QString(HOST);
+            _view->setStatus("Connecting...");
+            qDebug() << "Connecting to " + QString(host);
             break;
         }
         }
     }
+
 signals:
 };
 

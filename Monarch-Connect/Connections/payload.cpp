@@ -22,6 +22,7 @@ Payload::Payload(QUuid tagID, double val)
 }
 
 Payload::Payload(QByteArray bytes){
+    qDebug() << "Reading in bytes";
     QString stringdata = QString(bytes);
     //assume it's a qbytearray of the payload in toString's output form
     QString tag = stringdata.mid(0,stringdata.indexOf(':'));
@@ -45,6 +46,7 @@ Payload::Payload(QByteArray bytes){
     }
     //if tag doesn't exist insert it
     if(taglist.getTagType(tag) == std::shared_ptr<const TagType>(new TagType())){
+        qDebug() << "Tag not found from payload";
         //set fieldname, fieldunit, fieldscalar
         QVector<QString> fieldnames = QVector<QString>();
         fieldnames.append("Field");
@@ -60,6 +62,7 @@ Payload::Payload(QByteArray bytes){
     _vals = vals;
     _nFields = nFields;
     _tagID = taglist.getTagID(tag);
+    qDebug() << "Done reading in bytes";
 }
 
 Payload::Payload()
@@ -69,7 +72,7 @@ Payload::Payload()
 
 QByteArray Payload::encode() const{
     auto &l = Project::getInstance().getTagList();
-    QString payloadString = l.getTag(this->getTagID());;
+    QString payloadString = l.getTag(getTagID());
     payloadString = payloadString.toUpper() + ":";
     for(int i = 0; i < this->nFields(); i++){
         if(i != 0){
@@ -78,6 +81,7 @@ QByteArray Payload::encode() const{
         payloadString += QString::number(this->getValDirect(i));
     }
     payloadString += ";\r\n";
+    qDebug() << "Encoded payload: " + payloadString;
     QByteArray output = payloadString.toUtf8();
     output.append('\0');
     return output;

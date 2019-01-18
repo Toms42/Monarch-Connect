@@ -46,6 +46,7 @@ INCLUDEPATH += \
     "../Monarch-Connect/resources" \
     "../Monarch-Connect" \
     "../Monarch-Connect/Models" \
+    "../Monarch-Connect/Style" \
     "../Monarch-Connect/Common" \
     "../Monarch-Connect/Connections" \
     "../Monarch-Connect/Nodeeditor" \
@@ -106,7 +107,8 @@ SOURCES += \
     ../Monarch-Connect/Models/testmodel.cpp \
     ../Monarch-Connect/WidgetControllers/console.cpp \
     ../Monarch-Connect/Models/payloadvismodel.cpp \
-    ../Monarch-Connect/Models/socketmodel.cpp
+    ../Monarch-Connect/Models/socketmodel.cpp \
+    ../Monarch-Connect/Style/socketview.cpp
 
 HEADERS += \
     monarchconnecttest.h \
@@ -192,7 +194,8 @@ HEADERS += \
     ../Monarch-Connect/Models/testmodel.h \
     ../Monarch-Connect/WidgetControllers/console.h \
     ../Monarch-Connect/Models/payloadvismodel.h \
-    ../Monarch-Connect/Models/socketmodel.h
+    ../Monarch-Connect/Models/socketmodel.h \
+    ../Monarch-Connect/Style/socketview.h
 
 FORMS += \
         ../Monarch-Connect/mainwindow.ui
