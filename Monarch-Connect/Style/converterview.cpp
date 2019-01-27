@@ -2,7 +2,6 @@
 
 ConverterView::ConverterView(QWidget *parent) : QWidget(parent)
 {
-    _horizontalGroupBox = new QGroupBox(tr("Converter"), this);
     _power = new QPushButton("On/Off");
     _data = new QLineEdit();
     _status = new QLineEdit();
@@ -11,22 +10,47 @@ ConverterView::ConverterView(QWidget *parent) : QWidget(parent)
     _data->setReadOnly(true);
     _data->setPlaceholderText("Data");
     _status->setPlaceholderText("Status");
-    QFormLayout *layout = new QFormLayout;
-    layout->addRow(new QLabel(tr("Status:")), _status);
-    layout->addRow(new QLabel(tr("Data:")), _data);
-    layout->addRow(_power);
-    //range
-    _min = new QLineEdit();
-    _max = new QLineEdit();
-    _min->setPlaceholderText("-1.0");
-    _max->setPlaceholderText("1.0");
-    _range = new QPushButton("Set sensitivity");
-    layout->addRow(new QLabel(tr("Min:")), _min);
-    layout->addRow(new QLabel(tr("Max:")), _max);
-    layout->addRow(_range);
-    _horizontalGroupBox->setLayout(layout);
+    QGridLayout *layout = new QGridLayout;
+    layout->addWidget(new QLabel(tr("Status:")), 0, 0);
+    layout->addWidget(_status, 0, 1);
+
+    layout->addWidget(new QLabel(tr("Data:")), 1, 0);
+    layout->addWidget(_data, 1, 1);
+
+    layout->addWidget(_power, 2, 0);
+
+    _minAmplitude = new QLineEdit("0.0");
+    _maxAmplitude = new QLineEdit("45.0");
+    _minRoll = new QLineEdit("-25.0");
+    _maxRoll = new QLineEdit("25.0");
+    _minDihedral = new QLineEdit("45");
+    _maxDihedral = new QLineEdit("135");
+    _minAngV = new QLineEdit("0");
+    _maxAngV = new QLineEdit("1000");
+    _glideThresh = new QLineEdit("35");
+
+    layout->addWidget(new QLabel("Amplitude:"), 3, 0);
+    layout->addWidget(_minAmplitude, 3, 1);
+    layout->addWidget(_maxAmplitude, 3, 2);
+
+    layout->addWidget(new QLabel("Roll:"), 4, 0);
+    layout->addWidget(_minRoll, 4, 1);
+    layout->addWidget(_maxRoll, 4, 2);
+
+    layout->addWidget(new QLabel("Dihedral:"), 5, 0);
+    layout->addWidget(_minDihedral, 5, 1);
+    layout->addWidget(_maxDihedral, 5, 2);
+
+    layout->addWidget(new QLabel("Ang. V:"), 6, 0);
+    layout->addWidget(_minAngV, 6, 1);
+    layout->addWidget(_maxAngV, 6, 2);
+
+    layout->addWidget(new QLabel("Glide Thres:"), 7, 0);
+    layout->addWidget(_glideThresh, 7, 1);
+
+
+    this->setLayout(layout);
     connect(_power, &QPushButton::pressed, this, &ConverterView::pressed);
-    connect(_range, &QPushButton::pressed, this, &ConverterView::rangePressed);
 }
 
 void ConverterView::setData(QString data){

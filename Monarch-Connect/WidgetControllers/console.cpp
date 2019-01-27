@@ -7,6 +7,6 @@ Console::Console(QPlainTextEdit *textEdit, QObject *parent):
 }
 
 void Console::changeOutput(QString text){
-    _textEdit->appendPlainText(text);
-    _textEdit->appendPlainText("\n");
+    _textEdit->setPlainText(text);
+    //_textEdit->appendPlainText("\n");
 }

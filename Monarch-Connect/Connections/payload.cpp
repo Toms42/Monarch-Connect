@@ -86,7 +86,7 @@ QByteArray Payload::encode() const{
     payloadString += ";\r\n";
     qDebug() << "Encoded payload: " + payloadString;
     QByteArray output = payloadString.toUtf8();
-    output.append('\0');
+    //output.append('\0');
     return output;
 }
 

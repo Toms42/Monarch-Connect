@@ -17,17 +17,21 @@ private:
     QPushButton *_power;
     QLineEdit *_data;
     QLineEdit *_status;
-    QLineEdit *_min;
-    QPushButton *_range;
-    QLineEdit *_max;
-    QGroupBox *_horizontalGroupBox;
+
+public:
+    QLineEdit *_minAmplitude;
+    QLineEdit *_maxAmplitude;
+    QLineEdit *_minRoll;
+    QLineEdit *_maxRoll;
+    QLineEdit *_minDihedral;
+    QLineEdit *_maxDihedral;
+    QLineEdit *_minAngV;
+    QLineEdit *_maxAngV;
+    QLineEdit *_glideThresh;
 public:
     explicit ConverterView(QWidget *parent = nullptr);
-    QString getMin(){return _min->text();}
-    QString getMax(){return _max->text();}
 signals:
     void pressed();
-    void rangePressed();
 
 public slots:
     void setData(QString data);

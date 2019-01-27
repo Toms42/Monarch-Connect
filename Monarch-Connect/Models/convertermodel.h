@@ -12,7 +12,7 @@
 #include <QTimer>
 #include "gamepadmodel.h"
 
-#define REFRESH 50
+#define REFRESH 400
 
 class ConverterModel:public MonarchModel
 {
@@ -81,7 +81,6 @@ public:
         connect(this, &ConverterModel::statusChanged, _view, &ConverterView::setStatus);
         connect(_view, &ConverterView::pressed, this, &ConverterModel::changeStatus);
         connect(this, &ConverterModel::dataChanged, _view, &ConverterView::setData);
-        connect(_view, &ConverterView::rangePressed, this, &ConverterModel::setRange);
         timer = new QTimer();
         connect(timer, &QTimer::timeout, this, &ConverterModel::sendPayload);
         emit(statusChanged("Off"));
@@ -154,8 +153,8 @@ public:
 private:
     //scale to new range
     double scaleValue(double min, double max, double input){
-        double slope = (max-min)/2;
-        return min + slope*(input - min);
+        double slope = (max-min);
+        return min + slope*((1-input)/2);
     }
     void convertAndSend(Payload p)
     {
@@ -164,18 +163,30 @@ private:
 
         auto contID = Project::getInstance().getTagList().getTagID("Cont");
         QVector<double> vals(ContFields::_NUMFIELDS);
-        vals[ContFields::AMPLITUDE] = p.getVal(GamepadModel::GamepadFields::RIGHTY) + 1;
-        vals[ContFields::ROLL] = p.getVal(GamepadModel::GamepadFields::RIGHTX) + 1;
+        vals[ContFields::AMPLITUDE] = p.getVal(GamepadModel::GamepadFields::RIGHTY) ;
+        vals[ContFields::ROLL] = p.getVal(GamepadModel::GamepadFields::RIGHTX) ;
         vals[ContFields::DIHEDRAL] = p.getVal(GamepadModel::GamepadFields::LEFTX);
-        vals[ContFields::ANG_V] = p.getVal(GamepadModel::GamepadFields::LEFTY) + 1;
+        vals[ContFields::ANG_V] = p.getVal(GamepadModel::GamepadFields::LEFTY) ;
         vals[ContFields::GLIDE_THRESH] = 5;
 
         //scale values
-        vals[ContFields::AMPLITUDE] = scaleValue(_min,_max,vals[ContFields::AMPLITUDE]);
-        vals[ContFields::ROLL] = scaleValue(_min,_max,vals[ContFields::ROLL]);
-        vals[ContFields::DIHEDRAL] = scaleValue(_min,_max,vals[ContFields::DIHEDRAL]);
-        vals[ContFields::ANG_V] = scaleValue(_min,_max,vals[ContFields::ANG_V]);
-        vals[ContFields::GLIDE_THRESH] = scaleValue(_min,_max,vals[ContFields::GLIDE_THRESH]);
+        vals[ContFields::AMPLITUDE] = scaleValue(_view->_minAmplitude->text().toFloat(),
+                                                 _view->_maxAmplitude->text().toFloat(),
+                                                 vals[ContFields::AMPLITUDE]);
+
+        vals[ContFields::ROLL] = scaleValue(_view->_minRoll->text().toFloat(),
+                                            _view->_maxRoll->text().toFloat(),
+                                            vals[ContFields::ROLL]);
+
+        vals[ContFields::DIHEDRAL] = scaleValue(_view->_minDihedral->text().toFloat(),
+                                                _view->_maxDihedral->text().toFloat(),
+                                                vals[ContFields::DIHEDRAL]);
+
+        vals[ContFields::ANG_V] = scaleValue(_view->_minAngV->text().toFloat(),
+                                             _view->_maxAngV->text().toFloat(),
+                                             vals[ContFields::ANG_V]);
+
+        vals[ContFields::GLIDE_THRESH] = _view->_glideThresh->text().toFloat();
 
 
         Payload out(contID, ContFields::_NUMFIELDS, vals);
@@ -185,15 +196,7 @@ private:
 signals:
     void statusChanged(QString data);
     void dataChanged(QString data);
-public slots:
-    void setRange(){
-        _max = _view->getMax().toDouble();
-        _min = _view->getMin().toDouble();
-        if(_min >= _max){ //if it's invalid go to default
-            _max = 1;
-            _min = -1;
-        }
-    }
+
 private slots:
     void sendPayload(){
         if(!dataReady){
