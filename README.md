@@ -19,7 +19,7 @@ A generic client for managing control and telemetry streams for embedded devices
 * Run test suite in the test subdir to verify successful setup.
 ## Screenshots:
 Current internal test build:
-![screenshot](https://i.imgur.com/5ND1IJh.png)
+![screenshot](https://i.imgur.com/IhDWBZi.png)
 ## Features:
 * Modular, node-based creation of telemetry/control flows
 * Saving/Loading of projects with multiple flows
@@ -28,12 +28,15 @@ Current internal test build:
 * "Payload" system allowing payloads with multiple related fields
 * User-defined "tags" which define payload types
 * In-flow data visualization*
-* Easy-access statistics for connections*
-* Nodes for COM ports, TCP/UDP sockets, xbox controllers, etc*
+* Easy-access statistics for connections
+* Nodes for COM ports, TCP/UDP sockets, xbox controllers, etc
 * Convenience nodes for easy-setup arduino-integration*
 * Easily-extended with new nodes
 
 \* indicates planned feature for first release* 
+
+## Note about platform compatibility:
+Note: due to the current testing of xinput libraries, the most up-to-date test build will only build on windows at the moment. To test anyways, remove the xbox node and remove it from the node registration step. Apologies, a proper cross-platform input system is coming soon.
 
 ## Using
 * [Qt](https://www.qt.io/): Cross-platform c++ gui framework.
