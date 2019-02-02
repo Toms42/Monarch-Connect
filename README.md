@@ -8,6 +8,7 @@ A generic client for managing control and telemetry streams for embedded devices
 ## Building
 ### Continuous Integration:
 *Note: these builds run the test suite as well. Failing might indicate the build timed out, so check that*
+
 *Note: Currently not building on OSX/Linux due to xinput libraries. Cross-platform fix in progress.*
 * Ubuntu xenial (clang and gcc): [![Build Status](https://travis-ci.org/Toms42/Monarch-Connect.svg?branch=master)](https://travis-ci.org/Toms42/Monarch-Connect)
 * Windows (mingw and msvc): TODO
