@@ -3,7 +3,7 @@
 </p>
 
 # Monarch-Connect
-A generic client for managing control and telemetry streams for embedded devices, such as mobile robots or IOT devices.
+A generic client for managing control and telemetry streams for embedded devices, such as mobile robots or IOT devices. Development is stagnant at the moment until I have some more free time for this project or someone new and dedicated comes across it.
 
 ## Building
 ### Continuous Integration:
